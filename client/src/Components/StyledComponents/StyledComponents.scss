@@ -1,0 +1,90 @@
+//Styled Components
+
+//Divider
+.Divider {
+    border-top: 1px black solid;
+    align-self: center;
+    width: 80%;
+    margin: 8px 0px;
+}
+
+//Nav Drawer
+.NavDrawer {
+    width: 15%;
+    height: 100vh;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+
+    .TitleLogo {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 4px 16px;
+        .NavLogo {
+            height: 5vh;
+            width: 5vw;
+            margin: 0px 10px;
+        }
+    }
+    .Greeting {
+        text-align: center;
+        font-family: monospace;
+        margin: 15px 0px;
+    }
+    .NavItems {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        height: 80%;
+
+        :nth-child(8) {
+            margin-top: auto;
+        }
+        .NavItem {
+            width: 100%;
+            text-align: left;
+            padding: 16px 12px;
+        }
+
+        .NavItem:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+        }
+        .NavItemSelected {
+            border-radius: 35px;
+            background-color: rgba(0, 0, 0, 0.25);
+            color: white;
+            .NavItemsLogo {
+                fill: black;
+            }
+        }
+        .NavItemsLogo {
+            height: 20px;
+            width: 20px;
+            margin: 0px 16px;
+        }
+    }
+}
+
+//SearchInput
+.SearchInput {
+    .Inputarea {
+        background-image: url("../../Assets/searchquote.svg");
+        background-size: 5%;
+        background-repeat: no-repeat;
+        background-position: 5px;
+
+        display: block;
+        width: 40%;
+        border: 1px solid black;
+        border-radius: 5px;
+        box-shadow: 0px 0;
+        padding: 8px 12px 8px 48px;
+        margin: 2% auto;
+
+        text-transform: uppercase;
+    }
+    .InputArea:focus {
+        outline: none;
+    }
+}
