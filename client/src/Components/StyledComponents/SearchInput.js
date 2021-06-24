@@ -1,5 +1,8 @@
 import React from "react";
 
+//Import Scss
+import "./StyledComponents.scss";
+
 export default function SearchInput(props) {
     return (
         <>
