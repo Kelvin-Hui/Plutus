@@ -5,9 +5,9 @@
 }
 
 .Contentpage {
-    width: 85%;
-    background-color: rgba($color: #000000, $alpha: 0.1);
-    .CardGrid {
+    // width: 85%;
+    // background-color: rgba($color: #000000, $alpha: 0.1);
+    .CardGrid_SearchQuote {
         // display: grid;
         height: 100vh;
         width: 85%;
@@ -41,6 +41,11 @@
         }
         .Chart {
             grid-area: Chart;
+
+            .LH {
+                stroke: black;
+                stroke-width: 0.5;
+            }
         }
         .KeyStatistic {
             grid-area: KeyStatistic;
@@ -61,8 +66,13 @@
                 }
             }
         }
-        .Financial {
+        .IncomeStatement {
             grid-area: Earnings;
+            .yAxis {
+                .tick line {
+                    visibility: hidden;
+                }
+            }
         }
     }
 }

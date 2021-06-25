@@ -1,0 +1,25 @@
+%flexrow {
+    display: flex;
+    flex-direction: row;
+}
+
+.Contentpage {
+    .OptionsGrid {
+        width: 100%;
+        border: 1px black solid;
+
+        .Row {
+            text-align: center;
+        }
+        .CallInTheMoney {
+            td:nth-child(-n + 5) {
+                background-color: lightblue;
+            }
+        }
+        .PutInTheMoney {
+            td:nth-child(n + 7):nth-child(n-11) {
+                background-color: lightblue;
+            }
+        }
+    }
+}

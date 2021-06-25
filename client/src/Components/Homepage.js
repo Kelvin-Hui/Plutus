@@ -4,6 +4,7 @@ import React from "react";
 import NavDrawer from "./StyledComponents/NavDrawer";
 //Import Contents
 import SearchQuote from "./SearchQuote";
+import OptionChains from "./OptionChains/OptionChains";
 
 export default function Homepage() {
     const [currContent, setCurrContent] = React.useState("Dashboard");
@@ -15,9 +16,9 @@ export default function Homepage() {
             />
             {/* {currContent === "Dashboard" && <Dashboard />} */}
             {currContent === "SearchQuote" && <SearchQuote />}
-            {/* {currContent === "OptionChains" && <OptionChains />}
-            {currContent === "MarketNews" && <MarketNews />}
-            {currContent === "Backtesting" && <Backtesting />} */}
+            {currContent === "OptionChains" && <OptionChains />}
+            {/* {currContent === "MarketNews" && <MarketNews />}
+            {currContent === "Backtesting" && <Backtesting />}  */}
         </div>
     );
 }

@@ -17,6 +17,12 @@ app.use(express.json());
 //     console.log("MongoDB database connection established successfully");
 // })
 
+//Routes
+const optionChainsRouter = require("./routes/optionChainsRoute");
+
+app.use("/api/optionChains", optionChainsRouter);
+
+//App
 app.listen(port, () => {
     console.log(`Server is running on port : ${port}`);
 });

@@ -4,6 +4,12 @@ import React from "react";
 import "./StyledComponents.scss";
 
 export default function SearchInput(props) {
+    function enter(e) {
+        if (props.setExp !== undefined) {
+            props.setExp(null);
+        }
+        props.setSymbol(e.target.value.toUpperCase());
+    }
     return (
         <>
             <div className="SearchInput">
@@ -12,8 +18,7 @@ export default function SearchInput(props) {
                     type="search"
                     placeholder={props.placeholder}
                     onKeyDown={(e) => {
-                        e.key === "Enter" &&
-                            props.setSymbol(e.target.value.toUpperCase());
+                        e.key === "Enter" && enter(e);
                     }}
                 />
             </div>

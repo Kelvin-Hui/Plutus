@@ -3,17 +3,14 @@ import React from "react";
 //Import scss
 import "./SearchQuote.scss";
 
-//Import Axios for API calling
-import axios from "axios";
 //Import SearchInput
 import SearchInput from "../StyledComponents/SearchInput";
 
 //Import Content Components
 import Description from "./Description";
-import Chart from "./Chart";
-import BuySellBtn from "./BuySellBtn";
-import Financial from "./Financial";
+import Chart from "./Chart/Chart";
 import KeyStatistic from "./KeyStatistic";
+import IncomeStatement from "./Financial/IncomeStatement";
 
 // function getSymbolInfo(symbol, query) {
 //     const datetime = new Date();
@@ -29,7 +26,7 @@ import KeyStatistic from "./KeyStatistic";
 
 export default function SearchQuote() {
     console.log("rendered SQ");
-    const [symbol, setSymbol] = React.useState("MSFT");
+    const [symbol, setSymbol] = React.useState("AAPL");
 
     // React.useEffect(() => {
     //     // getSymbolInfo(symbol, "price");
@@ -45,12 +42,12 @@ export default function SearchQuote() {
                 placeholder="Search For Stock Quote (default : AAPL)"
                 setSymbol={setSymbol}
             />
-            <div className="CardGrid">
+            <div className="CardGrid_SearchQuote">
+                <IncomeStatement symbol={symbol} />
                 <Description symbol={symbol} />
                 {/* <BuySellBtn /> */}
                 <Chart symbol={symbol} />
-                {/* <KeyStatistic symbol={symbol} />
-                <Financial /> */}
+                <KeyStatistic symbol={symbol} />
             </div>
         </div>
     );
