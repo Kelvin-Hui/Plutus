@@ -68,8 +68,9 @@
         }
         .IncomeStatement {
             grid-area: Earnings;
+            .xAxis,
             .yAxis {
-                .tick line {
+                path {
                     visibility: hidden;
                 }
             }

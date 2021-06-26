@@ -64,7 +64,9 @@ export default function BarChart({ data }) {
 
         svg.append("g")
             .call(xAxis)
+            .attr("class", "xAxis")
             .attr("transform", `translate(0,${height - margin.bottom})`);
+
         svg.append("g")
             .call(yAxis)
             .attr("class", "yAxis")
