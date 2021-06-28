@@ -6,6 +6,7 @@ import "./StyledComponents.scss";
 import clsx from "clsx";
 
 //Import Needed SVG
+import PlutusLogo from "../../Assets/Plutus Icon.svg";
 import logo from "../../Assets/Logosvg.svg";
 import { ReactComponent as Homepagelogo } from "../../Assets/homepage.svg";
 import { ReactComponent as Dashboardlogo } from "../../Assets/dashboard.svg";
@@ -25,7 +26,7 @@ export default function NavDrawer({ currContent, setCurrContent }) {
         <div className="NavDrawer">
             {/*Brand and Logo*/}
             <div className="TitleLogo">
-                <img src={logo} alt="logo" className="NavLogo" />
+                <img src={PlutusLogo} alt="logo" className="NavLogo" />
                 <h2>Plutus</h2>
             </div>
 
