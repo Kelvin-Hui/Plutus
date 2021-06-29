@@ -35,24 +35,12 @@ export default function Chart({ symbol }) {
         }));
     }
 
-    function marketOpen() {
-        const today = new Date();
-        today.setUTCHours(13);
-        today.setUTCMinutes(30);
-        today.setUTCSeconds(0);
-        today.setUTCMilliseconds(0);
-
-        return today.valueOf() / 1000;
-    }
-
     function getChartData(symbol) {
-        const datetime = new Date();
         axios
             .get(
-                `https://api.allorigins.win/get?url=https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?symbol=${symbol}&period1=${marketOpen()}&period2=9999999999&interval=1m,${datetime.valueOf()}`
+                `http://localhost:5000/api/searchQuote?symbol=${symbol}&type=Chart`
             )
-            .then((response) => JSON.parse(response.data.contents))
-            .then((res) => res.chart.result[0])
+            .then((response) => response.data.data.chart.result[0])
             .then((result) => ({
                 timeStamp: result.timestamp,
                 open: result.indicators.quote[0].open,

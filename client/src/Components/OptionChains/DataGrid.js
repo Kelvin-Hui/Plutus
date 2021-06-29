@@ -57,33 +57,37 @@ export default function DataGrid({ symbol, exp }) {
     }, [symbol, exp]);
 
     const columns = [
+        "Open Interest",
         "Volume",
         "Implied Volatility",
         "Bid",
         "Ask",
         "Last",
+        "% Change",
         "Strike",
+        "% Change",
         "Last",
         "Bid",
         "Ask",
         "Implied Volatility",
         "Volume",
+        "Open Interest",
     ];
     return (
         <table className="OptionsGrid">
             <thead>
-                <tr>
-                    <th colSpan="11">{`${symbol}'s Option Chains ${new Date(
+                <tr className="GridTitle">
+                    <th colSpan="15">{`${symbol}'s Option Chains ${new Date(
                         exp * 1000
                     ).toLocaleDateString()}`}</th>
                 </tr>
 
                 <tr className="CALLPUT">
-                    <th colSpan="5">Calls</th>
+                    <th colSpan="7">Calls</th>
                     <th></th>
-                    <th colSpan="5">Puts</th>
+                    <th colSpan="7">Puts</th>
                 </tr>
-                <tr className="Row">
+                <tr className="Row ColName">
                     {columns.map((col, idx) => {
                         return <th key={col + idx}>{col}</th>;
                     })}
@@ -94,6 +98,7 @@ export default function DataGrid({ symbol, exp }) {
                     options.map((data, idx) => {
                         const c = data.calls != undefined ? data.calls : {};
                         const p = data.puts != undefined ? data.puts : {};
+
                         return (
                             <tr
                                 className={clsx({
@@ -103,6 +108,7 @@ export default function DataGrid({ symbol, exp }) {
                                 })}
                                 key={"data_" + idx}
                             >
+                                <td>{c.openInterest || " - "}</td>
                                 <td>{c.volume || " - "}</td>
                                 <td>
                                     {parseFloat(
@@ -112,8 +118,40 @@ export default function DataGrid({ symbol, exp }) {
                                 <td>{c.bid || " - "}</td>
                                 <td>{c.ask || " - "}</td>
                                 <td>{c.lastPrice || " - "}</td>
+                                <td
+                                    className={clsx({
+                                        percentChange: true,
+                                        up:
+                                            parseFloat(c.percentChange).toFixed(
+                                                2
+                                            ) > 0,
+                                        down:
+                                            parseFloat(c.percentChange).toFixed(
+                                                2
+                                            ) < 0,
+                                    })}
+                                >
+                                    {parseFloat(c.percentChange).toFixed(2) +
+                                        "%" || " - "}
+                                </td>
                                 <td id={"strike_" + data.strikes}>
                                     <b>{data.strikes}</b>
+                                </td>
+                                <td
+                                    className={clsx({
+                                        percentChange: true,
+                                        up:
+                                            parseFloat(p.percentChange).toFixed(
+                                                2
+                                            ) > 0,
+                                        down:
+                                            parseFloat(p.percentChange).toFixed(
+                                                2
+                                            ) < 0,
+                                    })}
+                                >
+                                    {parseFloat(p.percentChange).toFixed(2) +
+                                        "%" || " - "}
                                 </td>
                                 <td>{p.lastPrice || " - "}</td>
                                 <td>{p.bid || " - "}</td>
@@ -124,6 +162,7 @@ export default function DataGrid({ symbol, exp }) {
                                     ).toFixed(2) + "%" || " - "}
                                 </td>
                                 <td>{p.volume || " - "}</td>
+                                <td>{p.openInterest || " - "}</td>
                             </tr>
                         );
                     })}

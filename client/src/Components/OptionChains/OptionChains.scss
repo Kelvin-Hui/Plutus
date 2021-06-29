@@ -6,20 +6,37 @@
 .Contentpage {
     .OptionsGrid {
         width: 100%;
+        overflow: auto;
         border: 1px black solid;
 
+        .ColName {
+            th {
+                position: sticky;
+                top: 0;
+                z-index: 30;
+            }
+        }
         .Row {
             text-align: center;
         }
         .CallInTheMoney {
-            td:nth-child(-n + 5) {
-                background-color: lightblue;
+            td:nth-child(-n + 7) {
+                background-color: lightyellow;
             }
         }
         .PutInTheMoney {
-            td:nth-child(n + 7):nth-child(n-11) {
-                background-color: lightblue;
+            td:nth-child(n + 9):nth-child(n-13) {
+                background-color: lightyellow;
             }
+        }
+
+        .up {
+            font-weight: bold;
+            color: green;
+        }
+        .down {
+            font-weight: bold;
+            color: red;
         }
     }
 }

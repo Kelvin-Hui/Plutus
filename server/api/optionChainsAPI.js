@@ -27,7 +27,7 @@ exports.getOptionChains = async (req, res) => {
             data: response.data,
         });
     } catch (error) {
-        return status(200).json({
+        return res.status(200).json({
             status: "fail",
             error: error,
         });

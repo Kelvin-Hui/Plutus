@@ -19,8 +19,10 @@ app.use(express.json());
 
 //Routes
 const optionChainsRouter = require("./routes/optionChainsRoute");
+const searchQuoteRouter = require("./routes/searchQuoteRoute");
 
 app.use("/api/optionChains", optionChainsRouter);
+app.use("/api/searchQuote", searchQuoteRouter);
 
 //App
 app.listen(port, () => {
