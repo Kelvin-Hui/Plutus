@@ -48,7 +48,6 @@ export default function CandleStickChart({ data, dim }) {
                 ),
             ])
             .range([0 + margin.left, width - margin.right]);
-
         var y = d3
             .scaleLinear()
             .domain([
@@ -60,15 +59,16 @@ export default function CandleStickChart({ data, dim }) {
                 }) + 0.05,
             ])
             .range([height - margin.bottom, 0 + margin.top]);
-
         var yAxis = d3.axisLeft().scale(y);
         var xAxis = d3.axisBottom().scale(x);
 
         svg.append("g")
             .call(xAxis)
+            .attr("class", "xAxis")
             .attr("transform", `translate(0,${height - margin.bottom})`);
         svg.append("g")
             .call(yAxis)
+            .attr("class", "yAxis")
             .attr("transform", `translate(${margin.left},0)`);
 
         svg.selectAll("rect.OC")

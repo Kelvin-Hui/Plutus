@@ -10,15 +10,17 @@
     .CardGrid_SearchQuote {
         // display: grid;
         height: 100vh;
-        width: 85%;
+        width: 100%;
         margin: 0 auto;
-        // grid-template-columns: 25% 25% 25% 25%;
-        // grid-template-rows: 33% 33% 33%;
-        // grid-template-areas:
-        //     "Description Description Description BuySell"
-        //     "Chart Chart Chart KeyStatistic"
-        //     "Chart Chart Chart Earnings";
+        display: grid;
 
+        grid-template-rows: 30% 25% 30% 15%;
+        grid-template-columns: 25% 25% 25% 25%;
+        grid-template-areas:
+            "Description Description Description Description"
+            "Chart Chart Chart KeyStatistic"
+            "Chart Chart Chart BuySell"
+            "Earnings Earnings Earnings Earnings";
         .Description {
             grid-area: Description;
             .Summary {

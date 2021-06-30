@@ -43,8 +43,10 @@
             margin-top: auto;
         }
         .NavItem {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
             width: 100%;
-            text-align: left;
             padding: 16px 12px;
         }
 
@@ -96,7 +98,7 @@
     box-shadow: 1px 1px gray;
     background-color: white;
     z-index: 1;
-    // height: 90%;
+
     width: 90%;
 
     overflow: auto;
