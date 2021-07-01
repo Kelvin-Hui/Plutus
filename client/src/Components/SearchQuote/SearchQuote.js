@@ -51,9 +51,9 @@ export default function SearchQuote() {
                 setSymbol={setSymbol}
             />
             <div className="CardGrid_SearchQuote">
+                <Description companyInfo={data.companyInfo} />
                 <Chart symbol={symbol} ohlcData={data.ohlcData} />
                 <KeyStatistic summaryDetail={data.summaryDetail} />
-                <Description companyInfo={data.companyInfo} />
                 <IncomeStatement
                     incomeRevenueYearly={data.incomeRevenueYearly}
                 />

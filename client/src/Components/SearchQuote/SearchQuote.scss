@@ -1,7 +1,5 @@
-%CardCSS {
-    display: flex;
-    align-content: center;
-    justify-content: center;
+%CardHeight {
+    height: 100%;
 }
 
 .Contentpage {
@@ -14,17 +12,25 @@
         margin: 0 auto;
         display: grid;
 
-        grid-template-rows: 30% 25% 30% 15%;
-        grid-template-columns: 25% 25% 25% 25%;
+        row-gap: 10%;
+        // grid-template-rows: 30% 25% 30% 15%;
+        // grid-template-columns: 25% 25% 20% 30%;
         grid-template-areas:
             "Description Description Description Description"
             "Chart Chart Chart KeyStatistic"
             "Chart Chart Chart BuySell"
             "Earnings Earnings Earnings Earnings";
+
         .Description {
             grid-area: Description;
+            place-self: center stretch;
+            @extend %CardHeight;
+            .Title {
+                height: 10%;
+            }
             .Summary {
                 font-size: small;
+                height: 60%;
             }
 
             .Tags {
@@ -40,9 +46,13 @@
         }
         .BuySellBtn {
             grid-area: BuySell;
+            place-self: center;
+            @extend %CardHeight;
         }
         .Chart {
             grid-area: Chart;
+            place-self: center stretch;
+            @extend %CardHeight;
 
             .LH {
                 stroke: black;
@@ -51,6 +61,8 @@
         }
         .KeyStatistic {
             grid-area: KeyStatistic;
+            place-self: center stretch;
+            @extend %CardHeight;
             .keySummary {
                 display: flex;
                 flex-direction: row;
@@ -70,8 +82,11 @@
         }
         .IncomeStatement {
             grid-area: Earnings;
+            place-self: center stretch;
+            @extend %CardHeight;
             .xAxis,
-            .yAxis {
+            .yAxis,
+            .yAxisGrid {
                 path {
                     visibility: hidden;
                 }

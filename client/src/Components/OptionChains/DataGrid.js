@@ -94,6 +94,16 @@ export default function DataGrid({ symbol, exp }) {
                 </tr>
             </thead>
             <tbody>
+                <th
+                    colSpan="15"
+                    style={{
+                        height: "100vh",
+                        verticalAlign: "sub",
+                    }}
+                    className="Skeleton"
+                >
+                    Loading
+                </th>
                 {Object.keys(options).length != 0 &&
                     options.map((data, idx) => {
                         const c = data.calls != undefined ? data.calls : {};

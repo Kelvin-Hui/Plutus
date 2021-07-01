@@ -53,9 +53,14 @@ export default function BarChart({ data }) {
             .axisLeft()
             .scale(y)
             .tickFormat((d) => `${d / 1000000000}B`);
+
         var xAxis = d3.axisBottom().scale(x);
 
-        var yAxisGrid = d3.axisLeft(y).tickSize(-width).tickFormat("").ticks(8);
+        var yAxisGrid = d3
+            .axisLeft(y)
+            .tickSize(-width)
+            .tickFormat("")
+            .ticks(10);
 
         var negativeValue =
             d3.min(data, (d) => {
@@ -73,7 +78,7 @@ export default function BarChart({ data }) {
             .attr("transform", `translate(${margin.left},0)`);
 
         svg.append("g")
-            .attr("class", "y axis-grid")
+            .attr("class", "yAxisGrid")
             .attr("color", "lightgrey")
             .call(yAxisGrid)
             .attr("transform", `translate(${margin.left},0)`);
