@@ -2,7 +2,6 @@ import React from "react";
 
 //Import Custom Util Components
 import Card from "../StyledComponents/Card";
-import Skeleton from "../StyledComponents/Skeleton";
 
 //Import clsx
 import clsx from "clsx";

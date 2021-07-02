@@ -3,8 +3,8 @@
 }
 
 .Contentpage {
-    // width: 85%;
-    // background-color: rgba($color: #000000, $alpha: 0.1);
+    width: 85%;
+    background-color: rgba($color: #000000, $alpha: 0.1);
     .CardGrid_SearchQuote {
         // display: grid;
         height: 100vh;
@@ -12,7 +12,7 @@
         margin: 0 auto;
         display: grid;
 
-        row-gap: 10%;
+        row-gap: 5%;
         // grid-template-rows: 30% 25% 30% 15%;
         // grid-template-columns: 25% 25% 20% 30%;
         grid-template-areas:
