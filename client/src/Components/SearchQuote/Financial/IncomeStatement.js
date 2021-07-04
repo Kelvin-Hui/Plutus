@@ -43,7 +43,10 @@ export default function IncomeStatement({ incomeRevenueYearly }) {
         <div className="IncomeStatement ">
             <Card>
                 {incomeRevenueYearly.length === 0 ? (
-                    <div>Loading....</div>
+                    <div
+                        className="Skeleton"
+                        style={{ height: "100%", width: "100%" }}
+                    />
                 ) : (
                     <BarChart data={incomeRevenueYearly} />
                 )}

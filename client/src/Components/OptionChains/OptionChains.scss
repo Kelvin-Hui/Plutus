@@ -19,14 +19,17 @@
         .Row {
             text-align: center;
         }
+        .Row:hover {
+            background-color: rgba($color: #000000, $alpha: 0.3);
+        }
         .CallInTheMoney {
             td:nth-child(-n + 7) {
-                background-color: lightyellow;
+                background-color: rgba($color: #ffffe0, $alpha: 0.5);
             }
         }
         .PutInTheMoney {
             td:nth-child(n + 9):nth-child(n-13) {
-                background-color: lightyellow;
+                background-color: rgba($color: #ffffe0, $alpha: 0.5);
             }
         }
 

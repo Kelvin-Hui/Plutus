@@ -1,19 +1,68 @@
 const axios = require("axios");
 
 function calcPeriod1() {
+    let market = new Date();
+
+    market.setUTCHours(13);
+    market.setUTCMinutes(30);
+    market.setUTCSeconds(0);
+    market.setUTCMilliseconds(0);
+
     let d = new Date();
+    let day = d.getDay();
+    console.log(d.toLocaleString());
+    console.log(day);
 
-    d.setUTCHours(13);
-    d.setUTCMinutes(30);
-    d.setUTCSeconds(0);
-    d.setUTCMilliseconds(0);
-
-    if (new Date().valueOf() > d.valueOf()) {
-        return d.valueOf() / 1000;
+    if (day !== 0 && day !== 6) {
+        console.log("WeekDay");
+        if (d.valueOf() > market.valueOf()) {
+            return market.valueOf() / 1000;
+        } else {
+            return market.setDate(market.getDate() - 1).valueOf() / 1000;
+        }
     } else {
-        return d.setDate(d.getDate() - 1).valueOf() / 1000;
+        console.log("WeekEnd");
+        if (day === 6) {
+            console.log("Sat");
+            return market.setDate(d.getDate() - 1).valueOf() / 1000;
+        }
+        if (day === 0) {
+            console.log("Sun");
+            return market.setDate(d.getDate() - 2).valueOf() / 1000;
+        }
     }
 }
+
+// function calcPeriod2() {
+//     let d = new Date();
+
+//     d.setUTCHours(13);
+//     d.setUTCMinutes(30);
+//     d.setUTCSeconds(0);
+//     d.setUTCMilliseconds(0);
+
+//     let day = d.getDay();
+//     console.log(day);
+
+//     if (day !== 0 && day !== 6) {
+//         console.log(day);
+//         console.log("Day in 1 2 3 4 5");
+//         if (new Date().valueOf() > d.valueOf()) {
+//             return d.valueOf() / 1000;
+//         } else {
+//             return d.setDate(d.getDate() - 1).valueOf() / 1000;
+//         }
+//     } else {
+//         if (day === 7) {
+//             console.log("SunDay");
+
+//             return d.setDate(d.getDate() - 2).valueOf() / 1000;
+//         } else {
+//             console.log("SatDay");
+//             return d.setDate(d.getDate() - 1).valueOf() / 1000;
+//         }
+//     }
+// }
 
 exports.getQuote = async (req, res) => {
     try {
@@ -117,10 +166,13 @@ exports.getQuote = async (req, res) => {
                         percent:
                             result.price.regularMarketChangePercent || null,
 
-                        tags: [
-                            result.summaryProfile.sector || null,
-                            result.summaryProfile.industry || null,
-                        ],
+                        tags:
+                            result.summaryProfile.sector === undefined
+                                ? []
+                                : [
+                                      result.summaryProfile.sector,
+                                      result.summaryProfile.industry,
+                                  ],
 
                         businessSummary:
                             result.summaryProfile.longBusinessSummary || null,

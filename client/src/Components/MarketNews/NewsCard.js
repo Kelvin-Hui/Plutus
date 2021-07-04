@@ -6,7 +6,20 @@ import Card from "../StyledComponents/Card";
 export default function NewsCard({ data }) {
     return (
         <Card>
-            <div className="SKeleton" />
+            <div className="NewsCard">
+                <a
+                    className="ThumbnailPic"
+                    href={data.newsLink}
+                    target="_blank"
+                >
+                    <img alt="thumbnailPic" src={data.newsThumbnail} />
+                </a>
+                <b className="Title">{data.newsTitle}</b>
+                <div className="NewsFooter">
+                    <i>{data.newsSource}</i>
+                    <span>{data.sourceTime} </span>
+                </div>
+            </div>
         </Card>
     );
 }

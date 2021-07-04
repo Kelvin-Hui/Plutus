@@ -103,7 +103,7 @@ export default function DataGrid({ symbol, exp }) {
                         }}
                         className="Skeleton"
                     >
-                        Loading
+                        Loading....
                     </th>
                 ) : (
                     Object.keys(options).length != 0 &&

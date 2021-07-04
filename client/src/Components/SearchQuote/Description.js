@@ -10,14 +10,16 @@ export default function Description({ companyInfo }) {
     return (
         <div className="Description">
             <Card>
-                <h3
+                <h1
                     className={clsx({
                         Title: true,
                         Skeleton: companyInfo.length === 0,
                     })}
                 >
-                    {companyInfo.companyName} {companyInfo.website}
-                </h3>
+                    {companyInfo.companyName}
+                    {companyInfo.website}
+                </h1>
+
                 <div
                     className={clsx({
                         Tags: true,

@@ -8,11 +8,23 @@ import SearchInput from "../StyledComponents/SearchInput";
 import axios from "axios";
 //Import NewsCard
 import NewsCard from "./NewsCard";
+//Import Custom Util Components
+import Card from "../StyledComponents/Card";
 
 export default function MarketNews() {
-    const [symbol, setSymbol] = React.useState(null);
+    const [symbol, setSymbol] = React.useState("AAPL");
+    const [news, setNews] = React.useState([]);
 
-    const sampleData = ["1", "2", "3", "1", "2", "3", "1", "2", "3"];
+    React.useEffect(() => {
+        axios
+            .get(`http://localhost:5000/api/marketNews?symbol=${symbol}`)
+            .then((response) => setNews(response.data.data));
+    }, [symbol]);
+
+    const sampleData = [1, 2, 3, 4, 5, 6];
+
+    console.log(news);
+
     return (
         <div className="Contentpage">
             <SearchInput
@@ -20,9 +32,21 @@ export default function MarketNews() {
                 setSymbol={setSymbol}
             />
             <div className="NewsCardGrid">
-                {sampleData.map((data, idx) => {
-                    return <NewsCard key={idx} data={data} />;
-                })}
+                {news.length === 0
+                    ? sampleData.map((d, idx) => {
+                          return (
+                              <Card>
+                                  <div
+                                      key={idx}
+                                      className="Skeleton"
+                                      style={{ height: "300px", width: "100%" }}
+                                  />
+                              </Card>
+                          );
+                      })
+                    : news.map((d, idx) => {
+                          return <NewsCard key={idx} data={d} />;
+                      })}
             </div>
         </div>
     );

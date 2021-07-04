@@ -31,7 +31,10 @@ export default function Chart({ symbol, ohlcData }) {
         <div className="Chart" ref={pref}>
             <Card>
                 {ohlcData.length === 0 ? (
-                    <div>Loading...</div>
+                    <div
+                        className="Skeleton"
+                        style={{ height: "100%", width: "100%" }}
+                    ></div>
                 ) : (
                     <CandleStickChart data={ohlcData} dim={dim} />
                 )}

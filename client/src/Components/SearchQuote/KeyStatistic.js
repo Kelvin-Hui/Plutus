@@ -2,53 +2,21 @@ import React from "react";
 
 //Import Custom Util Components
 import Card from "../StyledComponents/Card";
-//Import Axios for API calling
-import axios from "axios";
+
+//Import clsx
+import clsx from "clsx";
 
 export default function KeyStatistic({ summaryDetail }) {
-    // const [summaryDetail, SetSummaryDetail] = React.useState({});
-
-    // React.useEffect(() => {
-    //     getSymbolInfo(symbol, "summaryDetail");
-    // }, [symbol]);
-
-    // function getSymbolInfo(symbol, query) {
-    //     const datetime = new Date();
-    //     const modules = `?modules=${query},` + datetime.valueOf();
-    //     axios
-    //         .get(
-    //             `https://api.allorigins.win/get?url=https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}${modules}`
-    //         )
-    //         .then((response) => JSON.parse(response.data.contents))
-    //         .then((res) => res.quoteSummary.result[0].summaryDetail)
-    //         .then((result) =>
-    //             SetSummaryDetail({
-    //                 askRange: result.ask.raw + " x " + result.askSize.raw,
-    //                 bidRange: result.bid.raw + " x " + result.bidSize.raw,
-    //                 prevClose: result.previousClose.raw,
-    //                 open: result.open.raw,
-    //                 dayRange: result.dayLow.raw + " - " + result.dayHigh.raw,
-    //                 fiftyTwoWeekRange:
-    //                     result.fiftyTwoWeekLow.raw +
-    //                     " - " +
-    //                     result.fiftyTwoWeekHigh.raw,
-
-    //                 volume: result.volume.longFmt,
-    //                 avgVolume: result.averageVolume.longFmt,
-    //                 fiftyMA: result.fiftyDayAverage.raw,
-    //                 twoHundredMA: result.twoHundredDayAverage.raw,
-    //             })
-    //         )
-    //         .catch((err) => console.log(err + query));
-    // }
-    // console.log(summaryDetail);
     return (
         <div className="KeyStatistic">
             <Card>
                 {summaryDetail.length === 0 ? (
-                    <div>Loading....</div>
+                    <div
+                        className="Skeleton"
+                        style={{ height: "100%", width: "100%" }}
+                    />
                 ) : (
-                    <div className="keySummary">
+                    <div className="KeySummary">
                         <tbody>
                             <tr>
                                 <td>

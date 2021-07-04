@@ -28,11 +28,6 @@
             .Title {
                 height: 10%;
             }
-            .Summary {
-                font-size: small;
-                height: 60%;
-            }
-
             .Tags {
                 display: flex;
                 flex-direction: row;
@@ -42,6 +37,10 @@
                     padding: 4px 8px;
                     margin: 0px 8px;
                 }
+            }
+            .Summary {
+                font-size: large;
+                height: 60%;
             }
         }
         .BuySellBtn {
@@ -63,7 +62,7 @@
             grid-area: KeyStatistic;
             place-self: center stretch;
             @extend %CardHeight;
-            .keySummary {
+            .KeySummary {
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
