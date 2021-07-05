@@ -2,8 +2,6 @@ import React from "react";
 
 //Import Custom Util Components
 import Card from "../../StyledComponents/Card";
-//Import Axios for API calling
-import axios from "axios";
 
 //Import candleStickChart
 import CandleStickChart from "./CandleStickChart";
@@ -29,7 +27,7 @@ export default function Chart({ symbol, ohlcData }) {
 
     return (
         <div className="Chart" ref={pref}>
-            <Card>
+            <Card H100={true}>
                 {ohlcData.length === 0 ? (
                     <div
                         className="Skeleton"

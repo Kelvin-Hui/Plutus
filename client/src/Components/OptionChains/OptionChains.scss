@@ -6,7 +6,7 @@
 .Contentpage {
     .OptionsGrid {
         width: 100%;
-        overflow: auto;
+        overflow-y: scroll;
         border: 1px black solid;
 
         .ColName {

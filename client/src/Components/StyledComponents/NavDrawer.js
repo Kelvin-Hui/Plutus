@@ -7,7 +7,6 @@ import clsx from "clsx";
 
 //Import Needed SVG
 import PlutusLogo from "../../Assets/Plutus Icon.svg";
-import logo from "../../Assets/Logosvg.svg";
 import { ReactComponent as Homepagelogo } from "../../Assets/homepage.svg";
 import { ReactComponent as Dashboardlogo } from "../../Assets/dashboard.svg";
 import { ReactComponent as Searchquotelogo } from "../../Assets/searchquote.svg";

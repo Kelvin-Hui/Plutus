@@ -16,7 +16,7 @@ export default function KeyStatistic({ summaryDetail }) {
                         style={{ height: "100%", width: "100%" }}
                     />
                 ) : (
-                    <div className="KeySummary">
+                    <table className="KeySummary">
                         <tbody>
                             <tr>
                                 <td>
@@ -82,7 +82,7 @@ export default function KeyStatistic({ summaryDetail }) {
                                 </td>
                             </tr>
                         </tbody>
-                    </div>
+                    </table>
                 )}
             </Card>
         </div>

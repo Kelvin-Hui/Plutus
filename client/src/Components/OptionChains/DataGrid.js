@@ -95,16 +95,18 @@ export default function DataGrid({ symbol, exp }) {
             </thead>
             <tbody>
                 {Object.keys(options).length === 0 ? (
-                    <th
+                    <td
                         colSpan="15"
                         style={{
                             height: "100vh",
                             verticalAlign: "sub",
+                            textAlign: "center",
+                            fontWeight: "bold",
                         }}
                         className="Skeleton"
                     >
                         Loading....
-                    </th>
+                    </td>
                 ) : (
                     Object.keys(options).length != 0 &&
                     options.map((data, idx) => {

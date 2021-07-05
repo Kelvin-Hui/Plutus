@@ -1,10 +1,16 @@
 %CardHeight {
     height: 100%;
 }
+%Up {
+    color: green;
+    font-weight: bold;
+}
+%Down {
+    color: red;
+    font-weight: bold;
+}
 
 .Contentpage {
-    width: 85%;
-    background-color: rgba($color: #000000, $alpha: 0.1);
     .CardGrid_SearchQuote {
         // display: grid;
         height: 100vh;
@@ -13,21 +19,31 @@
         display: grid;
 
         row-gap: 5%;
-        // grid-template-rows: 30% 25% 30% 15%;
-        // grid-template-columns: 25% 25% 20% 30%;
+
         grid-template-areas:
             "Description Description Description Description"
-            "Chart Chart Chart KeyStatistic"
-            "Chart Chart Chart BuySell"
+            "KeyStatistic KeyStatistic BuySell BuySell"
+            "Chart Chart Chart Chart"
             "Earnings Earnings Earnings Earnings";
 
         .Description {
             grid-area: Description;
             place-self: center stretch;
             @extend %CardHeight;
-            .Title {
-                height: 10%;
+            .Header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                .Title {
+                    height: 10%;
+                }
+                .WebsiteLogo {
+                    height: 30px;
+                    width: 30px;
+                    vertical-align: middle;
+                }
             }
+
             .Tags {
                 display: flex;
                 flex-direction: row;
@@ -39,14 +55,101 @@
                 }
             }
             .Summary {
-                font-size: large;
+                font-size: medium;
                 height: 60%;
+            }
+            .Footer {
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                .Box {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    border-radius: 15px;
+                    padding: 8px 16px;
+                    border: 1.5px solid black;
+                    span {
+                        font-size: large;
+                    }
+                    .Up {
+                        @extend %Up;
+                    }
+                    .Down {
+                        @extend %Down;
+                    }
+                }
             }
         }
         .BuySellBtn {
             grid-area: BuySell;
-            place-self: center;
+            place-self: center stretch;
             @extend %CardHeight;
+
+            .BuySell {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                .Price {
+                    text-align: center;
+
+                    h1 {
+                        margin: 0;
+                    }
+                    h3 {
+                        margin: 0 0 40% 0;
+                    }
+                    .Up {
+                        @extend %Up;
+                    }
+                    .Down {
+                        @extend %Down;
+                    }
+                }
+
+                .Buttons {
+                    display: flex;
+                    flex-direction: row;
+                    .Btn {
+                        border-radius: 20px;
+                        border: 1px solid black;
+                        padding: 16px 24px;
+                        color: white;
+                    }
+                    .Quantity {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: large;
+
+                        input {
+                            width: 80%;
+                            border: none;
+                            outline: none;
+                            border-bottom: 3px grey solid;
+                            text-align: center;
+                            font-size: larger;
+                        }
+                    }
+                    .Buy {
+                        @extend %Up;
+                        background-color: rgba($color: green, $alpha: 0.8);
+                    }
+                    .Buy:hover {
+                        background-color: green;
+                    }
+                    .Sell {
+                        @extend %Down;
+                        background-color: rgba($color: red, $alpha: 0.8);
+                    }
+                    .Sell:hover {
+                        background-color: red;
+                    }
+                }
+            }
         }
         .Chart {
             grid-area: Chart;
@@ -61,17 +164,22 @@
         .KeyStatistic {
             grid-area: KeyStatistic;
             place-self: center stretch;
-            @extend %CardHeight;
+            //@extend %CardHeight;
+            //margin: auto 0%;
             .KeySummary {
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
                 tbody {
                     margin: 0 5px;
+
                     td {
                         border-bottom: 1px grey solid;
                         display: flex;
                         justify-content: space-between;
+                        align-items: center;
+
+                        white-space: nowrap;
                         b {
                             margin: 0px 5px 0px 0px;
                         }

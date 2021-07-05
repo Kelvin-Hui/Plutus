@@ -18,6 +18,9 @@ function calcPeriod1() {
         if (d.valueOf() > market.valueOf()) {
             return market.valueOf() / 1000;
         } else {
+            if (day === 1 && market.getDay() === 1) {
+                return market.setDate(d.getDate() - 3).valueOf() / 1000;
+            }
             return market.setDate(market.getDate() - 1).valueOf() / 1000;
         }
     } else {
@@ -161,6 +164,7 @@ exports.getQuote = async (req, res) => {
                 data: {
                     companyInfo: {
                         companyName: result.price.longName || null,
+                        companySymbol: result.price.symbol || null,
                         currentPrice:
                             result.price.regularMarketPrice.raw || null,
                         percent:

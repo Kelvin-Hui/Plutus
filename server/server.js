@@ -21,10 +21,12 @@ app.use(express.json());
 const optionChainsRouter = require("./routes/optionChainsRoute");
 const searchQuoteRouter = require("./routes/searchQuoteRoute");
 const getNewsRouter = require("./routes/marketNewsRoute");
+const checkValidSymbolRouter = require("./routes/checkValidSymbolRoute");
 
 app.use("/api/optionChains", optionChainsRouter);
 app.use("/api/searchQuote", searchQuoteRouter);
 app.use("/api/marketNews", getNewsRouter);
+app.use("/api/checkSymbol", checkValidSymbolRouter);
 
 //App
 app.listen(port, () => {

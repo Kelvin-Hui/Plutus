@@ -39,7 +39,7 @@ export default function OptionChains() {
             <Card>
                 <span>Option's Exp Date : </span>
                 <select
-                    Value={exp === null ? expirationDates[0] : exp}
+                    value={exp === null ? expirationDates[0] : exp}
                     onChange={(e) => setExp(e.target.value)}
                 >
                     {expirationDates.map((d, idx) => {

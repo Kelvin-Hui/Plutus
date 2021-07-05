@@ -13,6 +13,7 @@ import axios from "axios";
 import Description from "./Description";
 import Chart from "./Chart/Chart";
 import KeyStatistic from "./KeyStatistic";
+import BuySellBtn from "./BuySellBtn";
 import IncomeStatement from "./Financial/IncomeStatement";
 
 export default function SearchQuote() {
@@ -54,9 +55,13 @@ export default function SearchQuote() {
                 <Description companyInfo={data.companyInfo} />
                 <Chart symbol={symbol} ohlcData={data.ohlcData} />
                 <KeyStatistic summaryDetail={data.summaryDetail} />
-                <IncomeStatement
-                    incomeRevenueYearly={data.incomeRevenueYearly}
+                <BuySellBtn
+                    price={data.companyInfo.currentPrice}
+                    percent={data.companyInfo.percent}
                 />
+                {/* <IncomeStatement
+                    incomeRevenueYearly={data.incomeRevenueYearly}
+                /> */}
             </div>
         </div>
     );

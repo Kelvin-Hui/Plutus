@@ -40,8 +40,8 @@ export default function IncomeStatement({ incomeRevenueYearly }) {
     // console.log(data);
 
     return (
-        <div className="IncomeStatement ">
-            <Card>
+        <div className="IncomeStatement">
+            <Card H100={true}>
                 {incomeRevenueYearly.length === 0 ? (
                     <div
                         className="Skeleton"

@@ -30,14 +30,14 @@ export default function MarketNews() {
             <SearchInput
                 placeholder="Search For Stock Quote (default : AAPL)"
                 setSymbol={setSymbol}
+                setNews={setNews}
             />
             <div className="NewsCardGrid">
                 {news.length === 0
                     ? sampleData.map((d, idx) => {
                           return (
-                              <Card>
+                              <Card key={"card_" + idx}>
                                   <div
-                                      key={idx}
                                       className="Skeleton"
                                       style={{ height: "300px", width: "100%" }}
                                   />
@@ -45,7 +45,7 @@ export default function MarketNews() {
                           );
                       })
                     : news.map((d, idx) => {
-                          return <NewsCard key={idx} data={d} />;
+                          return <NewsCard key={"newsCard_" + idx} data={d} />;
                       })}
             </div>
         </div>

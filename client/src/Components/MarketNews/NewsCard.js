@@ -5,7 +5,7 @@ import Card from "../StyledComponents/Card";
 
 export default function NewsCard({ data }) {
     return (
-        <Card>
+        <Card H100={true}>
             <div className="NewsCard">
                 <a
                     className="ThumbnailPic"

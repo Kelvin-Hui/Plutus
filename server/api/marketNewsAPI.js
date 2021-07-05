@@ -10,7 +10,7 @@ exports.getNews = async (req, res) => {
         const result = await axios({
             method: "get",
             url: yahoo_url,
-            timeout: 2000,
+            timeout: 3000,
             params: {
                 modules: "price",
             },
@@ -20,14 +20,16 @@ exports.getNews = async (req, res) => {
         exchangeName = exchangeName.replace("GS", "");
         exchangeName = exchangeName.replace("GM", "");
         exchangeName = exchangeName.replace(" ", "");
-        console.log(exchangeName);
+        console.log(symbol + " : " + exchangeName);
 
         const url = `https://www.google.com/finance/quote/${symbol}:${exchangeName}`;
+
+        console.log(url);
 
         const response = await axios({
             method: "get",
             url: url,
-            timeout: 2000,
+            timeout: 5000,
         });
 
         const $ = cheerio.load(response.data);
