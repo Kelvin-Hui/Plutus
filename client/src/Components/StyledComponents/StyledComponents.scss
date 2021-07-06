@@ -161,6 +161,7 @@
     }
 }
 
+//Dialog
 .Dialog {
     display: none;
     height: 100vh;
@@ -174,5 +175,68 @@
         width: 50%;
         margin: 10% auto 10% auto;
         padding: 8px 24px;
+    }
+}
+
+//Snackbar
+.Snackbar {
+    visibility: hidden;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+
+    position: fixed;
+    top: 50px;
+
+    padding: 16px;
+    z-index: 3;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    height: 5%;
+
+    .SnackLogo {
+        //height: 5%;
+        width: 5%;
+    }
+}
+.Snackbar.Error {
+    background-color: red;
+}
+.Snackbar.Warning {
+    background-color: #ffa000;
+}
+.Snackbar.Info {
+    background-color: blue;
+}
+.Snackbar.Success {
+    background-color: green;
+}
+.Snackbar.Show {
+    visibility: visible;
+    animation: fadeIn 0.5s, fadeOut 0.5s 1s;
+}
+
+@keyframes fadeIn {
+    from {
+        top: 0;
+        opacity: 0;
+    }
+    to {
+        top: 50px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        top: 50px;
+        opacity: 1;
+    }
+    to {
+        top: 0;
+        opacity: 0;
     }
 }

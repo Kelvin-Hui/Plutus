@@ -19,6 +19,13 @@ export default function Login() {
             form.className = "Form";
         }
     }
+    function login() {
+        console.log("login");
+    }
+
+    function register() {
+        console.log("register!");
+    }
 
     return (
         <>
@@ -47,7 +54,7 @@ export default function Login() {
                                 placeholder="Password"
                             ></input>
                             <span onClick={() => toggleFlip()}>
-                                New Here? Create Account!
+                                New Here? Create An Account!
                             </span>
                             <button className="Ripple">Login</button>
                         </div>
@@ -65,7 +72,7 @@ export default function Login() {
                             <span onClick={() => toggleFlip()}>
                                 Already Have An Account? Log In!
                             </span>
-                            <button className="Ripple">Create</button>
+                            <button className="Ripple">Register</button>
                         </div>
                     </div>
                 </div>
