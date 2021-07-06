@@ -33,7 +33,8 @@ exports.getNews = async (req, res) => {
         });
 
         const $ = cheerio.load(response.data);
-        const newsTable = $(".D6ciZd > div:not(:last)");
+        // const newsTable = $(".D6ciZd > div:not(:last)");
+        const newsTable = $(".D6ciZd > .yY3Lee");
         const news = [];
 
         newsTable.each(function () {
