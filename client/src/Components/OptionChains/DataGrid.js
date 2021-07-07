@@ -5,6 +5,12 @@ import axios from "axios";
 //Import clsx
 import clsx from "clsx";
 
+function properDate(d) {
+    return (
+        d.getUTCMonth() + 1 + "/" + d.getUTCDate() + "/" + d.getUTCFullYear()
+    );
+}
+
 export default function DataGrid({ symbol, exp }) {
     const [options, setOptions] = React.useState({});
 
@@ -77,9 +83,9 @@ export default function DataGrid({ symbol, exp }) {
         <table className="OptionsGrid">
             <thead>
                 <tr className="GridTitle">
-                    <th colSpan="15">{`${symbol}'s Option Chains ${new Date(
-                        exp * 1000
-                    ).toLocaleDateString()}`}</th>
+                    <th colSpan="15">{`${symbol}'s Option Chains ${properDate(
+                        new Date(exp * 1000)
+                    )}`}</th>
                 </tr>
 
                 <tr className="CALLPUT">

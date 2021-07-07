@@ -1,7 +1,7 @@
 const epxress = require("express");
 const router = epxress.Router();
 
-const { checkSymbol } = require("../api/checkValidSymbolAPI");
+const { checkSymbol } = require("../controllers/checkValidSymbolController");
 
 router.route("/").get(checkSymbol);
 

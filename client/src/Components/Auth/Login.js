@@ -7,29 +7,123 @@ import "./Auth.scss";
 import PlutusLogo from "../../Assets/Plutus Icon.svg";
 import AccountLogo from "../../Assets/account.svg";
 
+//Import Custom Util Components
+import Snackbar from "../StyledComponents/Snackbar";
+
+//Import UserContext
+import UserContext from "../../Context/UserContext";
+
+//Import React Router Dom
+import { useHistory } from "react-router-dom";
+
+//Import clsx
+import clsx from "clsx";
+
+//Import Axios for API calling
+import axios from "axios";
+
 export default function Login() {
+    const loginUsername = React.useRef();
+    const loginPassword = React.useRef();
+    const registerUsername = React.useRef();
+    const registerPassword = React.useRef();
+
+    const { setUserInfo } = React.useContext(UserContext);
+    const history = useHistory();
+
+    const url = "http://localhost:5000/api/auth/";
+
     function toggleFlip() {
         const form = document.querySelector(".Form");
-
-        console.log(form);
-
         if (form.className === "Form") {
             form.className = "Form Flipped";
+            loginUsername.current.value = null;
+            loginPassword.current.value = null;
         } else if (form.className === "Form Flipped") {
             form.className = "Form";
+            registerUsername.current.value = null;
+            registerPassword.current.value = null;
         }
     }
-    function login() {
-        console.log("login");
+
+    function toggleSnackbar(status, msg) {
+        var snack = document.getElementsByClassName("Snackbar")[0];
+
+        snack.className = `Snackbar ${status} Show`;
+        snack.textContent = msg;
+
+        setTimeout(function () {
+            snack.className = "Snackbar";
+            //snack.className = snack.className.replace("Show", "");
+        }, 1900);
     }
 
-    function register() {
-        console.log("register!");
+    function login(e) {
+        e.preventDefault();
+        console.log("login");
+        let user = loginUsername.current.value;
+        let pw = loginPassword.current.value;
+        const submit = async (user, pw) => {
+            const res = await axios.post(url + "login", {
+                username: user,
+                password: pw,
+            });
+            if (res.data.status == "fail") {
+                toggleSnackbar("Error", res.data.message);
+                loginUsername.current.style.border = "3px solid red";
+                loginPassword.current.style.border = "3px solid red";
+            } else {
+                toggleSnackbar("Success", res.data.message);
+                localStorage.setItem("Auth Token", res.data.token);
+                setUserInfo({ username: res.data.username });
+            }
+        };
+        submit(user, pw);
     }
+
+    function register(e) {
+        e.preventDefault();
+        console.log("register!");
+        let user = registerUsername.current.value;
+        let pw = registerPassword.current.value;
+        const submit = async (user, pw) => {
+            const res = await axios.post(url + "register", {
+                username: user,
+                password: pw,
+            });
+            if (res.data.status == "fail") {
+                toggleSnackbar("Error", res.data.message);
+                registerUsername.current.style.border = "3px solid red";
+                registerPassword.current.style.border = "3px solid red";
+            } else {
+                toggleSnackbar("Success", res.data.message);
+                toggleFlip();
+            }
+        };
+        submit(user, pw);
+    }
+
+    const hitEnter = (e) => {
+        if (e.key === "Enter") {
+            const form = document.querySelector(".Form");
+            const ele = document.getElementById(
+                form.className === "Form" ? "Login" : "Register"
+            );
+            ele.click();
+        }
+    };
+    React.useEffect(() => {
+        document.addEventListener("keydown", hitEnter);
+
+        return () => {
+            document.removeEventListener("keydown", hitEnter);
+        };
+    }, []);
 
     return (
         <>
-            <div className="LoginPage">
+            <div className="LoginPage" id="LP">
+                <Snackbar />
                 <div className="LogoName">
                     <img src={PlutusLogo} alt="logo" className="Logo" />
                     <div className="Name">
@@ -48,15 +142,25 @@ export default function Login() {
                                 alt="account"
                                 className="AccountLogo"
                             />
-                            <input placeholder="UserName"></input>
                             <input
+                                ref={loginUsername}
+                                placeholder="UserName"
+                            ></input>
+                            <input
+                                ref={loginPassword}
                                 type="password"
                                 placeholder="Password"
                             ></input>
                             <span onClick={() => toggleFlip()}>
                                 New Here? Create An Account!
                             </span>
-                            <button className="Ripple">Login</button>
+                            <button
+                                id="Login"
+                                className="Ripple"
+                                onClick={(e) => login(e)}
+                            >
+                                Login
+                            </button>
                         </div>
                         <div className="Face Back" id="Back">
                             <img
@@ -64,15 +168,25 @@ export default function Login() {
                                 alt="account"
                                 className="AccountLogo"
                             />
-                            <input placeholder="UserName"></input>
                             <input
+                                ref={registerUsername}
+                                placeholder="UserName"
+                            ></input>
+                            <input
+                                ref={registerPassword}
                                 type="password"
                                 placeholder="Password"
                             ></input>
                             <span onClick={() => toggleFlip()}>
                                 Already Have An Account? Log In!
                             </span>
-                            <button className="Ripple">Register</button>
+                            <button
+                                id="Register"
+                                className="Ripple"
+                                onClick={(e) => register(e)}
+                            >
+                                Register
+                            </button>
                         </div>
                     </div>
                 </div>

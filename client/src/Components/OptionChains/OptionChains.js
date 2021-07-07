@@ -11,6 +11,12 @@ import DataGrid from "./DataGrid";
 //Import Custom Util Components
 import Card from "../StyledComponents/Card";
 
+function properDate(d) {
+    return (
+        d.getUTCMonth() + 1 + "/" + d.getUTCDate() + "/" + d.getUTCFullYear()
+    );
+}
+
 export default function OptionChains() {
     const [symbol, setSymbol] = React.useState("AAPL");
     const [exp, setExp] = React.useState(null);
@@ -46,7 +52,7 @@ export default function OptionChains() {
                         var date = new Date(d * 1000);
                         return (
                             <option value={d} key={d + idx}>
-                                {date.toLocaleDateString()}
+                                {properDate(date)}
                             </option>
                         );
                     })}

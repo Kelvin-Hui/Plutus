@@ -15,6 +15,8 @@ exports.checkSymbol = async (req, res) => {
             },
         });
 
+        console.log(response);
+
         return res.status(200).json({
             status: "success",
             valid: true,
@@ -23,7 +25,6 @@ exports.checkSymbol = async (req, res) => {
         return res.status(200).json({
             status: "fail",
             valid: false,
-            // error: error,
         });
     }
 };

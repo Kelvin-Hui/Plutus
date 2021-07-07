@@ -36,37 +36,6 @@ function calcPeriod1() {
     }
 }
 
-// function calcPeriod2() {
-//     let d = new Date();
-
-//     d.setUTCHours(13);
-//     d.setUTCMinutes(30);
-//     d.setUTCSeconds(0);
-//     d.setUTCMilliseconds(0);
-
-//     let day = d.getDay();
-//     console.log(day);
-
-//     if (day !== 0 && day !== 6) {
-//         console.log(day);
-//         console.log("Day in 1 2 3 4 5");
-//         if (new Date().valueOf() > d.valueOf()) {
-//             return d.valueOf() / 1000;
-//         } else {
-//             return d.setDate(d.getDate() - 1).valueOf() / 1000;
-//         }
-//     } else {
-//         if (day === 7) {
-//             console.log("SunDay");
-
-//             return d.setDate(d.getDate() - 2).valueOf() / 1000;
-//         } else {
-//             console.log("SatDay");
-//             return d.setDate(d.getDate() - 1).valueOf() / 1000;
-//         }
-//     }
-// }
-
 exports.getQuote = async (req, res) => {
     try {
         const { symbol, type } = req.query;

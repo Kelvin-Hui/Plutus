@@ -14,7 +14,13 @@ function toggleSnack() {
 export default function TestSnackbar() {
     return (
         <>
-            <Snackbar message={"warning warning"} Warning={true} />
+            <Snackbar
+                message={"warning warning"}
+                Warning={false}
+                Info={false}
+                Success={true}
+                Error={false}
+            />
             <button onClick={() => toggleSnack()}>Click Me</button>
         </>
     );

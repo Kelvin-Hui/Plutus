@@ -16,11 +16,16 @@ import { ReactComponent as Backtestinglogo } from "../../Assets/backtesting.svg"
 import { ReactComponent as Settinglogo } from "../../Assets/setting.svg";
 import { ReactComponent as Logoutlogo } from "../../Assets/logout.svg";
 
+//Import UserContext
+import UserContext from "../../Context/UserContext";
+
 //Import Custom Util Components
 import Divider from "./Divider";
 
 //Nav Drawer For The Home Page.
 export default function NavDrawer({ currContent, setCurrContent }) {
+    const { userInfo, setUserInfo } = React.useContext(UserContext);
+
     return (
         <div className="NavDrawer">
             {/*Brand and Logo*/}
@@ -30,7 +35,7 @@ export default function NavDrawer({ currContent, setCurrContent }) {
             </div>
 
             {/*User Greeting*/}
-            <h2 className="Greeting">Welcome!</h2>
+            <h2 className="Greeting">Welcome! {userInfo.username}</h2>
 
             {/*Navigation Items*/}
             <div className="NavItems">
@@ -108,7 +113,13 @@ export default function NavDrawer({ currContent, setCurrContent }) {
                     Setting
                 </div>
 
-                <div className={clsx({ NavItem: true })}>
+                <div
+                    className={clsx({ NavItem: true })}
+                    onClick={() => {
+                        setUserInfo(null);
+                        localStorage.removeItem("Auth Token");
+                    }}
+                >
                     <Logoutlogo className="NavItemsLogo" />
                     LogOut
                 </div>

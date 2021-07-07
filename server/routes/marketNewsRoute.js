@@ -1,7 +1,7 @@
 const epxress = require("express");
 const router = epxress.Router();
 
-const { getNews } = require("../api/marketNewsAPI");
+const { getNews } = require("../controllers/marketNewsController");
 
 router.route("/").get(getNews);
 

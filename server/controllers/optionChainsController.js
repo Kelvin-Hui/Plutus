@@ -16,12 +16,6 @@ exports.getOptionChains = async (req, res) => {
             params: { date: date },
         });
 
-        if (response.data.optionChain.result.length == 0) {
-            return res.status(200).json({
-                status: "fail",
-                error: "empty data",
-            });
-        }
         return res.status(200).json({
             status: "success",
             data: response.data,

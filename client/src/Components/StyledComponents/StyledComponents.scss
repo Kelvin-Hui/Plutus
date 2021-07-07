@@ -188,7 +188,7 @@
     position: fixed;
     top: 50px;
 
-    padding: 16px;
+    padding: 8px;
     z-index: 3;
 
     display: flex;
@@ -197,26 +197,38 @@
 
     height: 5%;
 
+    &.Error {
+        background-color: red;
+    }
+    &.Info {
+        background-color: blue;
+    }
+
+    &.Success {
+        background-color: green;
+    }
+    &.Warning {
+        background-color: #ffa000;
+    }
+
     .SnackLogo {
-        //height: 5%;
+        visibility: hidden;
         width: 5%;
+        fill: white;
+        margin: 0px 16px;
+
+        &.Error,
+        &.Info,
+        &.Success,
+        &.Warning {
+            visibility: visible;
+        }
     }
 }
-.Snackbar.Error {
-    background-color: red;
-}
-.Snackbar.Warning {
-    background-color: #ffa000;
-}
-.Snackbar.Info {
-    background-color: blue;
-}
-.Snackbar.Success {
-    background-color: green;
-}
+
 .Snackbar.Show {
     visibility: visible;
-    animation: fadeIn 0.5s, fadeOut 0.5s 1s;
+    animation: fadeIn 0.5s, fadeOut 0.5s 1.5s;
 }
 
 @keyframes fadeIn {
