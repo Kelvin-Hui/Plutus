@@ -15,10 +15,20 @@ export default function MarketNews() {
     const [symbol, setSymbol] = React.useState("AAPL");
     const [news, setNews] = React.useState([]);
 
+    // React.useEffect(() => {
+    //     axios
+    //         .get(`http://localhost:5000/api/marketNews?symbol=${symbol}`)
+    //         .then((response) => setNews(response.data.data));
+    // }, [symbol]);
+
     React.useEffect(() => {
-        axios
-            .get(`http://localhost:5000/api/marketNews?symbol=${symbol}`)
-            .then((response) => setNews(response.data.data));
+        const fetchData = async () => {
+            const result = await axios(
+                `http://localhost:5000/api/marketNews?symbol=${symbol}`
+            );
+            setNews(result.data.data);
+        };
+        fetchData();
     }, [symbol]);
 
     const sampleData = [1, 2, 3, 4, 5, 6];

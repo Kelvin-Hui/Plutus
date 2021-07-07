@@ -21,9 +21,6 @@ export default function SearchInput(props) {
     function enter(e) {
         let valid = check(e.target.value.toUpperCase());
 
-        if (props.setExp !== undefined) {
-            props.setExp(null);
-        }
         if (props.setNews !== undefined) {
             props.setNews([]);
         }

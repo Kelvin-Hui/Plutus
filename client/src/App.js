@@ -26,7 +26,6 @@ function App() {
                 setUserInfo(null);
                 return;
             }
-            console.log("I Got Token");
 
             let axiosConfig = {
                 headers: {

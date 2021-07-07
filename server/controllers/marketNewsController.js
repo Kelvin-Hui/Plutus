@@ -33,21 +33,23 @@ exports.getNews = async (req, res) => {
         });
 
         const $ = cheerio.load(response.data);
-        // const newsTable = $(".D6ciZd > div:not(:last)");
         const newsTable = $(".D6ciZd > .yY3Lee");
         const news = [];
 
         newsTable.each(function () {
-            const newsSource = $(this)
-                .find("div > div > a > div > div > div:first")
-                .text();
-            const sourceTime = $(this)
-                .find("div > div > a > div > div > div:last")
-                .text();
+            // const newsSource = $(this)
+            //     .find("div > div > a > div > div > div:first")
+            //     .text();
+            // const sourceTime = $(this)
+            //     .find("div > div > a > div > div > div:last")
+            //     .text();
 
-            const newsTitle = $(this)
-                .find("div > div > a > div > div:last")
-                .text();
+            // const newsTitle = $(this)
+            //     .find("div > div > a > div > div:last")
+            //     .text();
+            const newsSource = $(this).find(".sfyJob").text();
+            const sourceTime = $(this).find(".Adak").text();
+            const newsTitle = $(this).find(".AoCdqe").text();
 
             const newsLink = $(this).find("div> div>a").prop("href");
 
@@ -60,10 +62,6 @@ exports.getNews = async (req, res) => {
                 newsLink: newsLink,
                 newsThumbnail: newsThumbnail,
             });
-            // console.log(newsSource + " : " + sourceTime);
-            // console.log(newsTitle);
-            // console.log(newsLink);
-            // console.log("new img : " + newsThumbnail);
         });
 
         return res.status(200).json({
@@ -71,7 +69,7 @@ exports.getNews = async (req, res) => {
             data: news,
         });
     } catch (error) {
-        return res.status(200).json({
+        return res.status(400).json({
             status: "fail",
             error: error,
         });

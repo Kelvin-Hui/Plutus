@@ -11,56 +11,20 @@ function properDate(d) {
     );
 }
 
-export default function DataGrid({ symbol, exp }) {
-    const [options, setOptions] = React.useState({});
-
-    function processData(data) {
-        var strikes = data.strikes;
-
-        let cIdx = 0;
-        const coptions = data.options[0].calls;
-        const cLen = data.options[0].calls.length;
-
-        let pIdx = 0;
-        const poptions = data.options[0].puts;
-        const pLen = data.options[0].puts.length;
-
-        return strikes.map((s, idx) => {
-            return {
-                strikes: s,
-                calls:
-                    cIdx < cLen
-                        ? coptions[cIdx].strike === s
-                            ? data.options[0].calls[cIdx++]
-                            : null
-                        : null,
-                puts:
-                    pIdx < pLen
-                        ? poptions[pIdx].strike === s
-                            ? data.options[0].puts[pIdx++]
-                            : null
-                        : null,
-            };
-        });
-    }
+export default function DataGrid({ symbol, data, exp }) {
+    const [optionData, setOptionData] = React.useState(data);
 
     React.useEffect(() => {
-        {
-            exp != null &&
-                axios
-                    .get(
-                        `http://localhost:5000/api/optionChains?symbol=${symbol}&date=${exp}`
-                    )
-                    .then(
-                        (response) => response.data.data.optionChain.result[0]
-                    )
-                    .then(
-                        (res) => (
-                            setOptions(processData(res)), console.log(res)
-                        )
-                    );
+        const fetchData = async () => {
+            const result = await axios.get(
+                `http://localhost:5000/api/optionChains?symbol=${symbol}&date=${exp}`
+            );
+            setOptionData(result.data.data.optionsData);
+        };
+        if (exp !== null) {
+            fetchData();
         }
-    }, [symbol, exp]);
+    }, [exp]);
 
     const columns = [
         "Open Interest",
@@ -100,7 +64,7 @@ export default function DataGrid({ symbol, exp }) {
                 </tr>
             </thead>
             <tbody>
-                {Object.keys(options).length === 0 ? (
+                {Object.keys(optionData).length === 0 ? (
                     <td
                         colSpan="15"
                         style={{
@@ -114,8 +78,8 @@ export default function DataGrid({ symbol, exp }) {
                         Loading....
                     </td>
                 ) : (
-                    Object.keys(options).length != 0 &&
-                    options.map((data, idx) => {
+                    Object.keys(optionData).length != 0 &&
+                    optionData.map((data, idx) => {
                         const c = data.calls != undefined ? data.calls : {};
                         const p = data.puts != undefined ? data.puts : {};
 
