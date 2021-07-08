@@ -1,11 +1,11 @@
 import React from "react";
 import "./App.scss";
 
-//Import Homepage
-import Homepage from "./Components/Homepage";
+// //Import Homepage
+// import Homepage from "./Components/Homepage";
 
-//Import Login
-import Login from "./Components/Auth/Login";
+// //Import Login
+// import Login from "./Components/Auth/Login";
 
 //Import React Router Dom
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -15,6 +15,12 @@ import UserContext from "./Context/UserContext";
 
 //Import Axios for API calling
 import axios from "axios";
+
+//Import Custom Util Components
+import Spinner from "./Components/StyledComponents/Spinner";
+
+const Homepage = React.lazy(() => import("./Components/Homepage"));
+const Login = React.lazy(() => import("./Components/Auth/Login"));
 
 function App() {
     const [userInfo, setUserInfo] = React.useState(null);
@@ -38,8 +44,7 @@ function App() {
             if (validate.data.status === "success") {
                 setUserInfo({
                     username: validate.data.username,
-                    balance: validate.data.balance,
-                    portfolio: validate.data.portfolio,
+                    userID: validate.data.userID,
                 });
             } else {
                 setUserInfo(null);
@@ -50,17 +55,19 @@ function App() {
     }, []);
 
     return (
-        <Router>
-            <UserContext.Provider value={{ userInfo, setUserInfo }}>
-                <Switch>
-                    {userInfo !== null ? (
-                        <Route path="/" exact component={Homepage} />
-                    ) : (
-                        <Route path="/" exact component={Login} />
-                    )}
-                </Switch>
-            </UserContext.Provider>
-        </Router>
+        <React.Suspense fallback={<Spinner />}>
+            <Router>
+                <UserContext.Provider value={{ userInfo, setUserInfo }}>
+                    <Switch>
+                        {userInfo !== null ? (
+                            <Route path="/" exact component={Homepage} />
+                        ) : (
+                            <Route path="/" exact component={Login} />
+                        )}
+                    </Switch>
+                </UserContext.Provider>
+            </Router>
+        </React.Suspense>
     );
 }
 

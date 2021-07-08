@@ -1,0 +1,25 @@
+.Contentpage {
+    .Dashboard {
+        display: grid;
+        margin: 1%;
+        row-gap: 5%;
+        grid-template-columns: 33% 33% 33%;
+        grid-template-areas:
+            "AccountInfo Graph Graph"
+            "Portfolio Portfolio Portfolio"
+            "Transactions Transactions Transactions";
+
+        .AcconntInfo {
+            grid-area: AccountInfo;
+        }
+        .Graph {
+            grid-area: Graph;
+        }
+        .Portfolio {
+            grid-area: Portfolio;
+        }
+        .Transactions {
+            grid-area: Transactions;
+        }
+    }
+}
