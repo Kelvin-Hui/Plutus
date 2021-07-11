@@ -21,14 +21,52 @@ import UserContext from "../../Context/UserContext";
 
 //Import Custom Util Components
 import Divider from "./Divider";
+import Snackbar from "../StyledComponents/Snackbar";
+import Dialog from "./Dialog";
+
+//Import Axios for API calling
+import axios from "axios";
 
 //Nav Drawer For The Home Page.
 export default function NavDrawer({ currContent, setCurrContent }) {
     const { userInfo, setUserInfo } = React.useContext(UserContext);
+    const [open, setOpen] = React.useState(false);
+
+    const url = "http://localhost:5000/api/order/reset";
+
+    function toggleSnackbar(status, msg) {
+        var snack = document.getElementsByClassName("Snackbar")[0];
+
+        snack.className = `Snackbar ${status} Show`;
+        snack.textContent = msg;
+
+        setTimeout(function () {
+            snack.className = "Snackbar";
+        }, 1900);
+    }
+
+    function reset(e) {
+        e.preventDefault();
+        const resetOrder = async () => {
+            const res = await axios.post(url, {
+                userID: userInfo.userID,
+            });
+            if (res.data.status == "fail") {
+                toggleSnackbar("Error", res.data.message);
+            } else {
+                toggleSnackbar("Success", res.data.message);
+            }
+        };
+        resetOrder();
+    }
 
     return (
         <div className="NavDrawer">
             {/*Brand and Logo*/}
+            <Dialog open={open} setOpen={setOpen}>
+                {/* <Snackbar /> */}
+                <button onClick={(e) => reset(e)}>Reset Button!</button>
+            </Dialog>
             <div className="TitleLogo">
                 <img src={PlutusLogo} alt="logo" className="NavLogo" />
                 <h2>Plutus</h2>
@@ -108,7 +146,10 @@ export default function NavDrawer({ currContent, setCurrContent }) {
 
                 <Divider />
 
-                <div className={clsx({ NavItem: true })}>
+                <div
+                    className={clsx({ NavItem: true })}
+                    onClick={() => setOpen(true)}
+                >
                     <Settinglogo className="NavItemsLogo" />
                     Setting
                 </div>

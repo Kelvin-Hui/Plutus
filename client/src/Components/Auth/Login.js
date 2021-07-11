@@ -75,7 +75,11 @@ export default function Login() {
             } else {
                 toggleSnackbar("Success", res.data.message);
                 localStorage.setItem("Auth Token", res.data.token);
-                setUserInfo({ username: res.data.username });
+                setUserInfo({
+                    username: res.data.username,
+                    userID: res.data.userID,
+                    joinDate: new Date(res.data.joinDate),
+                });
             }
         };
         submit(user, pw);

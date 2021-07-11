@@ -22,7 +22,15 @@ const userPortfolioSchema = new Schema(
             required: true,
             default: 25000,
         },
+        unitPrice: {
+            type: Map,
+            default: {},
+        },
         portfolio: {
+            type: Map,
+            default: {},
+        },
+        transaction: {
             type: Array,
             default: [],
         },

@@ -6,6 +6,8 @@ import "./SearchQuote.scss";
 //Import SearchInput
 import SearchInput from "../StyledComponents/SearchInput";
 
+import Snackbar from "../StyledComponents/Snackbar";
+
 //Import Axios for API calling
 import axios from "axios";
 
@@ -47,6 +49,7 @@ export default function SearchQuote() {
 
     return (
         <div className="Contentpage">
+            {/* <Snackbar /> */}
             <SearchInput
                 placeholder="Search For Stock Quote (default : AAPL)"
                 setSymbol={setSymbol}
@@ -56,6 +59,7 @@ export default function SearchQuote() {
                 <Chart symbol={symbol} ohlcData={data.ohlcData} />
                 <KeyStatistic summaryDetail={data.summaryDetail} />
                 <BuySellBtn
+                    symbol={symbol}
                     price={data.companyInfo.currentPrice}
                     percent={data.companyInfo.percent}
                 />

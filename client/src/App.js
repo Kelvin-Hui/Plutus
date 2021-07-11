@@ -45,6 +45,12 @@ function App() {
                 setUserInfo({
                     username: validate.data.username,
                     userID: validate.data.userID,
+                    joinDate: new Date(validate.data.joinDate),
+                    //divider
+                    balance: validate.data.balance,
+                    portfolio: validate.data.portfolio,
+                    transaction: validate.data.transaction,
+                    unitPrice: validate.data.unitPrice,
                 });
             } else {
                 setUserInfo(null);

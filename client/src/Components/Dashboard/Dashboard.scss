@@ -8,7 +8,6 @@
             "AccountInfo Graph Graph"
             "Portfolio Portfolio Portfolio"
             "Transactions Transactions Transactions";
-
         .AcconntInfo {
             grid-area: AccountInfo;
         }
@@ -17,9 +16,18 @@
         }
         .Portfolio {
             grid-area: Portfolio;
+            .PortfolioTable {
+                //border: 0.1px solid grey;
+                width: 100%;
+                text-align: center;
+            }
         }
         .Transactions {
             grid-area: Transactions;
+            .TransactionsTable {
+                width: 100%;
+                text-align: center;
+            }
         }
     }
 }

@@ -26,6 +26,8 @@ mongoose
     })
     .catch((err) => console.log(err));
 
+mongoose.set("useFindAndModify", false);
+
 //Routes
 const authRouter = require("./routes/authRoute");
 
@@ -33,12 +35,14 @@ const optionChainsRouter = require("./routes/optionChainsRoute");
 const searchQuoteRouter = require("./routes/searchQuoteRoute");
 const getNewsRouter = require("./routes/marketNewsRoute");
 const checkValidSymbolRouter = require("./routes/checkValidSymbolRoute");
+const orderRouter = require("./routes/orderRoute");
 
 app.use("/api/optionChains", optionChainsRouter);
 app.use("/api/searchQuote", searchQuoteRouter);
 app.use("/api/marketNews", getNewsRouter);
 app.use("/api/checkSymbol", checkValidSymbolRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/order", orderRouter);
 
 //App
 app.listen(port, () => {
