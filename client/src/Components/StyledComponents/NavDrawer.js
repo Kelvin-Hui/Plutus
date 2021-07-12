@@ -21,15 +21,15 @@ import UserContext from "../../Context/UserContext";
 
 //Import Custom Util Components
 import Divider from "./Divider";
-import Snackbar from "../StyledComponents/Snackbar";
 import Dialog from "./Dialog";
 
 //Import Axios for API calling
 import axios from "axios";
 
 //Nav Drawer For The Home Page.
-export default function NavDrawer({ currContent, setCurrContent }) {
-    const { userInfo, setUserInfo } = React.useContext(UserContext);
+export default function NavDrawer() {
+    const { userInfo, setUserInfo, nav, setNav } =
+        React.useContext(UserContext);
     const [open, setOpen] = React.useState(false);
 
     const url = "http://localhost:5000/api/order/reset";
@@ -77,7 +77,7 @@ export default function NavDrawer({ currContent, setCurrContent }) {
 
             {/*Navigation Items*/}
             <div className="NavItems">
-                <div
+                {/* <div
                     className={clsx({
                         NavItem: true,
                     })}
@@ -85,16 +85,19 @@ export default function NavDrawer({ currContent, setCurrContent }) {
                 >
                     <Homepagelogo className="NavItemsLogo" />
                     Home
-                </div>
+                </div> */}
 
                 <Divider />
 
                 <div
                     className={clsx({
                         NavItem: true,
-                        NavItemSelected: currContent === "Dashboard",
+                        NavItemSelected: nav.currentPage === "Dashboard",
                     })}
-                    onClick={() => setCurrContent("Dashboard")}
+                    onClick={() =>
+                        nav.currentPage !== "Dashboard" &&
+                        setNav({ ...nav, currentPage: "Dashboard" })
+                    }
                 >
                     <Dashboardlogo className="NavItemsLogo" />
                     Dashboard
@@ -103,9 +106,12 @@ export default function NavDrawer({ currContent, setCurrContent }) {
                 <div
                     className={clsx({
                         NavItem: true,
-                        NavItemSelected: currContent === "SearchQuote",
+                        NavItemSelected: nav.currentPage === "SearchQuote",
                     })}
-                    onClick={() => setCurrContent("SearchQuote")}
+                    onClick={() =>
+                        nav.currentPage !== "SearchQuote" &&
+                        setNav({ ...nav, currentPage: "SearchQuote" })
+                    }
                 >
                     <Searchquotelogo className="NavItemsLogo" />
                     Search Quote
@@ -114,9 +120,12 @@ export default function NavDrawer({ currContent, setCurrContent }) {
                 <div
                     className={clsx({
                         NavItem: true,
-                        NavItemSelected: currContent === "OptionChains",
+                        NavItemSelected: nav.currentPage === "OptionChains",
                     })}
-                    onClick={() => setCurrContent("OptionChains")}
+                    onClick={() =>
+                        nav.currentPage !== "OptionChains" &&
+                        setNav({ ...nav, currentPage: "OptionChains" })
+                    }
                 >
                     <Optionchainslogo className="NavItemsLogo" />
                     Option Chains
@@ -125,15 +134,18 @@ export default function NavDrawer({ currContent, setCurrContent }) {
                 <div
                     className={clsx({
                         NavItem: true,
-                        NavItemSelected: currContent === "MarketNews",
+                        NavItemSelected: nav.currentPage === "MarketNews",
                     })}
-                    onClick={() => setCurrContent("MarketNews")}
+                    onClick={() =>
+                        nav.currentPage !== "MarketNews" &&
+                        setNav({ ...nav, currentPage: "MarketNews" })
+                    }
                 >
                     <Marketnewslogo className="NavItemsLogo" />
                     Market News
                 </div>
 
-                <div
+                {/* <div
                     className={clsx({
                         NavItem: true,
                         NavItemSelected: currContent === "Backtesting",
@@ -142,7 +154,7 @@ export default function NavDrawer({ currContent, setCurrContent }) {
                 >
                     <Backtestinglogo className="NavItemsLogo" />
                     BackTesting
-                </div>
+                </div> */}
 
                 <Divider />
 

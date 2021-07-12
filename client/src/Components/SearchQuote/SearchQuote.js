@@ -19,9 +19,9 @@ import KeyStatistic from "./KeyStatistic";
 import BuySellBtn from "./BuySellBtn";
 import IncomeStatement from "./Financial/IncomeStatement";
 
-export default function SearchQuote() {
+export default function SearchQuote({ symbol }) {
     console.log("rendered SQ");
-    const [symbol, setSymbol] = React.useState("AAPL");
+    //const [symbol, setSymbol] = React.useState("AAPL");
     const [data, setData] = React.useState({
         companyInfo: [],
         incomeRevenueYearly: [],
@@ -53,7 +53,7 @@ export default function SearchQuote() {
             <Snackbar />
             <SearchInput
                 placeholder="Search For Stock Quote (default : AAPL)"
-                setSymbol={setSymbol}
+                //setSymbol={setSymbol}
             />
             <div className="CardGrid_SearchQuote">
                 <Description companyInfo={data.companyInfo} />

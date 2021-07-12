@@ -4,6 +4,7 @@ let UserPortfolio = require("../models/userPortfolioModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
+const { prev } = require("cheerio/lib/api/traversing");
 
 exports.createAccount = async (req, res) => {
     console.log("called create account");
@@ -159,37 +160,6 @@ exports.validateToken = async (req, res) => {
     }
 };
 
-exports.getInfo = async (req, res) => {
-    try {
-        const { userID } = req.query;
-        if (!userID) {
-            return res.status(200).json({
-                status: "fail",
-                message: "userID Missing!",
-            });
-        }
-        const existingPortfolio = await UserPortfolio.findOne({
-            userID: userID,
-        });
-        if (!existingPortfolio) {
-            return res.status(200).json({
-                status: "fail",
-                message: "Fail ! Portfolio Doesn't Exist !",
-            });
-        }
-
-        return res.status(200).json({
-            status: "success",
-            data: existingPortfolio,
-        });
-    } catch (error) {
-        return res.status(200).json({
-            status: "fail",
-            error: error.message,
-        });
-    }
-};
-
 exports.getDashboardInfo = async (req, res) => {
     try {
         const { userID } = req.query;
@@ -233,28 +203,41 @@ exports.getDashboardInfo = async (req, res) => {
             const position = existingPortfolio.portfolio.get(symbol);
             const unitPrice = existingPortfolio.unitPrice.get(symbol);
             const marketValue = Math.abs(position) * currentPrice;
+
+            const previousClose_unitPrice =
+                unitPrice > previousClose ? unitPrice : previousClose;
+
             data.portfolioValue += marketValue;
 
             data.portfolioData.push({
                 symbol: symbol,
-                currentPrice: currentPrice,
+                currentPrice: currentPrice.toFixed(2),
                 companyName: companyName,
                 position: position,
-                averageCost: unitPrice,
+                averageCost: unitPrice.toFixed(2),
                 marketValue: parseFloat(marketValue).toFixed(2),
                 todayReturn: {
-                    raw: parseFloat(currentPrice - previousClose).toFixed(2),
+                    raw: (
+                        Math.abs(position) *
+                        parseFloat(currentPrice - previousClose_unitPrice)
+                    ).toFixed(2),
                     fmt:
                         (
-                            (currentPrice - previousClose) /
-                            previousClose
-                        ).toFixed(4) * 100,
+                            ((currentPrice - previousClose_unitPrice) /
+                                previousClose_unitPrice) *
+                            100
+                        ).toFixed(2) + "%",
                 },
                 totalReturn: {
-                    raw: parseFloat(currentPrice - unitPrice).toFixed(2),
+                    raw: (
+                        Math.abs(position) *
+                        parseFloat(currentPrice - unitPrice)
+                    ).toFixed(2),
                     fmt:
-                        ((currentPrice - unitPrice) / unitPrice).toFixed(4) *
-                        100,
+                        (
+                            ((currentPrice - unitPrice) / unitPrice) *
+                            100
+                        ).toFixed(2) + "%",
                 },
             });
         }

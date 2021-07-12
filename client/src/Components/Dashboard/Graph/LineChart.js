@@ -45,13 +45,25 @@ export default function LineChart({ transactions, portfolioValue }) {
         var xAxis = d3.axisBottom(x);
 
         var maxPNL = 0;
+        var totalGain = 0;
+        var totalLoss = 0;
+
         transactions.map((data) => {
-            maxPNL += data.pnl;
+            if (data.pnl > 0) {
+                totalGain += data.pnl;
+            } else {
+                totalLoss += data.pnl;
+            }
         });
+
+        maxPNL = Math.max(totalGain, Math.abs(totalLoss));
 
         var y = d3
             .scaleLinear()
-            .domain([25000 - maxPNL, 25000 + maxPNL])
+            .domain([
+                25000 - Math.abs(maxPNL * 1.5),
+                25000 + Math.abs(maxPNL * 1.5),
+            ])
             .range([height, 0]);
         var yAxis = d3.axisLeft(y).tickFormat(function (d) {
             return "$" + d;
@@ -65,8 +77,9 @@ export default function LineChart({ transactions, portfolioValue }) {
         svg.append("path")
             .datum(transactions)
             .attr("fill", "none")
-            .attr("stroke", "#69b3a2")
-            .attr("stroke-width", 1.5)
+            .attr("class", "line")
+            .attr("stroke", totalGain + totalLoss > 0 ? "#69b3a2" : "#FF0000")
+            .attr("stroke-width", 2.5)
             .attr(
                 "d",
                 d3
@@ -77,6 +90,7 @@ export default function LineChart({ transactions, portfolioValue }) {
                     .y(function (d) {
                         return y((tempValue += d.pnl));
                     })
+                    .curve(d3.curveMonotoneX)
             );
     }
 

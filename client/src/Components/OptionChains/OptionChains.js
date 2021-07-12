@@ -20,9 +20,9 @@ function properDate(d) {
     );
 }
 
-export default function OptionChains() {
+export default function OptionChains({ symbol }) {
     console.log("OC");
-    const [symbol, setSymbol] = React.useState("AAPL");
+    //const [symbol, setSymbol] = React.useState("AAPL");
     const [exp, setExp] = React.useState(null);
     const [expirationDates, setExpirationDates] = React.useState([]);
     const [data, setData] = React.useState([]);
@@ -46,7 +46,7 @@ export default function OptionChains() {
             <Snackbar />
             <SearchInput
                 placeholder="Search For Stock Quote (default : AAPL)"
-                setSymbol={setSymbol}
+                //setSymbol={setSymbol}
             />
 
             <Card>

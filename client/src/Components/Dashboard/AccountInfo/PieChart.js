@@ -72,7 +72,7 @@ export default function PieChart({ pieChartData, portfolioValue }) {
             .on("mouseout", function (d, i) {
                 d3.select("#text1").text("Portfolio Value");
                 d3.select("#text2").text("");
-                d3.select("#text3").text("$" + portfolioValue);
+                d3.select("#text3").text("$" + portfolioValue.toFixed(2));
                 d3.select(this).transition().duration(50).attr("opacity", 1);
             });
         svg.append("text")

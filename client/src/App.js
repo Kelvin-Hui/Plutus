@@ -1,12 +1,6 @@
 import React from "react";
 import "./App.scss";
 
-// //Import Homepage
-// import Homepage from "./Components/Homepage";
-
-// //Import Login
-// import Login from "./Components/Auth/Login";
-
 //Import React Router Dom
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
@@ -23,7 +17,13 @@ const Homepage = React.lazy(() => import("./Components/Homepage"));
 const Login = React.lazy(() => import("./Components/Auth/Login"));
 
 function App() {
+    console.log("App Rendering");
     const [userInfo, setUserInfo] = React.useState(null);
+    //NAV
+    const [nav, setNav] = React.useState({
+        currentPage: "Dashboard",
+        symbol: "AAPL",
+    });
 
     React.useEffect(() => {
         const CheckToken = async () => {
@@ -63,7 +63,10 @@ function App() {
     return (
         <React.Suspense fallback={<Spinner />}>
             <Router>
-                <UserContext.Provider value={{ userInfo, setUserInfo }}>
+                <UserContext.Provider
+                    //NAV
+                    value={{ userInfo, setUserInfo, nav, setNav }}
+                >
                     <Switch>
                         {userInfo !== null ? (
                             <Route path="/" exact component={Homepage} />

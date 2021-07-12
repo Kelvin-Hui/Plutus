@@ -11,6 +11,7 @@ export default function Portfolio({ portfolioData, portfolioValue }) {
         "Company Name",
         "Position",
         "Average Cost ($)",
+        "Current Price ($)",
         "Market Value ($)",
         "Portfolio Diversity (%)",
         "Today Return (%)",
@@ -24,7 +25,7 @@ export default function Portfolio({ portfolioData, portfolioValue }) {
                 <table className="PortfolioTable">
                     <thead>
                         <tr>
-                            <th colSpan={8}>Portfolio</th>
+                            <th colSpan={9}>Portfolio</th>
                         </tr>
                         <tr className="ColName">
                             {columns.map((col, idx) => {
@@ -41,6 +42,7 @@ export default function Portfolio({ portfolioData, portfolioValue }) {
                                         <td>{data.companyName}</td>
                                         <td>{data.position}</td>
                                         <td>${data.averageCost}</td>
+                                        <td>${data.currentPrice}</td>
                                         <td>${data.marketValue}</td>
                                         <td>
                                             {parseFloat(
@@ -50,11 +52,11 @@ export default function Portfolio({ portfolioData, portfolioValue }) {
                                         </td>
                                         <td>
                                             ${data.todayReturn.raw}(
-                                            {data.todayReturn.fmt}%)
+                                            {data.todayReturn.fmt})
                                         </td>
                                         <td>
                                             ${data.totalReturn.raw}(
-                                            {data.totalReturn.fmt}%)
+                                            {data.totalReturn.fmt})
                                         </td>
                                     </tr>
                                 );

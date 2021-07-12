@@ -39,7 +39,7 @@
         align-items: flex-start;
         height: 80%;
 
-        :nth-child(8) {
+        :nth-child(6) {
             margin-top: auto;
         }
         .NavItem {
@@ -185,7 +185,7 @@
     color: white;
 
     position: fixed;
-    top: 50px;
+    top: 75px;
     left: calc(85% / 2);
 
     padding: 8px;
@@ -237,7 +237,7 @@
         opacity: 0;
     }
     to {
-        top: 50px;
+        top: 7px;
         opacity: 1;
     }
 }

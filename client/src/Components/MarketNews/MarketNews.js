@@ -12,8 +12,8 @@ import NewsCard from "./NewsCard";
 import Card from "../StyledComponents/Card";
 import Snackbar from "../StyledComponents/Snackbar";
 
-export default function MarketNews() {
-    const [symbol, setSymbol] = React.useState("AAPL");
+export default function MarketNews({ symbol }) {
+    //const [symbol, setSymbol] = React.useState("AAPL");
     const [news, setNews] = React.useState([]);
 
     // React.useEffect(() => {
@@ -41,7 +41,7 @@ export default function MarketNews() {
             <Snackbar />
             <SearchInput
                 placeholder="Search For Stock Quote (default : AAPL)"
-                setSymbol={setSymbol}
+                //setSymbol={setSymbol}
                 setNews={setNews}
             />
             <div className="NewsCardGrid">
