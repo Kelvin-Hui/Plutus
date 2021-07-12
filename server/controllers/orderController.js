@@ -46,13 +46,6 @@ exports.buy = async (req, res) => {
         const totalPrice = Math.abs(currentPrice * quantity);
         let balance = existingPortfolio.balance;
 
-        if (balance < totalPrice) {
-            return res.status(200).json({
-                status: "fail",
-                message: "Order Fail ! Insufficient Balance !",
-            });
-        }
-
         let avgPrice = existingPortfolio.unitPrice.get(symbol);
         avgPrice = avgPrice === undefined ? 0 : avgPrice;
         let position = existingPortfolio.portfolio.get(symbol);
@@ -63,6 +56,12 @@ exports.buy = async (req, res) => {
         let pnl = 0;
 
         if (position >= 0) {
+            if (balance < totalPrice) {
+                return res.status(200).json({
+                    status: "fail",
+                    message: "Order Fail ! Insufficient Balance !",
+                });
+            }
             newBalance -= totalPrice;
             newAvgPrice =
                 (position * avgPrice + currentPrice * quantity) /
@@ -77,8 +76,14 @@ exports.buy = async (req, res) => {
                 newAvgPrice = 0;
             }
         }
-        existingPortfolio.unitPrice.set(symbol, newAvgPrice);
-        existingPortfolio.portfolio.set(`${symbol}`, position + quantity);
+
+        if (newAvgPrice === 0) {
+            existingPortfolio.portfolio.delete(symbol);
+            existingPortfolio.unitPrice.delete(symbol);
+        } else {
+            existingPortfolio.unitPrice.set(symbol, newAvgPrice);
+            existingPortfolio.portfolio.set(`${symbol}`, position + quantity);
+        }
         existingPortfolio.save();
 
         const updatedPortfolio = await UserPortfolio.findByIdAndUpdate(
@@ -151,13 +156,6 @@ exports.sell = async (req, res) => {
         const totalPrice = Math.abs(currentPrice * quantity);
         let balance = existingPortfolio.balance;
 
-        if (balance < totalPrice) {
-            return res.status(200).json({
-                status: "fail",
-                message: "Order Fail ! Insufficient Balance !",
-            });
-        }
-
         let avgPrice = existingPortfolio.unitPrice.get(symbol);
         avgPrice = avgPrice === undefined ? 0 : avgPrice;
         let position = existingPortfolio.portfolio.get(symbol);
@@ -168,6 +166,12 @@ exports.sell = async (req, res) => {
         let pnl = 0;
 
         if (position <= 0) {
+            if (balance < totalPrice) {
+                return res.status(200).json({
+                    status: "fail",
+                    message: "Order Fail ! Insufficient Balance !",
+                });
+            }
             newBalance -= totalPrice;
             newAvgPrice =
                 (Math.abs(position) * avgPrice +
@@ -183,9 +187,13 @@ exports.sell = async (req, res) => {
                 newAvgPrice = 0;
             }
         }
-
-        existingPortfolio.unitPrice.set(symbol, newAvgPrice);
-        existingPortfolio.portfolio.set(`${symbol}`, position + quantity);
+        if (newAvgPrice === 0) {
+            existingPortfolio.portfolio.delete(symbol);
+            existingPortfolio.unitPrice.delete(symbol);
+        } else {
+            existingPortfolio.unitPrice.set(symbol, newAvgPrice);
+            existingPortfolio.portfolio.set(`${symbol}`, position + quantity);
+        }
         existingPortfolio.save();
 
         const updatedPortfolio = await UserPortfolio.findByIdAndUpdate(

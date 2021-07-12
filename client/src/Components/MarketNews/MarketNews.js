@@ -10,6 +10,7 @@ import axios from "axios";
 import NewsCard from "./NewsCard";
 //Import Custom Util Components
 import Card from "../StyledComponents/Card";
+import Snackbar from "../StyledComponents/Snackbar";
 
 export default function MarketNews() {
     const [symbol, setSymbol] = React.useState("AAPL");
@@ -37,6 +38,7 @@ export default function MarketNews() {
 
     return (
         <div className="Contentpage">
+            <Snackbar />
             <SearchInput
                 placeholder="Search For Stock Quote (default : AAPL)"
                 setSymbol={setSymbol}

@@ -6,6 +6,7 @@ import "./SearchQuote.scss";
 //Import SearchInput
 import SearchInput from "../StyledComponents/SearchInput";
 
+//Import Custom Util Components
 import Snackbar from "../StyledComponents/Snackbar";
 
 //Import Axios for API calling
@@ -49,7 +50,7 @@ export default function SearchQuote() {
 
     return (
         <div className="Contentpage">
-            {/* <Snackbar /> */}
+            <Snackbar />
             <SearchInput
                 placeholder="Search For Stock Quote (default : AAPL)"
                 setSymbol={setSymbol}

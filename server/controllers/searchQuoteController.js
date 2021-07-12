@@ -1,5 +1,4 @@
 const axios = require("axios");
-const { report } = require("../routes/orderRoute");
 
 function calcPeriod1() {
     let market = new Date();
@@ -173,38 +172,38 @@ exports.getQuote = async (req, res) => {
     }
 };
 
-exports.getPrice = async (req, res) => {
-    try {
-        const { symbols } = req.query;
+// exports.getPrice = async (req, res) => {
+//     try {
+//         const { symbols } = req.query;
 
-        let symbolArray = symbols.split(",");
+//         let symbolArray = symbols.split(",");
 
-        let data = {};
+//         let data = {};
 
-        for (var i = 0; i < symbolArray.length; i++) {
-            let url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbolArray[i]}?modules=price`;
+//         for (var i = 0; i < symbolArray.length; i++) {
+//             let url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbolArray[i]}?modules=price`;
 
-            let response = await axios.get(url);
-            const currentPrice =
-                response.data.quoteSummary.result[0].price.regularMarketPrice
-                    .raw;
-            const companyName =
-                response.data.quoteSummary.result[0].price.shortName;
+//             let response = await axios.get(url);
+//             const currentPrice =
+//                 response.data.quoteSummary.result[0].price.regularMarketPrice
+//                     .raw;
+//             const companyName =
+//                 response.data.quoteSummary.result[0].price.shortName;
 
-            data[symbolArray[i]] = {
-                currentPrice: currentPrice,
-                companyName: companyName,
-            };
-        }
+//             data[symbolArray[i]] = {
+//                 currentPrice: currentPrice,
+//                 companyName: companyName,
+//             };
+//         }
 
-        return res.status(200).json({
-            status: "success",
-            data: data,
-        });
-    } catch (error) {
-        return res.status(400).json({
-            status: "fail",
-            error: error.message,
-        });
-    }
-};
+//         return res.status(200).json({
+//             status: "success",
+//             data: data,
+//         });
+//     } catch (error) {
+//         return res.status(400).json({
+//             status: "fail",
+//             error: error.message,
+//         });
+//     }
+// };

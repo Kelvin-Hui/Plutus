@@ -7,7 +7,6 @@ import Dashboard from "./Dashboard/Dashboard";
 import SearchQuote from "./SearchQuote";
 import OptionChains from "./OptionChains";
 import MarketNews from "./MarketNews";
-import Snackbar from "./StyledComponents/Snackbar";
 
 export default function Homepage() {
     const [currContent, setCurrContent] = React.useState("Dashboard");
@@ -18,7 +17,7 @@ export default function Homepage() {
                 currContent={currContent}
                 setCurrContent={setCurrContent}
             />
-            <Snackbar />
+
             {currContent === "Dashboard" && <Dashboard />}
             {currContent === "SearchQuote" && <SearchQuote />}
             {currContent === "OptionChains" && <OptionChains />}

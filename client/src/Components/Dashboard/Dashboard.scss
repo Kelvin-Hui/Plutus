@@ -8,11 +8,29 @@
             "AccountInfo Graph Graph"
             "Portfolio Portfolio Portfolio"
             "Transactions Transactions Transactions";
-        .AcconntInfo {
+        .AccountInfo {
             grid-area: AccountInfo;
+            .Card {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                .PieChartContainer {
+                    margin-top: 1em;
+                }
+            }
         }
         .Graph {
             grid-area: Graph;
+            .LineChartContainer {
+                height: inherit;
+                span {
+                    height: inherit;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: x-large;
+                }
+            }
         }
         .Portfolio {
             grid-area: Portfolio;
@@ -20,6 +38,7 @@
                 //border: 0.1px solid grey;
                 width: 100%;
                 text-align: center;
+                overflow-y: scroll;
             }
         }
         .Transactions {
@@ -27,6 +46,22 @@
             .TransactionsTable {
                 width: 100%;
                 text-align: center;
+                tbody {
+                    tr {
+                        .TransactionType.buy {
+                            color: green;
+                            border: 1px solid green;
+                            border-radius: 15px;
+                            padding: 1px 0px 3px 0px;
+                        }
+                        .TransactionType.sell {
+                            color: red;
+                            border: 1px solid red;
+                            border-radius: 15px;
+                            padding: 2px;
+                        }
+                    }
+                }
             }
         }
     }

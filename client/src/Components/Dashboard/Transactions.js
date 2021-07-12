@@ -2,8 +2,16 @@ import React from "react";
 
 //Import Custom Util Components
 import Card from "../StyledComponents/Card";
+//Import clsx
+import clsx from "clsx";
 
 export default function Transactions({ transactions }) {
+    transactions =
+        transactions !== undefined
+            ? transactions.sort(
+                  (a, b) => Date.parse(b.date) - Date.parse(a.date)
+              )
+            : [];
     const columns = [
         "Date",
         "Symbol",
@@ -36,8 +44,16 @@ export default function Transactions({ transactions }) {
                                                 data.date
                                             ).toLocaleString()}
                                         </td>
-                                        <td>{data.symbol}</td>
                                         <td>
+                                            <b>{data.symbol}</b>
+                                        </td>
+                                        <td
+                                            className={clsx({
+                                                TransactionType: true,
+                                                buy: data.quantity > 0,
+                                                sell: data.quantity < 0,
+                                            })}
+                                        >
                                             {data.quantity > 0 ? "Buy" : "Sell"}
                                         </td>
                                         <td>{Math.abs(data.quantity)}</td>
@@ -45,7 +61,7 @@ export default function Transactions({ transactions }) {
                                         <td>
                                             {data.pnl === 0
                                                 ? " - "
-                                                : "$" + data.pnl}
+                                                : "$" + data.pnl.toFixed(2)}
                                         </td>
                                     </tr>
                                 );

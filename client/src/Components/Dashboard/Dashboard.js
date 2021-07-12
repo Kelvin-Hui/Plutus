@@ -5,21 +5,29 @@ import "./Dashboard.scss";
 
 //Import Content Components
 import AccountInfo from "./AccountInfo/AccountInfo";
-import Graph from "./Graph";
+import Graph from "./Graph/Graph";
 import Portfolio from "./Portfolio";
 import Transactions from "./Transactions";
+
+//Import Custom Util Components
+import Snackbar from "../StyledComponents/Snackbar";
 
 //Import UserContext
 import UserContext from "../../Context/UserContext";
 //Import Axios for API calling
 import axios from "axios";
+import PieChart from "./AccountInfo/PieChart";
 
 export default function Dashboard() {
     console.log("render dashboard");
     const { userInfo } = React.useContext(UserContext);
-    const url = "http://localhost:5000/api/auth/getInfo";
+    const url = "http://localhost:5000/api/auth/getDashboardInfo";
 
-    const [userData, setUserData] = React.useState(userInfo);
+    const [userData, setUserData] = React.useState({
+        userPortfolio: userInfo,
+        portfolioData: [],
+        portfolioValue: 0,
+    });
 
     function toggleSnackbar(status, msg) {
         var snack = document.getElementsByClassName("Snackbar")[0];
@@ -40,9 +48,7 @@ export default function Dashboard() {
                 toggleSnackbar("Error", res.data.message);
             } else {
                 console.log(res.data.data);
-                if (res.data.data.balance != userInfo.balance) {
-                    setUserData(res.data.data);
-                }
+                setUserData(res.data.data);
             }
         };
 
@@ -51,18 +57,23 @@ export default function Dashboard() {
 
     return (
         <div className="Contentpage">
+            <Snackbar />
             <div className="Dashboard">
-                <AccountInfo balance={userData.balance} />
-                <Graph />
+                <AccountInfo
+                    portfolioData={userData.portfolioData}
+                    portfolioValue={userData.portfolioValue}
+                    cashValue={userData.userPortfolio.balance}
+                />
+                <Graph
+                    transactions={userData.userPortfolio.transaction}
+                    portfolioValue={userData.portfolioValue}
+                />
                 <Portfolio
-                    balance={userData.balance}
-                    portfolio={userData.portfolio}
-                    unitPrice={userData.unitPrice}
+                    portfolioValue={userData.portfolioValue}
+                    portfolioData={userData.portfolioData}
                 />
                 <Transactions
-                    transactions={userData.transaction.sort(
-                        (a, b) => Date.parse(b.date) - Date.parse(a.date)
-                    )}
+                    transactions={userData.userPortfolio.transaction}
                 />
             </div>
         </div>

@@ -12,6 +12,7 @@ import DataGrid from "./DataGrid";
 
 //Import Custom Util Components
 import Card from "../StyledComponents/Card";
+import Snackbar from "../StyledComponents/Snackbar";
 
 function properDate(d) {
     return (
@@ -42,6 +43,7 @@ export default function OptionChains() {
 
     return (
         <div className="Contentpage">
+            <Snackbar />
             <SearchInput
                 placeholder="Search For Stock Quote (default : AAPL)"
                 setSymbol={setSymbol}

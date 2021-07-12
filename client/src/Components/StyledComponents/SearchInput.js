@@ -17,6 +17,16 @@ export default function SearchInput(props) {
                 return res.data.valid;
             });
     }
+    function toggleSnackbar(status, msg) {
+        var snack = document.getElementsByClassName("Snackbar")[0];
+
+        snack.className = `Snackbar ${status} Show`;
+        snack.textContent = msg;
+
+        setTimeout(function () {
+            snack.className = "Snackbar";
+        }, 1900);
+    }
 
     function enter(e) {
         let valid = check(e.target.value.toUpperCase());
@@ -28,7 +38,10 @@ export default function SearchInput(props) {
         valid.then(function (v) {
             if (v) {
                 props.setSymbol(e.target.value.toUpperCase());
+            } else {
+                toggleSnackbar("Error", "Error ! Symbol Not Found !");
             }
+
             setError(!v);
         });
     }
@@ -43,12 +56,12 @@ export default function SearchInput(props) {
                         e.key === "Enter" && enter(e);
                     }}
                 />
-                <span
+                {/* <span
                     className={clsx({ Error_msg: error })}
                     style={{ display: error ? "block" : "none" }}
                 >
                     Error ! Symbol Not Found !
-                </span>
+                </span> */}
             </div>
         </>
     );

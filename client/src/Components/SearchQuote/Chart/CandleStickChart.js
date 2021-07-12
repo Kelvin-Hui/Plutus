@@ -121,6 +121,15 @@ export default function CandleStickChart({ data, dim }) {
             .attr("y2", function (d) {
                 return y(d.low);
             });
+
+        svg.append("text")
+            .attr("x", width / 2 - margin.left)
+            .attr("y", 0)
+            .attr("dy", "1em")
+
+            .attr("font-size", "1em")
+            .attr("font-weight", "bold")
+            .text(`${data[0].date.toLocaleDateString()}`);
     }
     return <div ref={ref} />;
 }

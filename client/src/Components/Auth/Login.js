@@ -39,10 +39,12 @@ export default function Login() {
             form.className = "Form Flipped";
             loginUsername.current.value = null;
             loginPassword.current.value = null;
+            registerUsername.current.focus();
         } else if (form.className === "Form Flipped") {
             form.className = "Form";
             registerUsername.current.value = null;
             registerPassword.current.value = null;
+            loginUsername.current.focus();
         }
     }
 

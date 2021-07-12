@@ -3,6 +3,7 @@ let UserPortfolio = require("../models/userPortfolioModel");
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const axios = require("axios");
 
 exports.createAccount = async (req, res) => {
     console.log("called create account");
@@ -180,6 +181,87 @@ exports.getInfo = async (req, res) => {
         return res.status(200).json({
             status: "success",
             data: existingPortfolio,
+        });
+    } catch (error) {
+        return res.status(200).json({
+            status: "fail",
+            error: error.message,
+        });
+    }
+};
+
+exports.getDashboardInfo = async (req, res) => {
+    try {
+        const { userID } = req.query;
+        if (!userID) {
+            return res.status(200).json({
+                status: "fail",
+                message: "userID Missing!",
+            });
+        }
+        const existingPortfolio = await UserPortfolio.findOne({
+            userID: userID,
+        });
+        if (!existingPortfolio) {
+            return res.status(200).json({
+                status: "fail",
+                message: "Fail ! Portfolio Doesn't Exist !",
+            });
+        }
+
+        let data = {
+            userPortfolio: existingPortfolio,
+            portfolioData: [],
+            portfolioValue: existingPortfolio.balance,
+        };
+        let symbolArray = Array.from(existingPortfolio.portfolio.keys());
+
+        for (var i = 0; i < symbolArray.length; i++) {
+            const symbol = symbolArray[i];
+            let url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}?modules=price`;
+
+            let response = await axios.get(url);
+
+            const previousClose =
+                response.data.quoteSummary.result[0].price
+                    .regularMarketPreviousClose.raw;
+            const currentPrice =
+                response.data.quoteSummary.result[0].price.regularMarketPrice
+                    .raw;
+            const companyName =
+                response.data.quoteSummary.result[0].price.shortName;
+            const position = existingPortfolio.portfolio.get(symbol);
+            const unitPrice = existingPortfolio.unitPrice.get(symbol);
+            const marketValue = Math.abs(position) * currentPrice;
+            data.portfolioValue += marketValue;
+
+            data.portfolioData.push({
+                symbol: symbol,
+                currentPrice: currentPrice,
+                companyName: companyName,
+                position: position,
+                averageCost: unitPrice,
+                marketValue: parseFloat(marketValue).toFixed(2),
+                todayReturn: {
+                    raw: parseFloat(currentPrice - previousClose).toFixed(2),
+                    fmt:
+                        (
+                            (currentPrice - previousClose) /
+                            previousClose
+                        ).toFixed(4) * 100,
+                },
+                totalReturn: {
+                    raw: parseFloat(currentPrice - unitPrice).toFixed(2),
+                    fmt:
+                        ((currentPrice - unitPrice) / unitPrice).toFixed(4) *
+                        100,
+                },
+            });
+        }
+
+        return res.status(200).json({
+            status: "success",
+            data: data,
         });
     } catch (error) {
         return res.status(200).json({
