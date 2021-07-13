@@ -3,34 +3,20 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 // const redis = require("redis");
 
+require("dotenv").config();
+
+const app = express();
+const port = process.env.PORT || 5000;
+
+// //Redis
 // const client = redis.createClient(6379, "localhost");
 
 // client.on("error", function (error) {
 //     console.error(error);
 // });
-
-// client.set("key", "value", redis.print);
-// client.get("key", redis.print);
-
-// require("dotenv").config();
-
-const app = express();
-const port = process.env.PORT || 5000;
-// const redisPort = process.env.REDISPORT || 6379;
-
-// const redisClient = redis.createClient({
-//     host: "http://localhost",
-//     port: redisPort,
-//     password: "Plutus_Redis",
+// client.on("connect", function () {
+//     console.log("Connected to Redis...");
 // });
-
-// redisClient.on("error", function (err) {
-//     console.log("Redis error encountered", err);
-//   });
-
-// redisClient.on("end", function() {
-//     console.log("Redis connection closed");
-//   });
 
 app.use(cors());
 app.use(express.json());

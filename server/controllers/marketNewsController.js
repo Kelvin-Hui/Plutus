@@ -1,5 +1,6 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
+const localRedis = require("../local-redis");
 
 exports.getNews = async (req, res) => {
     try {
@@ -10,7 +11,7 @@ exports.getNews = async (req, res) => {
         const result = await axios({
             method: "get",
             url: yahoo_url,
-            timeout: 3000,
+            timeout: 5000,
             params: {
                 modules: "price",
             },
@@ -24,49 +25,49 @@ exports.getNews = async (req, res) => {
 
         const url = `https://www.google.com/finance/quote/${symbol}:${exchangeName}`;
 
-        console.log(url);
+        //Redis
+        localRedis.get(url, async (err, data) => {
+            if (err) console.log(err);
+            if (data != null) {
+                return res.status(200).json({
+                    status: "success",
+                    data: JSON.parse(data),
+                });
+            } else {
+                console.log(url);
+                const response = await axios({
+                    method: "get",
+                    url: url,
+                    timeout: 5000,
+                });
 
-        const response = await axios({
-            method: "get",
-            url: url,
-            timeout: 5000,
-        });
+                const $ = cheerio.load(response.data);
+                const newsTable = $(".D6ciZd > .yY3Lee");
+                let news = [];
 
-        const $ = cheerio.load(response.data);
-        const newsTable = $(".D6ciZd > .yY3Lee");
-        const news = [];
+                newsTable.each(function () {
+                    const newsSource = $(this).find(".sfyJob").text();
+                    const sourceTime = $(this).find(".Adak").text();
+                    const newsTitle = $(this).find(".AoCdqe").text();
 
-        newsTable.each(function () {
-            // const newsSource = $(this)
-            //     .find("div > div > a > div > div > div:first")
-            //     .text();
-            // const sourceTime = $(this)
-            //     .find("div > div > a > div > div > div:last")
-            //     .text();
+                    const newsLink = $(this).find("div> div>a").prop("href");
 
-            // const newsTitle = $(this)
-            //     .find("div > div > a > div > div:last")
-            //     .text();
-            const newsSource = $(this).find(".sfyJob").text();
-            const sourceTime = $(this).find(".Adak").text();
-            const newsTitle = $(this).find(".AoCdqe").text();
+                    const newsThumbnail = $(this).find(".PgYz9d").prop("src");
 
-            const newsLink = $(this).find("div> div>a").prop("href");
-
-            const newsThumbnail = $(this).find(".PgYz9d").prop("src");
-
-            news.push({
-                newsTitle: newsTitle,
-                newsSource: newsSource,
-                sourceTime: sourceTime,
-                newsLink: newsLink,
-                newsThumbnail: newsThumbnail,
-            });
-        });
-
-        return res.status(200).json({
-            status: "success",
-            data: news,
+                    news.push({
+                        newsTitle: newsTitle,
+                        newsSource: newsSource,
+                        sourceTime: sourceTime,
+                        newsLink: newsLink,
+                        newsThumbnail: newsThumbnail,
+                    });
+                });
+                localRedis.setex(url, 3600, JSON.stringify(news));
+                return res.status(200).json({
+                    status: "success",
+                    data: news,
+                });
+            }
         });
     } catch (error) {
         return res.status(400).json({

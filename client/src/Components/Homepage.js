@@ -11,6 +11,7 @@ import MarketNews from "./MarketNews";
 //NAV
 //Import UserContext
 import UserContext from "../Context/UserContext";
+import SidePanel from "./StyledComponents/SidePanel";
 
 export default function Homepage() {
     //NAV
@@ -21,20 +22,21 @@ export default function Homepage() {
 
     return (
         <div className="Homepage">
-            <NavDrawer />
+            {/* <NavDrawer /> */}
+            <SidePanel />
             {/* <NavDrawer
             currContent={currContent}
             setCurrContent={setCurrContent}
             /> */}
             {/* //Nav */}
             {nav.currentPage === "Dashboard" && <Dashboard />}
-            {nav.currentPage === "SearchQuote" && (
+            {nav.currentPage === "Search Quote" && (
                 <SearchQuote symbol={nav.symbol} />
             )}
-            {nav.currentPage === "OptionChains" && (
+            {nav.currentPage === "Option Chains" && (
                 <OptionChains symbol={nav.symbol} />
             )}
-            {nav.currentPage === "MarketNews" && (
+            {nav.currentPage === "Market News" && (
                 <MarketNews symbol={nav.symbol} />
             )}
 

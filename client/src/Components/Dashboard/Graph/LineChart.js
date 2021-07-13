@@ -78,7 +78,7 @@ export default function LineChart({ transactions, portfolioValue }) {
             .datum(transactions)
             .attr("fill", "none")
             .attr("class", "line")
-            .attr("stroke", totalGain + totalLoss > 0 ? "#69b3a2" : "#FF0000")
+            .attr("stroke", totalGain + totalLoss >= 0 ? "#69b3a2" : "#FF0000")
             .attr("stroke-width", 2.5)
             .attr(
                 "d",

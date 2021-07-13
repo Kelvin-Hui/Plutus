@@ -1,73 +1,88 @@
 //Styled Components
 
+%SnackLogo {
+    content: "";
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    margin: 8px 12px;
+    background-size: 24px 24px;
+    background-repeat: no-repeat;
+}
+
 //Divider
 .Divider {
-    border-top: 1px black solid;
-    align-self: center;
+    border: none;
+    height: 1px;
+    background-color: rgba($color: grey, $alpha: 0.5);
     width: 80%;
-    margin: 8px 0px;
+    align-self: center;
+    // border-top: 1px black solid;
+    // align-self: center;
+    // width: 80%;
+    // margin: 8px 0px;
 }
 
-//Nav Drawer
-.NavDrawer {
-    width: 15%;
-    height: 100vh;
-    background-color: white;
-    display: flex;
+// //Nav Drawer
+// .NavDrawer {
+//     width: 15%;
+//     height: 100vh;
+//     background-color: white;
+//     display: flex;
 
-    flex-direction: column;
+//     flex-direction: column;
 
-    .TitleLogo {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        padding: 4px 16px;
-        .NavLogo {
-            height: 5vh;
-            width: 5vw;
-            margin: 0px 10px;
-        }
-    }
-    .Greeting {
-        text-align: center;
-        font-family: monospace;
-        margin: 15px 0px;
-    }
-    .NavItems {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        height: 80%;
+//     .TitleLogo {
+//         display: flex;
+//         flex-direction: row;
+//         align-items: center;
+//         padding: 4px 16px;
+//         .NavLogo {
+//             height: 5vh;
+//             width: 5vw;
+//             margin: 0px 10px;
+//         }
+//     }
+//     .Greeting {
+//         text-align: center;
+//         font-family: monospace;
+//         margin: 15px 0px;
+//     }
+//     .NavItems {
+//         display: flex;
+//         flex-direction: column;
+//         align-items: flex-start;
+//         height: 80%;
 
-        :nth-child(6) {
-            margin-top: auto;
-        }
-        .NavItem {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            width: 100%;
-            padding: 16px 12px;
-        }
+//         :nth-child(6) {
+//             margin-top: auto;
+//         }
+//         .NavItem {
+//             display: flex;
+//             justify-content: flex-start;
+//             align-items: center;
+//             width: 100%;
+//             padding: 16px 12px;
+//         }
 
-        .NavItem:hover {
-            background-color: rgba(0, 0, 0, 0.04);
-        }
-        .NavItemSelected {
-            border-radius: 35px;
-            background-color: rgba(0, 0, 0, 0.25);
-            color: white;
-            .NavItemsLogo {
-                fill: black;
-            }
-        }
-        .NavItemsLogo {
-            height: 20px;
-            width: 20px;
-            margin: 0px 16px;
-        }
-    }
-}
+//         .NavItem:hover {
+//             background-color: rgba(0, 0, 0, 0.04);
+//         }
+//         .NavItemSelected {
+//             border-radius: 35px;
+//             background-color: rgba(0, 0, 0, 0.25);
+//             color: white;
+//             .NavItemsLogo {
+//                 fill: black;
+//             }
+//         }
+//         .NavItemsLogo {
+//             height: 20px;
+//             width: 20px;
+//             margin: 0px 16px;
+//         }
+//     }
+// }
 
 //SearchInput
 .SearchInput {
@@ -199,31 +214,39 @@
 
     &.Error {
         background-color: red;
+        &.Error::before {
+            @extend %SnackLogo;
+            background-image: url("../../Assets/error.svg");
+        }
     }
-    &.Info {
-        background-color: blue;
-    }
+    // &.Info {
+    //     background-color: blue;
+    // }
 
     &.Success {
         background-color: green;
-    }
-    &.Warning {
-        background-color: #ffa000;
-    }
-
-    .SnackLogo {
-        visibility: hidden;
-        width: 5%;
-        fill: white;
-        margin: 0px 16px;
-
-        &.Error,
-        &.Info,
-        &.Success,
-        &.Warning {
-            visibility: visible;
+        &.Success::before {
+            @extend %SnackLogo;
+            background-image: url("../../Assets/success.svg");
         }
     }
+    // &.Warning {
+    //     background-color: #ffa000;
+    // }
+
+    // .SnackLogo {
+    //     visibility: hidden;
+    //     width: 5%;
+    //     fill: white;
+    //     margin: 0px 16px;
+
+    //     &.Error,
+    //     &.Info,
+    //     &.Success,
+    //     &.Warning {
+    //         visibility: visible;
+    //     }
+    // }
 }
 
 .Snackbar.Show {
@@ -237,14 +260,14 @@
         opacity: 0;
     }
     to {
-        top: 7px;
+        top: 75px;
         opacity: 1;
     }
 }
 
 @keyframes fadeOut {
     from {
-        top: 50px;
+        top: 75px;
         opacity: 1;
     }
     to {

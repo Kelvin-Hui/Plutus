@@ -52,7 +52,10 @@ export default function PieChart({ pieChartData, portfolioValue }) {
             .data(pie(data))
             .enter()
             .append("path")
-            .attr("d", d3.arc().innerRadius(100).outerRadius(radius))
+            .attr(
+                "d",
+                d3.arc().innerRadius(100).outerRadius(radius).cornerRadius(5)
+            )
             .attr("fill", function (d, i) {
                 return color(i);
             })
