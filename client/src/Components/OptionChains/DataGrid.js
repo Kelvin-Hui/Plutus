@@ -24,7 +24,7 @@ export default function DataGrid({ symbol, data, exp }) {
         if (exp !== null) {
             fetchData();
         }
-    }, [exp]);
+    }, [symbol, exp]);
 
     const columns = [
         "Open Interest",

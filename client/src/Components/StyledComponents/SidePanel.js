@@ -1,7 +1,7 @@
 import React from "react";
 
 //Import Scss
-import "./StyledComponents2.scss";
+import "./StyledComponents.scss";
 
 //Import Needed SVG
 import { ReactComponent as Dashboardlogo } from "../../Assets/dashboard.svg";
@@ -29,6 +29,9 @@ import clsx from "clsx";
 
 export default function SidePanel() {
     const [collapsed, setCollapsed] = React.useState(false);
+
+    const [open, setOpen] = React.useState(false);
+
     const { userInfo, setUserInfo, nav, setNav } =
         React.useContext(UserContext);
     const icons = [
@@ -39,8 +42,46 @@ export default function SidePanel() {
         <Settinglogo className="NavItemIcon" />,
         <Logoutlogo className="NavItemIcon" />,
     ];
+
+    function toggleSnackbar(status, msg) {
+        var snack = document.getElementsByClassName("Snackbar")[0];
+
+        snack.className = `Snackbar ${status} Show`;
+        snack.textContent = msg;
+
+        setTimeout(function () {
+            snack.className = "Snackbar";
+        }, 1900);
+    }
+
+    function resetAccount(e) {
+        e.preventDefault();
+        const resetOrder = async () => {
+            const res = await axios.post(
+                "http://localhost:5000/api/order/reset",
+                {
+                    userID: userInfo.userID,
+                }
+            );
+            if (res.data.status == "fail") {
+                toggleSnackbar("Error", res.data.message);
+            } else {
+                toggleSnackbar("Success", res.data.message);
+            }
+        };
+        resetOrder();
+    }
+
     return (
         <div className={clsx({ SidePanel: true, Collapsed: collapsed })}>
+            <Dialog open={open} setOpen={setOpen}>
+                <button
+                    className="ResetButton"
+                    onClick={(e) => (setOpen(false), resetAccount(e))}
+                >
+                    Reset Balance!
+                </button>
+            </Dialog>
             <div className="TitleLogo">
                 <span className={clsx({ Collapsed: collapsed })}>Plutus</span>
             </div>
@@ -79,6 +120,7 @@ export default function SidePanel() {
                     })}
                     key={4}
                     tooltip="Setting"
+                    onClick={() => setOpen(true)}
                 >
                     <Settinglogo className="NavItemIcon" />
                     <span className="NavItemText">Setting</span>

@@ -38,7 +38,7 @@ exports.getNews = async (req, res) => {
                 const response = await axios({
                     method: "get",
                     url: url,
-                    timeout: 5000,
+                    timeout: 7000,
                 });
 
                 const $ = cheerio.load(response.data);
@@ -62,7 +62,9 @@ exports.getNews = async (req, res) => {
                         newsThumbnail: newsThumbnail,
                     });
                 });
-                localRedis.setex(url, 3600, JSON.stringify(news));
+                if (news.legnth !== 0) {
+                    localRedis.setex(url, 7200, JSON.stringify(news));
+                }
                 return res.status(200).json({
                     status: "success",
                     data: news,

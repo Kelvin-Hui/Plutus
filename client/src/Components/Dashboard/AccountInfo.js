@@ -1,0 +1,52 @@
+import React from "react";
+
+//Import Custom Util Components
+import Card from "../StyledComponents/Card";
+
+//Import clsx
+import clsx from "clsx";
+
+export default function AccountInfo({ userInfo, portfolioValue, todayPNL }) {
+    const totalReturn = {
+        raw: (portfolioValue - 25000).toFixed(2),
+        fmt:
+            (Math.abs((portfolioValue - 25000) / 25000) * 100).toFixed(2) + "%",
+    };
+    // const todayReturn = {
+    //     raw: todayPNL.raw.toFixed(2),
+    //     fmt: todayPNL.fmt + "%",
+    // };
+
+    const totalReturnGain = totalReturn.raw >= 0;
+    return (
+        <div className="AccountInfo">
+            <Card H100={true}>
+                <h1 className="Header">
+                    Hey {userInfo.userName} ! Welcome Back!
+                </h1>
+                <div className="StatContainer">
+                    <h2 className="PortfolioValue">
+                        $
+                        {Number(portfolioValue.toFixed(2)).toLocaleString("en")}
+                    </h2>
+                    <h3 className="TodayReturn">
+                        {/* {todayReturn.raw}
+                        {todayReturn.fmt} */}
+                    </h3>
+                    <h2
+                        className={clsx({
+                            TotalReturn: true,
+                            Up: totalReturnGain,
+                            Down: !totalReturnGain,
+                        })}
+                    >
+                        {totalReturnGain ? "+" : "-"}
+                        {Math.abs(totalReturn.raw)}(
+                        {totalReturnGain ? "+" : "-"}
+                        {totalReturn.fmt})
+                    </h2>
+                </div>
+            </Card>
+        </div>
+    );
+}

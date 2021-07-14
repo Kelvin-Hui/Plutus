@@ -1,22 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-// const redis = require("redis");
 
 require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 5000;
-
-// //Redis
-// const client = redis.createClient(6379, "localhost");
-
-// client.on("error", function (error) {
-//     console.error(error);
-// });
-// client.on("connect", function () {
-//     console.log("Connected to Redis...");
-// });
 
 app.use(cors());
 app.use(express.json());
@@ -41,7 +30,6 @@ mongoose.set("useFindAndModify", false);
 
 //Routes
 const authRouter = require("./routes/authRoute");
-
 const optionChainsRouter = require("./routes/optionChainsRoute");
 const searchQuoteRouter = require("./routes/searchQuoteRoute");
 const getNewsRouter = require("./routes/marketNewsRoute");

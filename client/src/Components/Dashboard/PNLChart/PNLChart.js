@@ -4,7 +4,7 @@ import React from "react";
 import Card from "../../StyledComponents/Card";
 import LineChart from "./LineChart";
 
-export default function Graph({ transactions, portfolioValue }) {
+export default function PNLChart({ transactions, portfolioValue }) {
     transactions =
         transactions !== undefined
             ? transactions.map((data) => ({
@@ -14,7 +14,7 @@ export default function Graph({ transactions, portfolioValue }) {
             : [];
 
     return (
-        <div className="Graph">
+        <div className="PNLChart">
             <Card H100={true}>
                 <LineChart
                     transactions={transactions}

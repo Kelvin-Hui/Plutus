@@ -5,6 +5,7 @@
 .Homepage {
     display: flex;
     flex-direction: row;
+    overflow-y: hidden;
     .Contentpage {
         width: fill-available;
         height: 100vh;

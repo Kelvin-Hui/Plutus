@@ -78,7 +78,7 @@ export default function Login() {
                 toggleSnackbar("Success", res.data.message);
                 localStorage.setItem("Auth Token", res.data.token);
                 setUserInfo({
-                    username: res.data.username,
+                    userName: res.data.username,
                     userID: res.data.userID,
                     joinDate: new Date(res.data.joinDate),
                 });

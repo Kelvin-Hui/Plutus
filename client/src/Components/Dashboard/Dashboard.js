@@ -4,8 +4,8 @@ import React from "react";
 import "./Dashboard.scss";
 
 //Import Content Components
-import AccountInfo from "./AccountInfo/AccountInfo";
-import Graph from "./Graph/Graph";
+import PortfolioChart from "./PortfolioChart/PortfolioChart";
+import PNLChart from "./PNLChart/PNLChart";
 import Portfolio from "./Portfolio";
 import Transactions from "./Transactions";
 
@@ -16,10 +16,9 @@ import Snackbar from "../StyledComponents/Snackbar";
 import UserContext from "../../Context/UserContext";
 //Import Axios for API calling
 import axios from "axios";
-import PieChart from "./AccountInfo/PieChart";
+import AccountInfo from "./AccountInfo";
 
 export default function Dashboard() {
-    console.log("render dashboard");
     const { userInfo } = React.useContext(UserContext);
     const url = "http://localhost:5000/api/auth/getDashboardInfo";
 
@@ -41,30 +40,41 @@ export default function Dashboard() {
     }
 
     React.useEffect(() => {
-        const getInfo = async () => {
+        const getDashboardInfo = async () => {
             const res = await axios.get(url + `?userID=${userInfo.userID}`);
 
             if (res.data.status == "fail") {
                 toggleSnackbar("Error", res.data.message);
             } else {
-                console.log(res.data.data);
                 setUserData(res.data.data);
             }
         };
 
-        getInfo();
+        getDashboardInfo();
     }, []);
+
+    // let todayReturn = { raw: 0, fmt: 0 };
+    // userData.portfolioData.map((data, idx) => {
+    //     todayReturn.raw += parseFloat(data.todayReturn.raw);
+    //     todayReturn.fmt += parseFloat(data.todayReturn.fmt.split("%")[0]);
+    // });
+    // console.log(todayReturn);
 
     return (
         <div className="Contentpage">
             <Snackbar />
             <div className="Dashboard">
                 <AccountInfo
+                    userInfo={userInfo}
+                    portfolioValue={userData.portfolioValue}
+                />
+
+                <PortfolioChart
                     portfolioData={userData.portfolioData}
                     portfolioValue={userData.portfolioValue}
                     cashValue={userData.userPortfolio.balance}
                 />
-                <Graph
+                <PNLChart
                     transactions={userData.userPortfolio.transaction}
                     portfolioValue={userData.portfolioValue}
                 />

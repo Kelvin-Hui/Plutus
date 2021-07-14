@@ -43,7 +43,7 @@ function App() {
             const validate = await axios.post(url, null, axiosConfig);
             if (validate.data.status === "success") {
                 setUserInfo({
-                    username: validate.data.username,
+                    userName: validate.data.username,
                     userID: validate.data.userID,
                     joinDate: new Date(validate.data.joinDate),
                     //divider

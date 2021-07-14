@@ -22,8 +22,10 @@
 <g id="Layer 1" vectornator:layerName="Layer 1">
 <g opacity="1">
 <g opacity="1">
-<path stroke="#0f18c8" stroke-width="7" d="M19.861+19.5575L124.139+19.5575C130.264+19.5575+135.23+24.5229+135.23+30.6482L135.23+97.1924C135.23+103.318+130.264+108.283+124.139+108.283L19.861+108.283C13.7357+108.283+8.77025+103.318+8.77025+97.1924L8.77025+30.6482C8.77025+24.5229+13.7357+19.5575+19.861+19.5575Z" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
-<path stroke="#0f18c8" stroke-width="10" d="M41.2787+124.443L103.187+124.211" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+<!-- <path stroke="#0f18c8" stroke-width="7" d="M19.861+19.5575L124.139+19.5575C130.264+19.5575+135.23+24.5229+135.23+30.6482L135.23+97.1924C135.23+103.318+130.264+108.283+124.139+108.283L19.861+108.283C13.7357+108.283+8.77025+103.318+8.77025+97.1924L8.77025+30.6482C8.77025+24.5229+13.7357+19.5575+19.861+19.5575Z" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+<path stroke="#0f18c8" stroke-width="10" d="M41.2787+124.443L103.187+124.211" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/> -->
+<path stroke="#0987D5" stroke-width="7" d="M19.861+19.5575L124.139+19.5575C130.264+19.5575+135.23+24.5229+135.23+30.6482L135.23+97.1924C135.23+103.318+130.264+108.283+124.139+108.283L19.861+108.283C13.7357+108.283+8.77025+103.318+8.77025+97.1924L8.77025+30.6482C8.77025+24.5229+13.7357+19.5575+19.861+19.5575Z" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+<path stroke="#0987D5" stroke-width="10" d="M41.2787+124.443L103.187+124.211" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
 </g>
 <path stroke="#18a702" stroke-width="3" d="M30.2866+93.6285L63.5018+58.5983" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
 <path stroke="#18a702" stroke-width="3" d="M63.6044+58.5419L81.0287+72.3362" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>

@@ -18,6 +18,7 @@ export default function Transactions({ transactions }) {
         "Transaction Type",
         "Quantity",
         "Average Price Per Share ($)",
+        "Total Amount",
         "Profit & Loss",
     ];
     return (
@@ -26,7 +27,7 @@ export default function Transactions({ transactions }) {
                 <table className="TransactionsTable">
                     <thead>
                         <tr>
-                            <th colSpan={6}>Transactions History</th>
+                            <th colSpan={7}>Transactions History</th>
                         </tr>
                         <tr className="ColName">
                             {columns.map((col, idx) => {
@@ -58,6 +59,14 @@ export default function Transactions({ transactions }) {
                                         </td>
                                         <td>{Math.abs(data.quantity)}</td>
                                         <td>${data.price}</td>
+                                        <td>
+                                            $
+                                            {(
+                                                data.price *
+                                                data.quantity *
+                                                -1
+                                            ).toFixed(2)}
+                                        </td>
                                         <td>
                                             {data.pnl === 0
                                                 ? " - "

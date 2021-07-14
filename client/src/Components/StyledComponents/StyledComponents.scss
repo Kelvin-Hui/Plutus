@@ -5,7 +5,7 @@
     display: inline-block;
     height: 24px;
     width: 24px;
-    margin: 8px 12px;
+    margin: 8px 12px 8px 0px;
     background-size: 24px 24px;
     background-repeat: no-repeat;
 }
@@ -23,66 +23,136 @@
     // margin: 8px 0px;
 }
 
-// //Nav Drawer
-// .NavDrawer {
-//     width: 15%;
-//     height: 100vh;
-//     background-color: white;
-//     display: flex;
+//SidePanel
+.SidePanel {
+    width: 15%;
+    height: 100vh;
 
-//     flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba($color: black, $alpha: 0.85);
+    color: white;
 
-//     .TitleLogo {
-//         display: flex;
-//         flex-direction: row;
-//         align-items: center;
-//         padding: 4px 16px;
-//         .NavLogo {
-//             height: 5vh;
-//             width: 5vw;
-//             margin: 0px 10px;
-//         }
-//     }
-//     .Greeting {
-//         text-align: center;
-//         font-family: monospace;
-//         margin: 15px 0px;
-//     }
-//     .NavItems {
-//         display: flex;
-//         flex-direction: column;
-//         align-items: flex-start;
-//         height: 80%;
+    &.Collapsed {
+        width: 5%;
+    }
 
-//         :nth-child(6) {
-//             margin-top: auto;
-//         }
-//         .NavItem {
-//             display: flex;
-//             justify-content: flex-start;
-//             align-items: center;
-//             width: 100%;
-//             padding: 16px 12px;
-//         }
+    .Dialog {
+        .Card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            button {
+                width: 50%;
+                padding: 8px 16px;
+                border: 1px solid black;
+                border-radius: 10px;
+                background-color: red;
+                color: white;
+            }
+        }
+    }
 
-//         .NavItem:hover {
-//             background-color: rgba(0, 0, 0, 0.04);
-//         }
-//         .NavItemSelected {
-//             border-radius: 35px;
-//             background-color: rgba(0, 0, 0, 0.25);
-//             color: white;
-//             .NavItemsLogo {
-//                 fill: black;
-//             }
-//         }
-//         .NavItemsLogo {
-//             height: 20px;
-//             width: 20px;
-//             margin: 0px 16px;
-//         }
-//     }
-// }
+    .TitleLogo {
+        font-size: xx-large;
+        font-family: system-ui;
+        font-weight: bold;
+        margin: 20% 0px;
+
+        span.Collapsed {
+            display: none;
+        }
+
+        &::before {
+            content: "";
+            display: inline-block;
+            height: 40px;
+            width: 40px;
+            vertical-align: bottom;
+
+            margin: 2px 12px;
+            background-size: 40px 40px;
+            background-repeat: no-repeat;
+            background-image: url("../../Assets/Plutus\ Icon.svg");
+        }
+    }
+    .NavItems {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        padding: 8px 0px;
+        margin: 0;
+        margin-top: 70%;
+
+        .NavItem {
+            padding: 8px 16px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-items: flex-start;
+            text-align: left;
+            cursor: pointer;
+
+            &:not(:last-child):hover {
+                .NavItemIcon {
+                    fill: lightseagreen;
+                }
+            }
+
+            &.Selected {
+                &::before {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    height: 50%;
+                    width: 3px;
+                    border: 1px solid white;
+                    background-color: white;
+                }
+                color: white;
+
+                .NavItemIcon {
+                    fill: white;
+                }
+            }
+
+            &.Collapsed {
+                &:not(:last-child):hover::after {
+                    content: attr(tooltip);
+                    position: fixed;
+                    z-index: 50;
+                    padding: 8px 16px;
+                    border-radius: 15px;
+                    background-color: rgba($color: gray, $alpha: 0.6);
+                    color: white;
+                    white-space: nowrap;
+                    transform: translateX(50%);
+                }
+                .NavItemText {
+                    display: none;
+                }
+            }
+
+            &:last-child {
+                align-self: flex-end;
+            }
+
+            .NavItemIcon {
+                height: 25px;
+                width: 25px;
+                margin: 10px 10px 10px 0px;
+                vertical-align: middle;
+                fill: gray;
+            }
+            .NavItemText {
+                line-height: 1.5;
+                font-size: 1rem;
+                font-weight: 500;
+            }
+        }
+    }
+}
 
 //SearchInput
 .SearchInput {
@@ -130,8 +200,10 @@
     background-color: white;
     z-index: 1;
 
-    width: 90%;
-
+    width: 100%;
+    &.H100 {
+        height: 100%;
+    }
     padding: 24px 24px;
     margin: auto auto;
 
@@ -142,9 +214,6 @@
         box-shadow: 0 15px 60px 0 rgba(0, 0, 0, 0.15),
             0 5px 25px 0 rgba(0, 0, 0, 0.15);
     }
-}
-.H100 {
-    height: 100%;
 }
 
 //Skeleton
@@ -181,7 +250,7 @@
     height: 100vh;
     width: 100vw;
     position: fixed;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.75);
     z-index: 2;
     .Card {
         position: relative;
@@ -203,7 +272,7 @@
     top: 75px;
     left: calc(85% / 2);
 
-    padding: 8px;
+    padding: 2px 16px;
     z-index: 3;
 
     display: flex;
