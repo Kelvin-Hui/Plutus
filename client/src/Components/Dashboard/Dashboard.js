@@ -75,8 +75,8 @@ export default function Dashboard() {
                     cashValue={userData.userPortfolio.balance}
                 />
                 <PNLChart
+                    userInfo={userInfo}
                     transactions={userData.userPortfolio.transaction}
-                    portfolioValue={userData.portfolioValue}
                 />
                 <Portfolio
                     portfolioValue={userData.portfolioValue}

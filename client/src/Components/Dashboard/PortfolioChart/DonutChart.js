@@ -48,15 +48,12 @@ export default function DonutChart({ donutChartData, portfolioValue }) {
         });
 
         let parentSize = Math.min(
-            ref.current.parentElement.offsetHeight * 0.9,
-            ref.current.parentElement.offsetWidth * 0.9
+            ref.current.parentElement.offsetHeight * 0.9 || 256,
+            ref.current.parentElement.offsetWidth * 0.9 || 256
         );
 
         let width = parentSize;
         let height = parentSize;
-
-        // let width = 200;
-        // let height = 200;
 
         let margin = 20;
 
@@ -128,6 +125,7 @@ export default function DonutChart({ donutChartData, portfolioValue }) {
             .data(pie(data))
             .enter()
             .append("text")
+            .style("font-weight", "bold")
             .attr("text-anchor", "middle")
             .attr("font-size", "0.8vw")
             .attr("transform", function (d) {
@@ -148,12 +146,14 @@ export default function DonutChart({ donutChartData, portfolioValue }) {
             .attr("text-anchor", "middle")
             .attr("font-size", "1vw")
             .attr("font-weight", "bold")
-            .attr("dy", "-1.5em");
+            .attr("dy", "-1.5em")
+            .text("Hover Symbols For");
 
         svg.append("text")
             .attr("id", "text2")
             .attr("text-anchor", "middle")
-            .attr("font-size", "1vw");
+            .attr("font-size", "1vw")
+            .text("More Detail");
         svg.append("text")
             .attr("id", "text3")
             .attr("text-anchor", "middle")

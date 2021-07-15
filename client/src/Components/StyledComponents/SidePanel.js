@@ -143,6 +143,7 @@ export default function SidePanel() {
 
                 <div
                     className="NavItem"
+                    id="CollapsedBtn"
                     onClick={() => setCollapsed(!collapsed)}
                 >
                     {collapsed ? (

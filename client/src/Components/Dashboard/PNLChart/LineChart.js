@@ -2,14 +2,21 @@ import React from "react";
 //Import d3JS for Stock Chart
 import * as d3 from "d3";
 
-export default function LineChart({ transactions, portfolioValue }) {
+export default function LineChart({ userInfo, transactions }) {
     const ref = React.useRef();
 
     React.useEffect(() => {
         if (transactions.length !== 0) {
             transactions.push({ date: new Date(), pnl: 0 });
-            reDrawChart();
+        } else {
+            transactions.push({ date: new Date(userInfo.joinDate), pnl: 0 });
+            transactions.push({ date: new Date(), pnl: 0 });
         }
+        var initalBalance = 25000;
+        transactions.map((data, idx) => {
+            data.currentBalance = initalBalance += data.pnl;
+        });
+        reDrawChart();
 
         var temp;
 
@@ -20,27 +27,51 @@ export default function LineChart({ transactions, portfolioValue }) {
             }, 500);
         });
 
-        return window.removeEventListener("resize", function () {
-            clearTimeout(temp);
-            temp = setTimeout(() => {
-                reDrawChart();
-            }, 500);
-        });
+        document
+            .getElementById("CollapsedBtn")
+            .addEventListener("click", function () {
+                clearTimeout(temp);
+                temp = setTimeout(() => {
+                    reDrawChart();
+                }, 500);
+            });
+
+        return (
+            window.removeEventListener("resize", function () {
+                clearTimeout(temp);
+                temp = setTimeout(() => {
+                    reDrawChart();
+                }, 500);
+            }),
+            document
+                .getElementById("CollapsedBtn")
+                .removeEventListener("click", function () {
+                    clearTimeout(temp);
+                    temp = setTimeout(() => {
+                        reDrawChart();
+                    }, 500);
+                })
+        );
     });
 
     function reDrawChart() {
-        const svg = d3.select(ref.current).select("#LineChart").remove();
+        d3.select(ref.current).select("#LineChart").remove();
         drawChart();
     }
 
     function drawChart() {
-        var margin = { top: 40, bottom: 20, left: 60, right: 40 };
+        var margin = { top: 40, bottom: 20, left: 70, right: 70 };
 
-        // let width = ref.current.parentElement.offsetWidth * 0.9 - 100;
-        // let height = ref.current.parentElement.offsetHeight * 0.9;
-
-        let width = ref.current.parentElement.offsetWidth * 0.95 - 100;
-        let height = ref.current.parentElement.offsetHeight * 0.85;
+        let width =
+            ref.current !== null
+                ? ref.current.parentElement.offsetWidth * 0.95 -
+                  margin.left -
+                  margin.right
+                : 1150;
+        let height =
+            ref.current !== null
+                ? ref.current.parentElement.offsetHeight * 0.85
+                : 400;
 
         var svg = d3
             .select(ref.current)
@@ -63,74 +94,39 @@ export default function LineChart({ transactions, portfolioValue }) {
             )
             .range([0, width]);
 
-        const format = d3.timeFormat("%d/%m/%y %H:%M");
-
+        const format = d3.timeFormat("%m/%d/%y %H:%M");
+        const hourFormat = d3.timeFormat("%H:%M");
         var xAxis = d3
             .axisBottom(x)
             .tickFormat(function (d) {
                 return format(d);
             })
-            .ticks(4);
-
-        var maxPNL = 0;
-        var totalGain = 0;
-        var totalLoss = 0;
-
-        transactions.map((data) => {
-            if (data.pnl > 0) {
-                totalGain += data.pnl;
-            } else {
-                totalLoss += data.pnl;
-            }
-        });
-
-        maxPNL = Math.max(totalGain, Math.abs(totalLoss));
+            .ticks(6);
 
         var y = d3
             .scaleLinear()
-            .domain([
-                25000 - Math.abs(maxPNL * 1.5),
-                25000 + Math.abs(maxPNL * 1.5),
-            ])
+            .domain(
+                d3
+                    .extent(transactions, function (d) {
+                        return d.currentBalance;
+                    })
+                    .map((d, idx) => d * (0.999 + idx * 0.002))
+            )
             .range([height, 0]);
+
         var yAxis = d3.axisLeft(y).tickFormat(function (d) {
             return "$" + d;
         });
 
         var xTick = svg
             .append("g")
+            .attr("class", "xAxis")
             .call(xAxis)
             .attr("transform", `translate(0,${height})`);
 
-        var yTick = svg.append("g").call(yAxis);
+        var yTick = svg.append("g").attr("class", "yAxis").call(yAxis);
 
-        yTick.selectAll(".tick text").attr("font-size", "0.9vw");
         yTick.selectAll(".tick line").attr("x2", width).attr("opacity", 0.1);
-        xTick
-            .selectAll(".tick text")
-            .attr("font-size", "0.9vw")
-            .attr("color", "gray");
-
-        // var tempValue = 25000;
-
-        // svg.append("path")
-        //     .datum(transactions)
-        //     .attr("fill", "none")
-        //     .attr("stroke", totalGain + totalLoss >= 0 ? "#69b3a2" : "#FF0000")
-        //     .attr("stroke-linecap", "round")
-        //     .attr("stroke-width", 4)
-        //     .attr(
-        //         "d",
-        //         d3
-        //             .line()
-        //             .x(function (d) {
-        //                 return x(d.date);
-        //             })
-        //             .y(function (d) {
-        //                 return y((tempValue += d.pnl));
-        //             })
-        //             .curve(d3.curveBasis)
-        //     );
 
         svg.append("path")
             .datum(transactions)
@@ -149,8 +145,9 @@ export default function LineChart({ transactions, portfolioValue }) {
                     .y(function (d) {
                         return y(25000);
                     })
-                    .curve(d3.curveBasis)
             );
+
+        //Brush Zoom
 
         var brush = d3
             .brushX()
@@ -162,14 +159,30 @@ export default function LineChart({ transactions, portfolioValue }) {
                 return updateChart(event);
             });
 
+        var clip = svg
+            .append("defs")
+            .append("svg:clipPath")
+            .attr("id", "clip")
+            .append("svg:rect")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("x", 0)
+            .attr("y", 0);
+
         var line = svg.append("g").attr("clip-path", "url(#clip)");
 
-        var tempValue = 25000;
         line.append("path")
             .datum(transactions)
             .attr("fill", "none")
-            .attr("stroke", "steelblue")
-            .attr("stroke-width", 1.5)
+            .attr("class", "line")
+            .attr(
+                "stroke",
+                transactions[transactions.length - 1].currentBalance >= 0
+                    ? "#69b3a2"
+                    : "#FF0000"
+            )
+            .attr("stroke-width", 4)
+            .attr("stroke-linecap", "round")
             .attr(
                 "d",
                 d3
@@ -178,8 +191,9 @@ export default function LineChart({ transactions, portfolioValue }) {
                         return x(d.date);
                     })
                     .y(function (d) {
-                        return y(d.pnl);
+                        return y(d.currentBalance);
                     })
+                    .curve(d3.curveMonotoneX)
             );
 
         line.append("g").attr("class", "brush").call(brush);
@@ -190,7 +204,6 @@ export default function LineChart({ transactions, portfolioValue }) {
         }
 
         function updateChart(event) {
-            console.log(event.selection);
             const extent = event.selection;
 
             if (!extent) {
@@ -198,11 +211,11 @@ export default function LineChart({ transactions, portfolioValue }) {
                 x.domain([4, 8]);
             } else {
                 x.domain([x.invert(extent[0]), x.invert(extent[1])]);
+
                 line.select(".brush").call(brush.move, null);
 
                 xTick.transition().duration(1000).call(d3.axisBottom(x));
 
-                var tempValue = 25000;
                 line.select(".line")
                     .transition()
                     .duration(1000)
@@ -214,11 +227,121 @@ export default function LineChart({ transactions, portfolioValue }) {
                                 return x(d.date);
                             })
                             .y(function (d) {
-                                return y(tempValue + d.pnl);
+                                return y(d.currentBalance);
                             })
+                            .curve(d3.curveMonotoneX)
                     );
             }
         }
+
+        svg.on("dblclick", function () {
+            x.domain(
+                d3.extent(transactions, function (d) {
+                    return new Date(d.date);
+                })
+            );
+
+            xTick.transition().call(xAxis);
+
+            line.select(".line")
+                .transition()
+                .attr(
+                    "d",
+                    d3
+                        .line()
+                        .x(function (d) {
+                            return x(d.date);
+                        })
+                        .y(function (d) {
+                            return y(d.currentBalance);
+                        })
+                        .curve(d3.curveMonotoneX)
+                );
+        });
+
+        //Line Cursor
+        var bisect = d3.bisector(function (d) {
+            return d.date;
+        }).left;
+
+        var focus = svg
+            .append("g")
+            .attr("class", "foucs")
+            .style("display", "none");
+        focus
+            .append("circle")
+            .attr(
+                "fill",
+                transactions[transactions.length - 1].currentBalance >= 0
+                    ? "#69b3a2"
+                    : "#FF0000"
+            )
+            .attr("r", 5);
+        focus
+            .append("rect")
+            .attr("class", "tooltip")
+            .attr("width", 110)
+            .attr("height", 75)
+            .attr("fill", "white")
+            .attr("stroke", "black")
+            .attr("stroke-width", "3")
+            .attr("x", -50)
+            .attr("y", -100)
+            .attr("rx", 4)
+            .attr("ry", 4);
+
+        focus
+            .append("text")
+            .attr("class", "date")
+
+            .attr("x", -35)
+            .attr("y", -75);
+        focus
+            .append("text")
+            .attr("class", "hour")
+            .attr("x", -15)
+            .attr("y", -55);
+        focus
+            .append("text")
+            .attr("class", "balance")
+            .attr("font-weight", "bold")
+            .attr("x", -45)
+            .attr("y", -35);
+
+        function mouseover() {
+            focus.style("display", "block");
+        }
+        function mouseout() {
+            focus.style("display", "none");
+        }
+
+        function mousemove(event) {
+            var x0 = x.invert(d3.pointer(event)[0]);
+            var i = bisect(transactions, x0, 0);
+            var selectedData = transactions[i];
+
+            focus.attr(
+                "transform",
+                `translate(${x(selectedData.date)},${y(
+                    selectedData.currentBalance
+                )})`
+            );
+
+            focus.select(".date").text(selectedData.date.toLocaleDateString());
+            focus.select(".hour").text(hourFormat(selectedData.date));
+            focus
+                .select(".balance")
+                .text(
+                    "$" +
+                        Number(
+                            selectedData.currentBalance.toFixed(2)
+                        ).toLocaleString("en")
+                );
+        }
+
+        svg.on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseout", mouseout);
     }
 
     return <div ref={ref} />;

@@ -2,10 +2,15 @@ import React from "react";
 
 //Import Custom Util Components
 import Card from "../StyledComponents/Card";
+
+//Import UserContext
+import UserContext from "../../Context/UserContext";
+
 //Import clsx
 import clsx from "clsx";
 
 export default function Transactions({ transactions }) {
+    const { setNav } = React.useContext(UserContext);
     transactions =
         transactions !== undefined
             ? transactions.sort(
@@ -26,9 +31,6 @@ export default function Transactions({ transactions }) {
             <Card>
                 <table className="TransactionsTable">
                     <thead>
-                        <tr>
-                            <th colSpan={7}>Transactions History</th>
-                        </tr>
                         <tr className="ColName">
                             {columns.map((col, idx) => {
                                 return <th key={col + idx}>{col}</th>;
@@ -39,20 +41,31 @@ export default function Transactions({ transactions }) {
                         {transactions.length !== 0 &&
                             transactions.map((data, idx) => {
                                 return (
-                                    <tr key={"transactions_" + idx}>
+                                    <tr
+                                        className="Row"
+                                        key={"transactions_" + idx}
+                                    >
                                         <td>
                                             {new Date(
                                                 data.date
                                             ).toLocaleString()}
                                         </td>
-                                        <td>
+                                        <td
+                                            className="Symbol"
+                                            onClick={() =>
+                                                setNav({
+                                                    currentPage: "Search Quote",
+                                                    symbol: data.symbol,
+                                                })
+                                            }
+                                        >
                                             <b>{data.symbol}</b>
                                         </td>
                                         <td
                                             className={clsx({
                                                 TransactionType: true,
-                                                buy: data.quantity > 0,
-                                                sell: data.quantity < 0,
+                                                Up: data.quantity > 0,
+                                                Down: data.quantity < 0,
                                             })}
                                         >
                                             {data.quantity > 0 ? "Buy" : "Sell"}
@@ -67,7 +80,12 @@ export default function Transactions({ transactions }) {
                                                 -1
                                             ).toFixed(2)}
                                         </td>
-                                        <td>
+                                        <td
+                                            className={clsx({
+                                                Up: data.pnl > 0,
+                                                Down: data.pnl < 0,
+                                            })}
+                                        >
                                             {data.pnl === 0
                                                 ? " - "
                                                 : "$" + data.pnl.toFixed(2)}

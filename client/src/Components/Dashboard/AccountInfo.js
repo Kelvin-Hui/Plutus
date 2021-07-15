@@ -24,11 +24,21 @@ export default function AccountInfo({ userInfo, portfolioValue, todayPNL }) {
                 <h1 className="Header">
                     Hey {userInfo.userName} ! Welcome Back!
                 </h1>
+
+                <h3 className="JoinDate">
+                    You Have Been With 🧔🏼💰
+                    <span>Plutus </span>
+                    for
+                    <span>
+                        {new Date().getDate() - userInfo.joinDate.getDate()}
+                    </span>
+                    days 🥳🎉
+                </h3>
                 <div className="StatContainer">
-                    <h2 className="PortfolioValue">
+                    <h1 className="PortfolioValue">
                         $
                         {Number(portfolioValue.toFixed(2)).toLocaleString("en")}
-                    </h2>
+                    </h1>
                     <h3 className="TodayReturn">
                         {/* {todayReturn.raw}
                         {todayReturn.fmt} */}
