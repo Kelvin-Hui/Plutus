@@ -51,7 +51,7 @@ export default function Dashboard() {
         };
 
         getDashboardInfo();
-    }, []);
+    }, [userInfo.reset]);
 
     // let todayReturn = { raw: 0, fmt: 0 };
     // userData.portfolioData.map((data, idx) => {

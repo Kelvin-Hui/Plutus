@@ -11,6 +11,7 @@ export default function Card(props) {
         <div
             className={clsx({ Card: true, H100: props.H100 })}
             onClick={(e) => e.stopPropagation()}
+            id={props.id}
         >
             {props.children}
         </div>

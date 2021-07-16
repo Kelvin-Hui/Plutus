@@ -81,6 +81,12 @@ export default function Login() {
                     userName: res.data.username,
                     userID: res.data.userID,
                     joinDate: new Date(res.data.joinDate),
+
+                    balance: res.data.balance,
+                    portfolio: res.data.portfolio,
+                    transaction: res.data.transaction,
+                    unitPrice: res.data.unitPrice,
+                    reset: 0,
                 });
             }
         };

@@ -17,7 +17,7 @@ export default function PortfolioChart({
         portfolioValue === undefined ? 0 : portfolioValue.toFixed(2);
 
     portfolioData.map((d, idx) => {
-        donutChartData[d.symbol] = (d.marketValue / portfolioValue).toFixed(4);
+        donutChartData[d.symbol] = d.marketValue / portfolioValue;
     });
 
     const totalStockValue = portfolioValue - cashValue;

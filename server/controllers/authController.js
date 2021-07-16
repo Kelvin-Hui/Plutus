@@ -89,6 +89,16 @@ exports.loginAccount = async (req, res) => {
             });
         }
 
+        const existingPortfolio = await UserPortfolio.findOne({
+            userID: existingUser._id,
+        });
+        if (!existingPortfolio) {
+            return res.status(400).json({
+                status: "fail",
+                message: "Fail ! Portfolio Doesn't Exist !",
+            });
+        }
+
         let jwt_token = jwt.sign(
             { id: existingUser._id },
             process.env.JWT_Token
@@ -100,6 +110,10 @@ exports.loginAccount = async (req, res) => {
             username: username,
             userID: existingUser._id,
             joinDate: existingUser._id.getTimestamp(),
+            balance: existingPortfolio.balance,
+            portfolio: existingPortfolio.portfolio,
+            transaction: existingPortfolio.transaction,
+            unitPrice: existingPortfolio.unitPrice,
         });
     } catch (error) {
         return res.status(400).json({ status: "fail", message: error.message });
@@ -135,15 +149,6 @@ exports.validateToken = async (req, res) => {
                 message: "Fail ! Portfolio Doesn't Exist !",
             });
         }
-        // const uID = existingUser._id;
-        // const existingPortfolio = await UserPortfolio.findOne({ userID: uID });
-
-        // if (!existingPortfolio) {
-        //     console.log("No Portfolio!");
-        //     return res.status(400).json({ status: "fail" });
-        // }/
-        //Get TimeStamp;
-        // console.log(existingUser._id.getTimestamp());
         return res.status(200).json({
             status: "success",
             username: existingUser.username,

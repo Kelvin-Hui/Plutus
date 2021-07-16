@@ -26,7 +26,7 @@ exports.getNews = async (req, res) => {
         const url = `https://www.google.com/finance/quote/${symbol}:${exchangeName}`;
 
         //Redis
-        localRedis.get(url, async (err, data) => {
+        localRedis.get(`News_${symbol}`, async (err, data) => {
             if (err) console.log(err);
             if (data != null) {
                 return res.status(200).json({
@@ -63,7 +63,15 @@ exports.getNews = async (req, res) => {
                     });
                 });
                 if (news.legnth !== 0) {
-                    localRedis.setex(url, 7200, JSON.stringify(news));
+                    localRedis.SETEX(
+                        `News_${symbol}`,
+                        3600,
+                        JSON.stringify(news)
+                    );
+                    return res.status(200).json({
+                        status: "success",
+                        data: news,
+                    });
                 }
                 return res.status(200).json({
                     status: "success",

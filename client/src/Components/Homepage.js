@@ -4,7 +4,8 @@ import React from "react";
 import NavDrawer from "./StyledComponents/NavDrawer";
 //Import Contents
 import Dashboard from "./Dashboard/Dashboard";
-import SearchQuote from "./SearchQuote";
+//import SearchQuote from "./SearchQuote";
+import SearchQuote from "./SearchQuote2/";
 import OptionChains from "./OptionChains";
 import MarketNews from "./MarketNews";
 

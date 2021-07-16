@@ -67,6 +67,14 @@ export default function SidePanel() {
                 toggleSnackbar("Error", res.data.message);
             } else {
                 toggleSnackbar("Success", res.data.message);
+                setUserInfo({
+                    ...userInfo,
+                    balance: res.data.balance,
+                    portfolio: res.data.portfolio,
+                    transaction: res.data.transaction,
+                    unitPrice: res.data.unitPrice,
+                    reset: (userInfo.reset += 1),
+                });
             }
         };
         resetOrder();

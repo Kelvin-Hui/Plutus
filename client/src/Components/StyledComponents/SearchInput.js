@@ -64,12 +64,6 @@ export default function SearchInput(props) {
                         e.key === "Enter" && enter(e);
                     }}
                 />
-                {/* <span
-                    className={clsx({ Error_msg: error })}
-                    style={{ display: error ? "block" : "none" }}
-                >
-                    Error ! Symbol Not Found !
-                </span> */}
             </div>
         </>
     );

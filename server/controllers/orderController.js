@@ -67,11 +67,17 @@ exports.buy = async (req, res) => {
                 (position * avgPrice + currentPrice * quantity) /
                 (position + quantity);
         } else if (position < 0) {
-            newBalance += quantity * avgPrice;
+            newBalance += Math.min(Math.abs(position), quantity) * avgPrice;
             pnl =
                 (avgPrice - currentPrice) *
                 Math.min(Math.abs(position), quantity);
-            newbalance += pnl;
+            newBalance += pnl;
+
+            if (quantity > -position) {
+                newAvgPrice = currentPrice;
+                newBalance -= (position + quantity) * currentPrice;
+            }
+
             if (position == -quantity) {
                 newAvgPrice = 0;
             }
@@ -101,10 +107,13 @@ exports.buy = async (req, res) => {
                 },
             }
         );
-
         return res.status(200).json({
             status: "success",
             message: `Bought ${quantity} Share of ${symbol} @ ${currentPrice} !`,
+            balance: newBalance,
+            transaction: existingPortfolio.transaction,
+            unitPrice: existingPortfolio.unitPrice,
+            portfolio: existingPortfolio.portfolio,
         });
     } catch (error) {
         return res.status(200).json({
@@ -178,11 +187,17 @@ exports.sell = async (req, res) => {
                     currentPrice * Math.abs(quantity)) /
                 (Math.abs(position) + Math.abs(quantity));
         } else if (position > 0) {
-            newBalance += Math.abs(quantity) * avgPrice;
+            newBalance += Math.min(position, Math.abs(quantity)) * avgPrice;
             pnl =
                 (currentPrice - avgPrice) *
                 Math.min(position, Math.abs(quantity));
             newBalance += pnl;
+
+            if (-quantity > position) {
+                newAvgPrice = currentPrice;
+                newBalance -= (-quantity - position) * currentPrice;
+            }
+
             if (position == -quantity) {
                 newAvgPrice = 0;
             }
@@ -217,6 +232,10 @@ exports.sell = async (req, res) => {
             message: `Sold ${Math.abs(
                 quantity
             )} Share of ${symbol} @ ${currentPrice} !`,
+            balance: newBalance,
+            transaction: existingPortfolio.transaction,
+            unitPrice: existingPortfolio.unitPrice,
+            portfolio: existingPortfolio.portfolio,
         });
     } catch (error) {
         return res.status(200).json({
@@ -250,6 +269,10 @@ exports.reset = async (req, res) => {
         return res.status(200).json({
             status: "success",
             message: "Resetted Everything!",
+            balance: 25000,
+            transaction: [],
+            portfolio: {},
+            unitPrice: {},
         });
     } catch (error) {
         return res.status(200).json({

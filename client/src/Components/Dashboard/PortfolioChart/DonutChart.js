@@ -47,10 +47,13 @@ export default function DonutChart({ donutChartData, portfolioValue }) {
             });
         });
 
-        let parentSize = Math.min(
-            ref.current.parentElement.offsetHeight * 0.9 || 256,
-            ref.current.parentElement.offsetWidth * 0.9 || 256
-        );
+        let parentSize = 256;
+        if (ref.current !== null) {
+            parentSize = Math.min(
+                ref.current.parentElement.offsetHeight * 0.9,
+                ref.current.parentElement.offsetWidth * 0.9
+            );
+        }
 
         let width = parentSize;
         let height = parentSize;

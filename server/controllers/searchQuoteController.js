@@ -172,38 +172,79 @@ exports.getQuote = async (req, res) => {
     }
 };
 
-// exports.getPrice = async (req, res) => {
-//     try {
-//         const { symbols } = req.query;
+exports.getInfo = async (req, res) => {
+    try {
+        const { symbol } = req.query;
+        if (!symbol) {
+            return res.status(200).json({
+                status: "fail",
+                message: "Missing Symbol!",
+                data: {},
+            });
+        }
+        const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
+        const response = await axios({
+            method: "get",
+            url: url,
+            timeout: 3000,
+            params: {
+                modules: "price,summaryProfile,summaryDetail",
+            },
+        });
+        if (!response) {
+            return res.status(200).json({
+                status: "fail",
+                message: "Fail Response!",
+                data: {},
+            });
+        }
+        const priceResult = response.data.quoteSummary.result[0].price || [];
+        const summaryProfileResult =
+            response.data.quoteSummary.result[0].summaryProfile || [];
+        const summaryDetailResult =
+            response.data.quoteSummary.result[0].summaryDetail || [];
 
-//         let symbolArray = symbols.split(",");
+        let stockInfo =
+            priceResult !== [] && summaryProfileResult !== []
+                ? {
+                      name: priceResult.shortName,
+                      website: summaryProfileResult.website,
+                      symbol: symbol,
+                      exchangeName: priceResult.exchangeName.toUpperCase(),
+                      sector: summaryProfileResult.sector || null,
+                      industry: summaryProfileResult.industry || null,
+                      lastPrice: priceResult.regularMarketPrice.raw.toFixed(2),
+                      currency: priceResult.currency,
+                      priceChange: priceResult.regularMarketChange.fmt,
+                      priceChangePercent:
+                          priceResult.regularMarketChangePercent.fmt,
+                      color:
+                          priceResult.regularMarketChange.raw > 0
+                              ? "00FF00"
+                              : "#FF0000",
+                  }
+                : {};
 
-//         let data = {};
+        let keyData =
+            summaryDetailResult !== []
+                ? {
+                      previousClose:
+                          summaryDetailResult.previousClose.raw.toFixed(2),
+                      open: summaryDetailResult.open.raw.toFixed(2),
+                      high: summaryDetailResult.dayHigh.raw.toFixed(2),
+                      low: summaryDetailResult.dayLow.raw.toFixed(2),
+                      close: priceResult.regularMarketPrice.raw.toFixed(2),
+                  }
+                : {};
 
-//         for (var i = 0; i < symbolArray.length; i++) {
-//             let url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbolArray[i]}?modules=price`;
-
-//             let response = await axios.get(url);
-//             const currentPrice =
-//                 response.data.quoteSummary.result[0].price.regularMarketPrice
-//                     .raw;
-//             const companyName =
-//                 response.data.quoteSummary.result[0].price.shortName;
-
-//             data[symbolArray[i]] = {
-//                 currentPrice: currentPrice,
-//                 companyName: companyName,
-//             };
-//         }
-
-//         return res.status(200).json({
-//             status: "success",
-//             data: data,
-//         });
-//     } catch (error) {
-//         return res.status(400).json({
-//             status: "fail",
-//             error: error.message,
-//         });
-//     }
-// };
+        return res.status(200).json({
+            status: "success",
+            data: { stockInfo: stockInfo, keyData: keyData },
+        });
+    } catch (error) {
+        return res.status(200).json({
+            status: "fail",
+            error: error.message,
+        });
+    }
+};
