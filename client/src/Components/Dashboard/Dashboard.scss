@@ -41,7 +41,7 @@
                 }
                 .JoinDate {
                     span {
-                        font-size: 2vw;
+                        font-size: calc(2rem + 0.2vw);
                         padding: 0px 0.5%;
                     }
                 }
@@ -148,7 +148,7 @@
                             display: none;
                         }
                         text {
-                            font-size: 1vw;
+                            font-size: calc(0.8rem + 0.2vw);
                             color: gray;
                             opacity: 0.75;
                         }

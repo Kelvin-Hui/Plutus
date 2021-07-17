@@ -1,5 +1,6 @@
 %tagBorder {
     border: 1px solid black;
+    background: white;
     border-radius: 15px;
     padding: 4px 16px;
 }
@@ -55,40 +56,41 @@
             display: flex;
             flex-direction: column;
             justify-content: space-evenly;
-            .CompanyName {
-                display: flex;
-                position: relative;
-                align-items: center;
-                justify-content: space-between;
-                width: 100%;
 
-                h1 {
-                    font-size: calc(3rem + 0.1vw);
-                    margin-top: 0;
-                }
-                &::after {
-                    content: attr(symbol) " : " attr(exchange);
-                    display: block;
-                    position: absolute;
-                    bottom: 0;
-                    color: gray;
-                }
-                .webLogo {
-                    height: 30px;
-                    width: 30px;
-                    vertical-align: text-bottom;
-                }
-            }
-            .Tags {
+            .Header {
                 display: flex;
-                justify-content: space-around;
-                font-size: calc(0.75rem + 0.1vw);
-                margin: 2% 0%;
-                .Sector {
-                    @extend %tagBorder;
+                flex-direction: column;
+                .CompanyName {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 100%;
+                    h1 {
+                        font-size: calc(3rem + 0.1vw);
+                        margin: 2% 0%;
+                    }
+                    .webLogo {
+                        height: 30px;
+                        width: 30px;
+                        vertical-align: text-bottom;
+                    }
                 }
-                .Industry {
-                    @extend %tagBorder;
+                .SymbolTags {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 100%;
+                    h4 {
+                        color: rgba($color: gray, $alpha: 0.7);
+                    }
+                    div {
+                        display: inline-flex;
+                        div {
+                            margin: 0%;
+                            font-size: calc(0.75rem + 0.1vw);
+                            @extend %tagBorder;
+                        }
+                    }
                 }
             }
             .Price {
@@ -129,6 +131,7 @@
                 position: relative;
                 display: flex;
                 flex-direction: column;
+
                 &::before {
                     content: "Key Stats";
                     display: block;
@@ -139,6 +142,7 @@
                     font-weight: bold;
                 }
                 tbody {
+                    padding-top: 1em;
                     border-collapse: collapse;
                     tr {
                         border-bottom: 2px solid gray;
@@ -157,10 +161,7 @@
                 }
             }
         }
-        .MainChart {
-            grid-area: MainChart;
-            place-self: stretch;
-        }
+
         .OrderPanel {
             grid-area: OrderPanel;
             place-self: stretch;
@@ -169,7 +170,8 @@
                 position: relative;
                 display: flex;
                 flex-direction: column;
-                padding-top: 10%;
+                padding-top: calc(2.5rem + 0.1vw);
+                max-height: 48vh;
 
                 &::before {
                     content: "Market Order";
@@ -248,7 +250,7 @@
                             }
                             margin: 8px;
                             .Shares {
-                                width: 20%;
+                                width: 30%;
                                 padding: 8px 12px;
                             }
                         }
@@ -293,11 +295,14 @@
 
             .Card {
                 // height: 100%;
-                height: 100%;
-                min-height: 400px;
+                //height: 100%;
+                height: 48vh;
+                max-height: 48vh;
                 position: relative;
                 display: flex;
                 flex-direction: column;
+
+                padding-top: calc(2rem + 0.2vw);
 
                 overflow-y: scroll;
                 overflow-x: hidden;
@@ -309,7 +314,7 @@
                     font-size: calc(1.25rem + 0.1vw);
                 }
                 table {
-                    margin: 10% 0% 0% 0%;
+                    margin: 2% 0% 0% 0%;
                     text-align: center;
                     border-collapse: collapse;
                     position: relative;

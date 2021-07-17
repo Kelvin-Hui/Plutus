@@ -1,0 +1,56 @@
+%ColumnNav {
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    margin: 0;
+    color: gray;
+    .Options {
+        cursor: pointer;
+        &.Current {
+            color: #0f75b4;
+            &::after {
+                content: "";
+                display: block;
+                position: relative;
+                border-bottom: 2px solid #0f75b4;
+                bottom: -0.25em;
+            }
+        }
+    }
+}
+
+.MainChart {
+    grid-area: MainChart;
+    place-self: stretch;
+
+    .Columns {
+        @extend %ColumnNav;
+        justify-content: space-between;
+        padding: 1rem 2rem;
+        width: 100%;
+    }
+    .Divider {
+        color: gray;
+        width: 100%;
+    }
+    .Card {
+        min-height: 48vh;
+        padding: 1%;
+        .ChartContainer {
+            display: flex;
+            flex-direction: column;
+            .IntervalOptions {
+                @extend %ColumnNav;
+                justify-content: flex-end;
+                width: 100%;
+                .Options {
+                    padding: 0 0.3rem;
+                }
+            }
+            #PriceChart {
+                align-self: center;
+            }
+        }
+    }
+}

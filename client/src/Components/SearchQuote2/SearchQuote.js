@@ -34,6 +34,7 @@ export default function SearchQuote({ symbol }) {
                 setData(responseInfo.data.data);
             }
         };
+
         fetchData();
     }, [symbol]);
 
@@ -44,7 +45,7 @@ export default function SearchQuote({ symbol }) {
                 <SearchInput />
                 <StockInfo stockInfo={data.stockInfo} />
                 <KeyData keyData={data.keyData} />
-                <MainChart />
+                <MainChart previousClose={data.keyData.previousClose} />
                 <OrderPanel
                     lastPrice={Number(data.stockInfo.lastPrice).toLocaleString(
                         "en"

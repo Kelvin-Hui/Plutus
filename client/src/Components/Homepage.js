@@ -23,13 +23,8 @@ export default function Homepage() {
 
     return (
         <div className="Homepage">
-            {/* <NavDrawer /> */}
             <SidePanel />
-            {/* <NavDrawer
-            currContent={currContent}
-            setCurrContent={setCurrContent}
-            /> */}
-            {/* //Nav */}
+
             {nav.currentPage === "Dashboard" && <Dashboard />}
             {nav.currentPage === "Search Quote" && (
                 <SearchQuote symbol={nav.symbol} />
@@ -40,12 +35,6 @@ export default function Homepage() {
             {nav.currentPage === "Market News" && (
                 <MarketNews symbol={nav.symbol} />
             )}
-
-            {/* {currContent === "Dashboard" && <Dashboard />}
-            {currContent === "SearchQuote" && <SearchQuote />}
-            {currContent === "OptionChains" && <OptionChains />}
-            {currContent === "MarketNews" && <MarketNews />} */}
-            {/* {currContent === "Backtesting" && <Backtesting />}  */}
         </div>
     );
 }

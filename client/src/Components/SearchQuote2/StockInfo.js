@@ -11,26 +11,26 @@ export default function StockInfo({ stockInfo }) {
     const format = timeFormat("%b %d %Y %I:%M %p");
     return (
         <div className="StockInfo">
-            <div
-                className="CompanyName"
-                symbol={stockInfo.symbol}
-                exchange={stockInfo.exchangeName}
-            >
-                <h1>{stockInfo.name}</h1>
-                {stockInfo.website && (
-                    <a target="_blank" href={stockInfo.website}>
-                        <Websitelogo className="webLogo" />
-                    </a>
-                )}
+            <div className="Header">
+                <div className="CompanyName">
+                    <h1>{stockInfo.name}</h1>
+                    {stockInfo.website && (
+                        <a target="_blank" href={stockInfo.website}>
+                            <Websitelogo className="webLogo" />
+                        </a>
+                    )}
+                </div>
+                <div className="SymbolTags">
+                    <h4>
+                        {stockInfo.symbol} : {stockInfo.exchangeName}
+                    </h4>
+                    <div>
+                        {stockInfo.sector && <div>{stockInfo.sector}</div>}
+                        {stockInfo.industry && <div>{stockInfo.industry}</div>}
+                    </div>
+                </div>
             </div>
-            <div className="Tags">
-                {stockInfo.sector && (
-                    <div className="Sector">{stockInfo.sector}</div>
-                )}
-                {stockInfo.industry && (
-                    <div className="Industry">{stockInfo.industry}</div>
-                )}
-            </div>
+
             {stockInfo.lastPrice && (
                 <>
                     <h1 className="Price" currency={stockInfo.currency}>
