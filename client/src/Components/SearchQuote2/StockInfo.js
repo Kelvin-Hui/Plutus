@@ -36,13 +36,12 @@ export default function StockInfo({ stockInfo }) {
                     <h1 className="Price" currency={stockInfo.currency}>
                         {stockInfo.lastPrice}
                     </h1>
-                    <div className="PriceChange" time={format(new Date())}>
+                    <div className="PriceChange">
                         <h2 style={{ color: stockInfo.color }}>
-                            {stockInfo.priceChange}
+                            {stockInfo.priceChange} (
+                            {stockInfo.priceChangePercent})
                         </h2>
-                        <h2 style={{ color: stockInfo.color }}>
-                            ({stockInfo.priceChangePercent})
-                        </h2>
+                        <h5>Updated At {format(new Date())}</h5>
                     </div>
                 </>
             )}

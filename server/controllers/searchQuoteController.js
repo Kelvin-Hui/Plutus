@@ -322,3 +322,89 @@ exports.getInfo = async (req, res) => {
         });
     }
 };
+
+//Create an object that map type into modules params
+const type_modules = {
+    overview: "assetProfile",
+    revenue: "earnings",
+    earning: "earnings",
+};
+function extractData(data, type) {
+    if (data === undefined) {
+        return {};
+    } else {
+        switch (type) {
+            case "overview":
+                return {
+                    summary: data.longBusinessSummary,
+                    city: data.city,
+                    state: data.state,
+                    country: data.country,
+                    employees: data.fullTimeEmployees,
+                    ceoName: data.companyOfficers[0].name,
+                    ceoTitle: data.companyOfficers[0].title,
+                };
+            case "revenue":
+                return {
+                    financialsChart: data.financialsChart,
+                };
+
+            case "earning":
+                return {
+                    earningsChart: data.earningsChart,
+                };
+
+            case "financial":
+                return {};
+
+            default:
+                return {};
+        }
+    }
+}
+exports.getData = async (req, res) => {
+    try {
+        const { symbol, type } = req.query;
+        if (!symbol) {
+            return res.status(200).json({
+                status: "fail",
+                message: "Missing Symbol!",
+            });
+        }
+        if (!type) {
+            return res.status(200).json({
+                status: "fail",
+                message: "Missing Parameter",
+            });
+        }
+        const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
+
+        const response = await axios({
+            method: "get",
+            url: url,
+            timeout: 3000,
+            params: {
+                modules: type_modules[type],
+            },
+        });
+
+        if (!response) {
+            return res.status(200).json({
+                status: "fail",
+                message: "Fail Response!",
+            });
+        }
+
+        const result = response.data.quoteSummary.result[0][type_modules[type]];
+
+        return res.status(200).json({
+            status: "success",
+            data: extractData(result, type),
+        });
+    } catch (error) {
+        return res.status(200).json({
+            status: "fail",
+            error: error.message,
+        });
+    }
+};

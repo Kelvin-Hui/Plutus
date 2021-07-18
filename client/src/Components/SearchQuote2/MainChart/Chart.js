@@ -8,13 +8,10 @@ import clsx from "clsx";
 //Import d3JS for Stock Chart
 import * as d3 from "d3";
 
-import priceData from "./data";
-
 //Import Axios for API calling
 import axios from "axios";
 
 export default function Chart({ previousClose, symbol }) {
-    console.log("Rendered Price Chart");
     const ref = React.useRef();
     const [intervals, setIntervals] = React.useState("1m");
     const intervalOptions = [
@@ -43,7 +40,11 @@ export default function Chart({ previousClose, symbol }) {
                 toggleSnackbar("Error", "Please Try Again!");
             }
         };
-        getChart();
+
+        if (previousClose) {
+            getChart();
+        }
+
         //reDrawChart(priceData);
     }, [previousClose, symbol, intervals]);
 

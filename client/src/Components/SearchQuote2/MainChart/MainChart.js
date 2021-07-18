@@ -16,8 +16,8 @@ import UserContext from "../../../Context/UserContext";
 //Import Content Components
 import Overview from "../MainChart/Overview";
 import Chart from "../MainChart/Chart";
-import Statistic from "../MainChart/Statistic";
-import RevenueEarning from "../MainChart/RevenueEarning";
+import Revenue from "./Revenue";
+import Earning from "./Earning";
 import Financial from "../MainChart/Financial";
 
 export default function MainChart({ previousClose }) {
@@ -27,8 +27,8 @@ export default function MainChart({ previousClose }) {
     const Tabs = [
         "Overview",
         "Chart",
-        "Statistic",
-        "Revenue & Earning",
+        "Revenue",
+        "Earning",
         "Financial",
         "Options",
         "News",
@@ -64,12 +64,12 @@ export default function MainChart({ previousClose }) {
             </ul>
             {/* <Divider /> */}
             <Card>
-                {currentTab === "Overview" && <Overview />}
+                {currentTab === "Overview" && <Overview symbol={nav.symbol} />}
                 {currentTab === "Chart" && (
                     <Chart previousClose={previousClose} symbol={nav.symbol} />
                 )}
-                {currentTab === "Statistic" && <Statistic />}
-                {currentTab === "RevenueEarning" && <RevenueEarning />}
+                {currentTab === "Revenue" && <Revenue symbol={nav.symbol} />}
+                {currentTab === "Earning" && <Earning symbol={nav.symbol} />}
                 {currentTab === "Financil" && <Financial />}
             </Card>
         </div>

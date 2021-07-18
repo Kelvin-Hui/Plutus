@@ -62,7 +62,7 @@ exports.getNews = async (req, res) => {
                         newsThumbnail: newsThumbnail,
                     });
                 });
-                if (news.legnth !== 0) {
+                if (news !== []) {
                     localRedis.SETEX(
                         `News_${symbol}`,
                         3600,

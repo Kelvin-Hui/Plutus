@@ -9,6 +9,7 @@
         cursor: pointer;
         &.Current {
             color: #0f75b4;
+            font-weight: bold;
             &::after {
                 content: "";
                 display: block;
@@ -35,6 +36,7 @@
         width: 100%;
     }
     .Card {
+        position: relative;
         min-height: 48vh;
         padding: 1%;
         .ChartContainer {
@@ -51,6 +53,57 @@
             #PriceChart {
                 align-self: center;
             }
+        }
+        .Overview {
+            display: flex;
+            flex-direction: column;
+            .About {
+                padding: 1rem;
+
+                h1 {
+                    margin-top: 0;
+                    font-size: calc(1rem + 0.3vw);
+                }
+            }
+            .CompanyInfo {
+                display: flex;
+                align-items: center;
+                justify-content: space-evenly;
+                position: relative;
+                text-align: center;
+                .CEO,
+                .HeadQuarter,
+                .Employees {
+                    &::before {
+                        content: attr(text);
+                        display: block;
+                        position: relative;
+                        font-weight: bold;
+                        margin: 1rem;
+                    }
+                }
+            }
+            .EmptyData {
+                font-weight: bold;
+                align-self: center;
+            }
+        }
+        .RevenueChart {
+            display: flex;
+            flex-direction: column;
+            .YearOptions {
+                @extend %ColumnNav;
+                justify-content: flex-end;
+                width: 100%;
+                .Options {
+                    padding: 0rem 0.3rem 1rem 0.3rem;
+                }
+            }
+            #RevenueChart {
+                align-self: center;
+            }
+        }
+        .EarningChart {
         }
     }
 }
