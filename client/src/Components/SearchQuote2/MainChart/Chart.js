@@ -147,6 +147,9 @@ export default function Chart({ previousClose, symbol }) {
         //xAxis
         const dateFormat = d3.timeFormat("%m/%d");
         const hourFormat = d3.timeFormat("%H:%M");
+        const dataLength = Math.round(x.domain().length / 10);
+
+        console.log(dataLength);
         var xAxis = svg
             .append("g")
             .attr("class", "xAxis")
@@ -162,7 +165,7 @@ export default function Chart({ previousClose, symbol }) {
                           })
                           .tickValues(
                               x.domain().filter(function (d, i) {
-                                  return !(i % 60);
+                                  return !(i % dataLength);
                               })
                           )
             )

@@ -43,7 +43,9 @@ export default function Overview({ symbol }) {
                             {data.ceoName}
                         </div>
                         <div className="HeadQuarter" text="HeadQuarter">
-                            {data.city} , {data.state} , {data.country}
+                            {data.city}
+                            {data.state ? ", " + data.state : ""},{" "}
+                            {data.country}
                         </div>
                         <div className="Employees" text="Employees">
                             {data.employees}

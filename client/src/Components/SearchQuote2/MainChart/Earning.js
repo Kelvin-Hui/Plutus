@@ -22,7 +22,7 @@ export default function Earning({ symbol }) {
         };
 
         getEarning();
-    }, []);
+    }, [symbol]);
 
     function reDrawChart(data) {
         d3.select(ref.current).select("#EarningChart").remove();
@@ -131,53 +131,117 @@ export default function Earning({ symbol }) {
         yAxis.select(".domain").style("display", "none");
 
         //setColor
-        const colorEstimate = "#536db5";
         const colorBeats = "#69b3a2";
         const colorMiss = "#b55353";
 
+        //Creating Legend
+        var legend = svg
+            .append("g")
+            .attr("class", "legend")
+            .attr(
+                "transform",
+                `translate(${width - margin.left - margin.right}, ${
+                    -margin.top - margin.bottom
+                })`
+            );
+        legend
+            .append("circle")
+            .attr("cx", 100)
+            .attr("cy", 100)
+            .attr("r", "calc(0.3rem + 0.1vw)")
+            .style("fill", "gray");
+        legend
+            .append("circle")
+            .attr("cx", 85)
+            .attr("cy", 125)
+            .attr("r", "calc(0.3rem + 0.1vw)")
+
+            .style("fill", colorBeats);
+        legend
+            .append("circle")
+            .attr("cx", 115)
+            .attr("cy", 125)
+            .attr("r", "calc(0.3rem + 0.1vw)")
+
+            .style("fill", colorMiss);
+
+        legend
+            .append("text")
+            .attr("x", 140)
+            .attr("y", 100)
+            .text("Estimate")
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle");
+        legend
+            .append("text")
+            .attr("x", 140)
+            .attr("y", 125)
+            .text("Actual")
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle");
+
         //Created Tooltips
 
-        var focus = svg
-            .append("g")
-            .attr("class", "foucs")
-            .style("display", "none");
-
-        focus
-            .append("rect")
+        var tooltip = d3
+            .select(ref.current)
+            .append("div")
             .attr("class", "tooltip")
-            .attr("width", 100)
-            .attr("height", 60)
-            .attr("rx", 5)
-            .attr("ry", 5)
-            .attr("fill", "white")
-            .attr("stroke", "black")
-            .attr("stroke-width", "3");
-        focus
-            .append("text")
-            .attr("class", "EPS")
-            .text("estimate")
-            .attr("font-weight", "bold")
-            .attr("x", 20)
-            .attr("y", 17.5);
+            .style("display", "block")
+            .style("position", "absolute")
+            .style("opacity", 0)
+            .style("z-index", 2)
+            .style("border", "2px solid black")
+            .style("border-radius", "15px")
+            .style("background-color", "white")
+            .style("font-size", "calc(0.75rem + 0.3vw)")
+            .style("padding", "calc(0.2rem + 0.3vw)");
 
-        focus
-            .append("text")
-            .text("EPS")
-            .attr("font-weight", "bold")
-            .attr("x", 37.5)
-            .attr("y", 35);
-        focus
-            .append("text")
-            .attr("class", "Value")
-            .text(0.44)
-            .attr("font-weight", "bold")
-            .attr("x", 35)
-            .attr("y", 52.5);
+        function mouseover(event, d) {
+            tooltip
+                .style("top", y(d.actual.raw) + "px")
+                .style("left", x(d.date) + margin.left + margin.right + "px")
+                .style(
+                    "color",
+                    d.actual.raw > d.estimate.raw ? colorBeats : colorMiss
+                )
+                .html(`<b>Actual EPS : ${d.actual.raw}</b>`);
+            tooltip.transition().duration(50).style("opacity", 1);
+        }
 
         function mouseout() {
-            focus.style("display", "none");
-            focus.style("fill", "black");
+            tooltip
+                .transition()
+                .duration(300)
+                .style("display", "none")
+                .style("opacity", 0)
+                .style("color", "black");
         }
+
+        //Adding Dots Estimate;
+        svg.selectAll("dot.Estimate")
+            .data(earningChartData)
+            .enter()
+            .append("circle")
+            .attr("cx", function (d) {
+                return x(d.date);
+            })
+            .attr("cy", function (d) {
+                return y(d.estimate.raw);
+            })
+            .attr("r", "calc(0.5rem + 0.1vw)")
+            .style("fill", "gray")
+            .on("mouseover", function (event, d) {
+                tooltip
+                    .style("top", y(d.estimate.raw) + "px")
+                    .style(
+                        "left",
+                        x(d.date) + margin.left + margin.right + "px"
+                    )
+                    .html(`<b>Estimate EPS : ${d.estimate.raw}</b>`);
+                tooltip.transition().duration(50).style("opacity", 1);
+                tooltip.style("display", "block");
+            })
+            .on("mouseout", mouseout);
 
         //Adding Dots Actual;
         svg.selectAll("dot.Actual")
@@ -194,54 +258,24 @@ export default function Earning({ symbol }) {
             .attr("cy", function (d) {
                 return y(d.actual.raw);
             })
-            .attr("r", 10)
+            .attr("r", "calc(0.5rem + 0.1vw)")
             .style("fill", function (d) {
                 return d.actual.raw > d.estimate.raw ? colorBeats : colorMiss;
             })
-            .on("mouseover", function mouseover() {
-                var data = d3.select(this).data()[0];
-
-                focus.attr(
-                    "transform",
-                    `translate(${x(data.date) * 1.05},${y(data.actual.raw)})`
-                );
-                focus
-                    .style("display", "block")
+            .on("mouseover", function (event, d) {
+                tooltip
+                    .style("top", y(d.actual.raw) + "px")
                     .style(
-                        "fill",
-                        data.actual.raw > data.estimate.raw
-                            ? colorBeats
-                            : colorMiss
-                    );
-                focus.select(".EPS").text("Actual");
-                focus.select(".Value").text(data.actual.raw);
-            })
-            .on("mouseout", mouseout);
-
-        //Adding Dots Estimate;
-        svg.selectAll("dot.Estimate")
-            .data(earningChartData)
-            .enter()
-            .append("circle")
-            .attr("cx", function (d) {
-                return x(d.date);
-            })
-            .attr("cy", function (d) {
-                return y(d.estimate.raw);
-            })
-            .attr("r", 10)
-            .style("fill", "gray")
-            .on("mouseover", function mouseover() {
-                var data = d3.select(this).data()[0];
-
-                focus.attr(
-                    "transform",
-                    `translate(${x(data.date) * 1.05},${y(data.estimate.raw)})`
-                );
-                focus.style("display", "block");
-
-                focus.select(".EPS").text("Estimate");
-                focus.select(".Value").text(data.estimate.raw);
+                        "left",
+                        x(d.date) + margin.left + margin.right + "px"
+                    )
+                    .style(
+                        "color",
+                        d.actual.raw > d.estimate.raw ? colorBeats : colorMiss
+                    )
+                    .html(`<b>Actual EPS : ${d.actual.raw}</b>`);
+                tooltip.transition().duration(50).style("opacity", 1);
+                tooltip.style("display", "block");
             })
             .on("mouseout", mouseout);
     }

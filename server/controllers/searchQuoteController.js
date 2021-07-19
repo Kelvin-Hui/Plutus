@@ -328,6 +328,8 @@ const type_modules = {
     overview: "assetProfile",
     revenue: "earnings",
     earning: "earnings",
+    financial:
+        "incomeStatementHistory,incomeStatementHistoryQuarterly,cashflowStatementHistory,cashflowStatementHistoryQuarterly,balanceSheetHistory,balanceSheetHistoryQuarterly",
 };
 function extractData(data, type) {
     if (data === undefined) {
@@ -335,6 +337,7 @@ function extractData(data, type) {
     } else {
         switch (type) {
             case "overview":
+                data = data[type_modules[type]];
                 return {
                     summary: data.longBusinessSummary,
                     city: data.city,
@@ -345,17 +348,35 @@ function extractData(data, type) {
                     ceoTitle: data.companyOfficers[0].title,
                 };
             case "revenue":
+                data = data[type_modules[type]];
                 return {
                     financialsChart: data.financialsChart,
                 };
 
             case "earning":
+                data = data[type_modules[type]];
                 return {
                     earningsChart: data.earningsChart,
                 };
 
             case "financial":
-                return {};
+                return {
+                    incomeStatementHistoryQuarterly:
+                        data.incomeStatementHistoryQuarterly
+                            .incomeStatementHistory,
+                    incomeStatementHistoryAnnual:
+                        data.incomeStatementHistory.incomeStatementHistory,
+                    balanceSheetHistoryQuarterly:
+                        data.balanceSheetHistoryQuarterly
+                            .balanceSheetStatements,
+                    balanceSheetHistoryAnnual:
+                        data.balanceSheetHistory.balanceSheetStatements,
+                    cashflowStatementHistoryQuarterly:
+                        data.cashflowStatementHistoryQuarterly
+                            .cashflowStatements,
+                    cashflowStatementHistoryAnnual:
+                        data.cashflowStatementHistory.cashflowStatements,
+                };
 
             default:
                 return {};
@@ -395,7 +416,7 @@ exports.getData = async (req, res) => {
             });
         }
 
-        const result = response.data.quoteSummary.result[0][type_modules[type]];
+        const result = response.data.quoteSummary.result[0];
 
         return res.status(200).json({
             status: "success",

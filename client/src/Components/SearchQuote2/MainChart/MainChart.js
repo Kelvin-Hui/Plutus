@@ -34,6 +34,10 @@ export default function MainChart({ previousClose }) {
         "News",
     ];
 
+    React.useEffect(() => {
+        setCurrentTab("Chart");
+    }, [nav.symbol]);
+
     function switchTab(e, col) {
         e.preventDefault();
         if (col === "Options") {
@@ -70,7 +74,7 @@ export default function MainChart({ previousClose }) {
                 )}
                 {currentTab === "Revenue" && <Revenue symbol={nav.symbol} />}
                 {currentTab === "Earning" && <Earning symbol={nav.symbol} />}
-                {currentTab === "Financil" && <Financial />}
+                {currentTab === "Financial" && <Financial />}
             </Card>
         </div>
     );

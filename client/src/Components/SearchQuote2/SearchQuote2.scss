@@ -97,7 +97,7 @@
                 &::before {
                     content: "$";
                     display: inline;
-                    font-size: initial;
+                    font-size: calc(2rem + 0.1vw);
                 }
                 font-size: calc(4rem + 0.1vw);
                 margin: 0% 0% 0% 0%;

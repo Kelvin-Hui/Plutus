@@ -178,6 +178,53 @@ export default function Revenue({ symbol }) {
         const colorPositiveEarning = "#69b3a2";
         const colorNegativeEarning = "#b55353";
 
+        //Creating Legend
+        var legend = svg
+            .append("g")
+            .attr("class", "legend")
+            .attr(
+                "transform",
+                `translate(${width - margin.left - margin.right}, ${
+                    -margin.top - margin.bottom * 2
+                })`
+            );
+        legend
+            .append("rect")
+            .attr("x", 100)
+            .attr("y", 100)
+            .attr("width", 20)
+            .attr("height", 20)
+            .style("fill", colorRevenue);
+        legend
+            .append("rect")
+            .attr("x", 85)
+            .attr("y", 125)
+            .attr("width", 20)
+            .attr("height", 20)
+            .style("fill", colorPositiveEarning);
+        legend
+            .append("rect")
+            .attr("x", 115)
+            .attr("y", 125)
+            .attr("width", 20)
+            .attr("height", 20)
+            .style("fill", colorNegativeEarning);
+
+        legend
+            .append("text")
+            .attr("x", 150)
+            .attr("y", 110)
+            .text("Revenue")
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle");
+        legend
+            .append("text")
+            .attr("x", 150)
+            .attr("y", 135)
+            .text("Earning")
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle");
+
         //Creating Tooltips Trigger
 
         function mouseover() {

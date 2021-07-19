@@ -104,6 +104,49 @@
             }
         }
         .EarningChart {
+            position: relative;
+            .tooltip {
+            }
+        }
+        .Financial {
+            .StatementOptions {
+                @extend %ColumnNav;
+                justify-content: flex-start;
+                width: 50%;
+                padding-left: 0;
+                .Options {
+                    padding: 0rem 0.3rem 1rem 0.3rem;
+                }
+            }
+            .YearOptions {
+                @extend %ColumnNav;
+                justify-content: flex-end;
+                width: 50%;
+                .Options {
+                    padding: 0rem 0.3rem 1rem 0.3rem;
+                }
+            }
+            table {
+                width: 100%;
+                text-align: center;
+                padding: 2%;
+                thead {
+                    width: 100%;
+                    tr {
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                    }
+                }
+                tbody {
+                    .Column {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                    }
+                }
+            }
         }
     }
 }
