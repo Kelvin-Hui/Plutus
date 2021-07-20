@@ -27,31 +27,29 @@ export default function LineChart({ userInfo, transactions }) {
             }, 500);
         });
 
-        document
-            .getElementById("CollapsedBtn")
-            .addEventListener("click", function () {
-                clearTimeout(temp);
-                temp = setTimeout(() => {
-                    reDrawChart();
-                }, 500);
-            });
+        // document
+        //     .getElementById("CollapsedBtn")
+        //     .addEventListener("click", function () {
+        //         clearTimeout(temp);
+        //         temp = setTimeout(() => {
+        //             reDrawChart();
+        //         }, 500);
+        //     });
 
-        return (
-            window.removeEventListener("resize", function () {
-                clearTimeout(temp);
-                temp = setTimeout(() => {
-                    reDrawChart();
-                }, 500);
-            }),
-            document
-                .getElementById("CollapsedBtn")
-                .removeEventListener("click", function () {
-                    clearTimeout(temp);
-                    temp = setTimeout(() => {
-                        reDrawChart();
-                    }, 500);
-                })
-        );
+        return window.removeEventListener("resize", function () {
+            clearTimeout(temp);
+            temp = setTimeout(() => {
+                reDrawChart();
+            }, 500);
+        });
+        // document
+        //     .getElementById("CollapsedBtn")
+        //     .removeEventListener("click", function () {
+        //         clearTimeout(temp);
+        //         temp = setTimeout(() => {
+        //             reDrawChart();
+        //         }, 500);
+        //     })
     });
 
     function reDrawChart() {

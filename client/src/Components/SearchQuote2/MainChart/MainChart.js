@@ -74,7 +74,9 @@ export default function MainChart({ previousClose }) {
                 )}
                 {currentTab === "Revenue" && <Revenue symbol={nav.symbol} />}
                 {currentTab === "Earning" && <Earning symbol={nav.symbol} />}
-                {currentTab === "Financial" && <Financial />}
+                {currentTab === "Financial" && (
+                    <Financial symbol={nav.symbol} />
+                )}
             </Card>
         </div>
     );

@@ -91,14 +91,6 @@
                     &::before {
                         content: "Account Detail";
                         @extend %CardBeforeHeader;
-                        // display: block;
-                        // position: absolute;
-                        // top: 0;
-                        // left: 0;
-
-                        // font-size: 1.25em;
-                        // margin: 16px 16px;
-                        // font-weight: bold;
                     }
                     .CashValue {
                         &::before {
@@ -129,18 +121,12 @@
             .Card {
                 min-height: 400px;
                 position: relative;
+                display: flex;
+                justify-content: center;
                 div {
                     &::before {
                         content: "Realized PNL";
                         @extend %CardBeforeHeader;
-                        // display: block;
-                        // position: absolute;
-                        // top: 0;
-                        // left: 0;
-
-                        // font-size: 1.25em;
-                        // margin: 16px 16px;
-                        // font-weight: bold;
                     }
                     .yAxis,
                     .xAxis {
@@ -148,7 +134,7 @@
                             display: none;
                         }
                         text {
-                            font-size: calc(0.8rem + 0.2vw);
+                            font-size: calc(0.75rem + 0.2vw);
                             color: gray;
                             opacity: 0.75;
                         }
@@ -210,12 +196,14 @@
             place-self: center stretch;
             .Card {
                 position: relative;
+                max-height: 50vh;
+                overflow-y: scroll;
                 .TransactionsTable {
                     &::before {
                         content: "Recent Transactions";
                         @extend %CardBeforeHeader;
                     }
-                    margin-top: 5%;
+                    margin-top: 1.25em;
                     width: 100%;
                     text-align: center;
                     border-collapse: collapse;
@@ -231,6 +219,9 @@
                     th {
                         color: gray;
                         padding: 1% 0%;
+                        position: sticky;
+                        top: 0;
+                        background-color: white;
                     }
                     td {
                         padding: 2% 0%;

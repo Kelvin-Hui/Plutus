@@ -138,21 +138,23 @@
                     margin: 8px 16px;
                     font-weight: bold;
                 }
-                tbody {
-                    padding-top: 1em;
-                    border-collapse: collapse;
-                    tr {
-                        border-bottom: 2px solid gray;
-                        position: relative;
-                        td {
-                            &::before {
-                                content: attr(ColLabel);
-                                display: block;
-                                position: relative;
-                                color: gray;
-                                margin: 4px 0px;
+                table {
+                    tbody {
+                        padding-top: 1em;
+                        border-collapse: collapse;
+                        tr {
+                            border-bottom: 2px solid gray;
+                            position: relative;
+                            td {
+                                &::before {
+                                    content: attr(statlabel);
+                                    display: block;
+                                    position: relative;
+                                    color: gray;
+                                    margin: 4px 0px;
+                                }
+                                padding: 0px 0px 4px 0px;
                             }
-                            padding: 0px 0px 4px 0px;
                         }
                     }
                 }

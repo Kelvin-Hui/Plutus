@@ -68,13 +68,17 @@ export default function Chart({ previousClose, symbol }) {
         var margin = { top: 30, right: 50, bottom: 30, left: 50 };
         let intervalOptions = document.getElementById("intervalOptions");
         var width =
-            ref.current.parentElement.offsetWidth * 0.95 -
-            margin.left -
-            margin.right;
+            ref.current !== null
+                ? ref.current.parentElement.offsetWidth * 0.95 -
+                  margin.left -
+                  margin.right
+                : 980;
         var height =
-            (ref.current.parentElement.offsetHeight -
-                intervalOptions.offsetHeight) *
-            0.95;
+            ref.current !== null
+                ? (ref.current.parentElement.offsetHeight -
+                      intervalOptions.offsetHeight) *
+                  0.95
+                : 490;
 
         var svg = d3
             .select(ref.current)
@@ -148,8 +152,6 @@ export default function Chart({ previousClose, symbol }) {
         const dateFormat = d3.timeFormat("%m/%d");
         const hourFormat = d3.timeFormat("%H:%M");
         const dataLength = Math.round(x.domain().length / 10);
-
-        console.log(dataLength);
         var xAxis = svg
             .append("g")
             .attr("class", "xAxis")

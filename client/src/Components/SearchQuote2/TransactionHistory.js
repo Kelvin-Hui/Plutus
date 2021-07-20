@@ -22,16 +22,19 @@ export default function TransactionHistory() {
             <Card>
                 <table>
                     <tr className="Colname">
-                        <th>Date</th>
-                        <th>Price</th>
-                        <th>Total</th>
+                        <th key="Colname_Date">Date</th>
+                        <th key="Colname_Price">Price</th>
+                        <th key="Colname_Total">Total</th>
                     </tr>
                     <tbody>
                         {filteredTransactions.map((d, idx) => {
                             const Buy = d.quantity > 0;
                             return (
                                 <>
-                                    <tr className="Row">
+                                    <tr
+                                        className="Row"
+                                        key={"transaction_" + idx}
+                                    >
                                         <td
                                             className="Type"
                                             style={{
@@ -40,6 +43,7 @@ export default function TransactionHistory() {
                                             date={new Date(
                                                 d.date
                                             ).toLocaleDateString()}
+                                            key={"transaction_type_" + idx}
                                         >
                                             {Buy ? "Buy" : "Sell"}
                                         </td>
@@ -47,6 +51,7 @@ export default function TransactionHistory() {
                                         <td
                                             className="Quantity"
                                             price={d.price}
+                                            key={"transaction_quantity_" + idx}
                                         >
                                             {d.quantity}
                                         </td>
@@ -56,6 +61,7 @@ export default function TransactionHistory() {
                                             style={{
                                                 color: Buy ? "red" : "green",
                                             }}
+                                            key={"transaction_total_" + idx}
                                         >
                                             $
                                             {Number(

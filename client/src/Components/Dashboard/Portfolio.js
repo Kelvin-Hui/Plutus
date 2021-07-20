@@ -21,7 +21,7 @@ export default function Portfolio({ portfolioData, portfolioValue }) {
         "Last Price",
         "Market Value",
         "Portfolio Diversity",
-        "Today Return",
+        // "Today Return",
         "Total Return",
     ];
 
@@ -70,7 +70,7 @@ export default function Portfolio({ portfolioData, portfolioValue }) {
                                                     portfolioValue
                                             ).toFixed(2) + "%"}
                                         </td>
-                                        <td
+                                        {/* <td
                                             className={clsx({
                                                 Up: todayReturnGain,
                                                 Down: !todayReturnGain,
@@ -78,7 +78,7 @@ export default function Portfolio({ portfolioData, portfolioValue }) {
                                         >
                                             ${data.todayReturn.raw}(
                                             {data.todayReturn.fmt})
-                                        </td>
+                                        </td> */}
                                         <td
                                             className={clsx({
                                                 Up: totalReturnGain,

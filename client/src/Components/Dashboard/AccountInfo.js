@@ -39,10 +39,10 @@ export default function AccountInfo({ userInfo, portfolioValue, todayPNL }) {
                         $
                         {Number(portfolioValue.toFixed(2)).toLocaleString("en")}
                     </h1>
-                    <h3 className="TodayReturn">
+                    {/* <h3 className="TodayReturn">
                         {/* {todayReturn.raw}
-                        {todayReturn.fmt} */}
-                    </h3>
+                        {todayReturn.fmt}
+                    </h3> */}
                     <h2
                         className={clsx({
                             TotalReturn: true,

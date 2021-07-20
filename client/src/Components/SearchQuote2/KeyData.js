@@ -17,17 +17,22 @@ export default function KeyData({ keyData }) {
     return (
         <div className="KeyData">
             <Card>
-                <tbody align="middle">
-                    {data.map((d, idx) => {
-                        return (
-                            <tr key={idx}>
-                                <td className="Value" colLabel={Object.keys(d)}>
-                                    {keyData[Object.values(d)]}
-                                </td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
+                <table>
+                    <tbody align="middle">
+                        {data.map((d, idx) => {
+                            return (
+                                <tr key={idx}>
+                                    <td
+                                        className="Value"
+                                        statlabel={Object.keys(d)}
+                                    >
+                                        {keyData[Object.values(d)]}
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
             </Card>
         </div>
     );
