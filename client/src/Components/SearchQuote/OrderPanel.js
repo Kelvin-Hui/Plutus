@@ -1,7 +1,7 @@
 import React from "react";
 
 //Import scss
-import "./SearchQuote2.scss";
+import "./SearchQuote.scss";
 
 //Import Custom Util Components
 import Card from "../StyledComponents/Card";
@@ -118,7 +118,11 @@ export default function OrderPanel({ lastPrice }) {
         <div className="OrderPanel">
             <Card id="flipCard">
                 <div className="OrderInterface Show">
-                    <div className="Type Buy">Buy</div>
+                    <div className="Header">
+                        <div className="CardTitle">Market Order</div>
+                        <div className="Type Buy">Buy</div>
+                    </div>
+
                     <div className="PositionInfo">
                         <div className="CashBalance" name="Cash Balance">
                             ${cashValue}
@@ -142,7 +146,6 @@ export default function OrderPanel({ lastPrice }) {
                             </button>
                         </div>
                     </div>
-
                     <div className="OrderForm">
                         <div className="InputContainer" name="Shares ">
                             <input
@@ -177,7 +180,10 @@ export default function OrderPanel({ lastPrice }) {
                 </div>
 
                 <div className="OrderInterface">
-                    <div className="Type Sell">Sell</div>
+                    <div className="Header">
+                        <div className="CardTitle">Market Order</div>
+                        <div className="Type Sell">Sell</div>
+                    </div>
                     <div className="PositionInfo">
                         <div className="CashBalance" name="Cash Balance">
                             ${cashValue}

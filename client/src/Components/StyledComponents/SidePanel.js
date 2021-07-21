@@ -83,6 +83,12 @@ export default function SidePanel() {
     return (
         <div className={clsx({ SidePanel: true, Collapsed: collapsed })}>
             <Dialog open={open} setOpen={setOpen}>
+                <div className="UserName" text="User Name">
+                    {userInfo.userName}
+                </div>
+                <div className="JoinDate" text="Date Joined">
+                    {new Date(userInfo.joinDate).toLocaleDateString()}
+                </div>
                 <button
                     className="ResetButton"
                     onClick={(e) => (setOpen(false), resetAccount(e))}
@@ -124,28 +130,35 @@ export default function SidePanel() {
                 <div
                     className={clsx({
                         NavItem: true,
+
                         Collapsed: collapsed,
                     })}
-                    key={4}
-                    tooltip="Setting"
+                    content=""
+                    tooltip={"Setting"}
                     onClick={() => setOpen(true)}
                 >
-                    <Settinglogo className="NavItemIcon" />
+                    <div>
+                        <Settinglogo className="NavItemIcon" />
+                    </div>
                     <span className="NavItemText">Setting</span>
                 </div>
+
                 <div
                     className={clsx({
                         NavItem: true,
                         Collapsed: collapsed,
                     })}
-                    key={5}
                     tooltip="Log Out"
                     onClick={() => {
                         setUserInfo(null);
                         localStorage.removeItem("Auth Token");
                     }}
                 >
-                    <Logoutlogo className="NavItemIcon" />
+                    <div>
+                        {" "}
+                        <Logoutlogo className="NavItemIcon" />
+                    </div>
+
                     <span className="NavItemText">Log Out</span>
                 </div>
 
@@ -154,11 +167,13 @@ export default function SidePanel() {
                     id="CollapsedBtn"
                     onClick={() => setCollapsed(!collapsed)}
                 >
-                    {collapsed ? (
-                        <Doublerightarrowlogo className="NavItemIcon" />
-                    ) : (
-                        <Doubleleftarrowlogo className="NavItemIcon" />
-                    )}
+                    <div>
+                        {collapsed ? (
+                            <Doublerightarrowlogo className="NavItemIcon" />
+                        ) : (
+                            <Doubleleftarrowlogo className="NavItemIcon" />
+                        )}
+                    </div>
                 </div>
             </ul>
         </div>

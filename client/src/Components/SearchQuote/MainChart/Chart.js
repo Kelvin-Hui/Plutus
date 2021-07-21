@@ -76,7 +76,9 @@ export default function Chart({ previousClose, symbol }) {
         var height =
             ref.current !== null
                 ? (ref.current.parentElement.offsetHeight -
-                      intervalOptions.offsetHeight) *
+                      intervalOptions.offsetHeight -
+                      margin.top -
+                      margin.bottom) *
                   0.95
                 : 490;
 

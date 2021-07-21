@@ -11,10 +11,14 @@
 
 .Contentpage {
     .Dashboard {
+        // display: flex;
+        // flex-direction: column;
         display: grid;
         margin: 2%;
         column-gap: 2%;
         row-gap: 2%;
+
+        grid-template-columns: 49% 49%;
         grid-template-areas:
             "AccountInfo  PortfolioChart"
             "PNLChart PNLChart"
@@ -30,13 +34,14 @@
                 justify-content: space-between;
                 .Header {
                     margin-top: 0;
+                    font-size: calc(1.75rem + 0.4vw);
                     &::after {
                         content: "Here's Your Portfolio Performance 👇";
                         display: block;
                         color: gray;
                         margin: 8px 0px;
                         position: relative;
-                        font-size: 0.5em;
+                        font-size: calc(1rem + 0.2vw);
                     }
                 }
                 .JoinDate {
@@ -58,6 +63,7 @@
                         color: red;
                     }
                     .PortfolioValue {
+                        font-size: calc(1.75rem + 0.2vw);
                         &::before {
                             content: "Portfolio Value📈";
                             display: block;
@@ -67,6 +73,7 @@
                         }
                     }
                     .TotalReturn {
+                        font-size: calc(1.25rem + 0.2vw);
                         &::before {
                             content: "Total Return💵";
                             display: block;
@@ -93,21 +100,22 @@
                         @extend %CardBeforeHeader;
                     }
                     .CashValue {
+                        font-size: calc(0.75rem + 0.5vw);
                         &::before {
                             content: "Cash Value";
                             display: block;
                             color: gray;
-                            font-size: 1em;
+
                             text-decoration-line: underline;
                             margin: 8px 0px;
                         }
                     }
                     .TotalStockValue {
+                        font-size: calc(0.75rem + 0.5vw);
                         &::before {
                             content: "Total Stock Value";
                             display: block;
                             color: gray;
-                            font-size: 1em;
                             text-decoration-line: underline;
                             margin: 8px 0px;
                         }
@@ -118,16 +126,18 @@
         .PNLChart {
             grid-area: PNLChart;
             place-self: stretch;
+            .Header {
+                margin: 16px;
+                font-weight: bold;
+                font-size: calc(1.5rem + 0.1vw);
+            }
             .Card {
-                min-height: 400px;
+                min-height: 40vh;
+                height: calc(100% - 32px - (1.5rem + 0.1vw));
                 position: relative;
                 display: flex;
                 justify-content: center;
                 div {
-                    &::before {
-                        content: "Realized PNL";
-                        @extend %CardBeforeHeader;
-                    }
                     .yAxis,
                     .xAxis {
                         path {
@@ -146,18 +156,22 @@
         .Portfolio {
             grid-area: Portfolio;
             place-self: center stretch;
+
+            .Header {
+                margin: 16px;
+                font-weight: bold;
+                font-size: calc(1.5rem + 0.1vw);
+            }
             .Card {
                 position: relative;
+                overflow-x: auto;
+
                 .PortfolioTable {
-                    &::before {
-                        content: "Portfolio Overview";
-                        @extend %CardBeforeHeader;
-                    }
                     border-collapse: collapse;
-                    margin-top: 5%;
                     width: 100%;
                     text-align: center;
                     overflow-y: scroll;
+
                     tr {
                         border-bottom: 0.1px solid gray;
                     }
@@ -194,16 +208,23 @@
         .Transactions {
             grid-area: Transactions;
             place-self: center stretch;
+            .Header {
+                margin: 16px;
+                font-weight: bold;
+                font-size: calc(1.5rem + 0.1vw);
+            }
             .Card {
                 position: relative;
                 max-height: 50vh;
                 overflow-y: scroll;
+                padding-top: 0;
+                margin-bottom: 2%;
                 .TransactionsTable {
-                    &::before {
-                        content: "Recent Transactions";
-                        @extend %CardBeforeHeader;
-                    }
-                    margin-top: 1.25em;
+                    // &::before {
+                    //     content: "Recent Transactions";
+                    //     @extend %CardBeforeHeader;
+                    // }
+                    //margin-top: 1.25em;
                     width: 100%;
                     text-align: center;
                     border-collapse: collapse;
@@ -213,19 +234,18 @@
                     .Down {
                         color: red;
                     }
-                    tr {
-                        border-bottom: 0.1px solid gray;
-                    }
                     th {
                         color: gray;
-                        padding: 1% 0%;
+                        padding: 3% 0% 1% 0%;
                         position: sticky;
                         top: 0;
                         background-color: white;
+                        border-bottom: 0.1px solid gray;
                     }
                     td {
                         padding: 2% 0%;
                         font-weight: bold;
+                        border-bottom: 0.1px solid gray;
                         &.Symbol {
                             cursor: pointer;
                             color: lightseagreen;

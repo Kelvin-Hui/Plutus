@@ -27,6 +27,7 @@ export default function Portfolio({ portfolioData, portfolioValue }) {
 
     return (
         <div className="Portfolio">
+            <div className="Header">Portfolio Overview</div>
             <Card>
                 <table className="PortfolioTable">
                     <thead>

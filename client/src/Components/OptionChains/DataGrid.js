@@ -43,15 +43,10 @@ export default function DataGrid({ symbol, data, exp }) {
         "Volume",
         "Open Interest",
     ];
+
     return (
         <table className="OptionsGrid">
             <thead>
-                <tr className="GridTitle">
-                    <th colSpan="15">{`${symbol}'s Option Chains ${properDate(
-                        new Date(exp * 1000)
-                    )}`}</th>
-                </tr>
-
                 <tr className="CALLPUT">
                     <th colSpan="7">Calls</th>
                     <th></th>
@@ -65,18 +60,20 @@ export default function DataGrid({ symbol, data, exp }) {
             </thead>
             <tbody>
                 {Object.keys(optionData).length === 0 ? (
-                    <td
-                        colSpan="15"
-                        style={{
-                            height: "100vh",
-                            verticalAlign: "sub",
-                            textAlign: "center",
-                            fontWeight: "bold",
-                        }}
-                        className="Skeleton"
-                    >
-                        Loading....
-                    </td>
+                    <tr>
+                        <td
+                            colSpan="15"
+                            style={{
+                                height: "100vh",
+                                verticalAlign: "sub",
+                                textAlign: "center",
+                                fontWeight: "bold",
+                            }}
+                            className="Skeleton"
+                        >
+                            Loading....
+                        </td>
+                    </tr>
                 ) : (
                     Object.keys(optionData).length != 0 &&
                     optionData.map((data, idx) => {
@@ -90,6 +87,7 @@ export default function DataGrid({ symbol, data, exp }) {
                                     CallInTheMoney: c.inTheMoney,
                                     PutInTheMoney: p.inTheMoney,
                                 })}
+                                id={"Option_Strike@" + data.strikes}
                                 key={"data_" + idx}
                             >
                                 <td>{c.openInterest || " - "}</td>

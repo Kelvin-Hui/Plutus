@@ -15,7 +15,8 @@ export default function PNLChart({ userInfo, transactions }) {
 
     return (
         <div className="PNLChart" id="PNLChart_">
-            <Card H100={true}>
+            <div className="Header">Realized PNL</div>
+            <Card>
                 <LineChart userInfo={userInfo} transactions={transactions} />
             </Card>
         </div>

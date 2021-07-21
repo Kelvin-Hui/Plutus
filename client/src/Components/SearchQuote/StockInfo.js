@@ -1,7 +1,7 @@
 import React from "react";
 
 //Import scss
-import "./SearchQuote2.scss";
+import "./SearchQuote.scss";
 //Import d3 time format
 import { timeFormat } from "d3";
 //Import Needed SVG

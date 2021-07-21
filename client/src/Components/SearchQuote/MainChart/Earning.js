@@ -36,7 +36,11 @@ export default function Earning({ symbol }) {
             margin.left -
             margin.right;
 
-        var height = ref.current.parentElement.offsetHeight * 0.9;
+        var height =
+            (ref.current.parentElement.offsetHeight -
+                margin.top -
+                margin.bottom) *
+            0.9;
 
         var svg = d3
             .select(ref.current)

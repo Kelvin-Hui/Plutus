@@ -10,7 +10,7 @@ export default function Dialog(props) {
         <div
             className="Dialog"
             onClick={() => props.setOpen(false)}
-            style={{ display: props.open ? "block" : "none" }}
+            style={{ display: props.open ? "flex" : "none" }}
         >
             <Card H100={true}>{props.children}</Card>
         </div>

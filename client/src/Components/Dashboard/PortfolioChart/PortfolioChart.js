@@ -25,7 +25,7 @@ export default function PortfolioChart({
     return (
         <div className="PortfolioChart">
             <Card H100={true}>
-                <div className="InfoContainer">
+                <div className="InfoContainer" id="InfoContainer">
                     <h3 className="CashValue">
                         ${Number(cashValue).toLocaleString("en")}
                     </h3>

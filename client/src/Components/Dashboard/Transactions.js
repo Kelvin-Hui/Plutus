@@ -28,6 +28,7 @@ export default function Transactions({ transactions }) {
     ];
     return (
         <div className="Transactions">
+            <div className="Header">Recent Transactions</div>
             <Card>
                 <table className="TransactionsTable">
                     <thead>

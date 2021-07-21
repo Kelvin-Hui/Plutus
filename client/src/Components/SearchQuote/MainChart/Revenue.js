@@ -51,7 +51,9 @@ export default function Revenue({ symbol }) {
         let yearOptions = document.getElementById("YearOptions");
         var height =
             (ref.current.parentElement.offsetHeight -
-                yearOptions.offsetHeight) *
+                yearOptions.offsetHeight -
+                margin.top -
+                margin.bottom) *
             0.9;
 
         var svg = d3

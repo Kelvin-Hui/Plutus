@@ -4,45 +4,80 @@
 }
 
 .Contentpage {
-    .OptionsGrid {
-        width: 100%;
-        overflow-y: scroll;
-        border: 1px black solid;
+    #OptionChainCard {
+        width: 98%;
+        margin: 1%;
 
-        .ColName {
-            th {
-                position: sticky;
-                top: 0;
-                z-index: 30;
-                background-color: black;
-                color: white;
-                border-bottom: 3px solid black;
+        .OptionChainHeader {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .Title {
+                font-weight: bolder;
+                font-size: calc(1.5rem + 0.1vw);
+                margin: 1% 0%;
             }
-        }
-        .Row {
-            text-align: center;
-        }
-        .Row:hover {
-            background-color: rgba($color: #000000, $alpha: 0.3);
-        }
-        .CallInTheMoney {
-            td:nth-child(-n + 7) {
-                background-color: rgba($color: #ffffe0, $alpha: 0.5);
-            }
-        }
-        .PutInTheMoney {
-            td:nth-child(n + 9):nth-child(n-13) {
-                background-color: rgba($color: #ffffe0, $alpha: 0.5);
-            }
-        }
+            span {
+                font-size: calc(1rem + 0.2vw);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
 
-        .up {
-            font-weight: bold;
-            color: green;
+                select {
+                    padding: 4% 10%;
+                    appearance: none;
+                    outline: none;
+                    font-size: 1rem;
+                }
+            }
         }
-        .down {
-            font-weight: bold;
-            color: red;
+        .OptionsGrid {
+            width: 100%;
+            overflow-y: scroll;
+            .CALLPUT {
+                font-size: calc(1.25rem + 0.2vw);
+            }
+
+            .ColName {
+                th {
+                    position: sticky;
+                    padding: 1% 0%;
+                    top: 0;
+                    z-index: 30;
+                    background: white;
+                    border-bottom: 3px solid black;
+                }
+            }
+
+            .Row {
+                text-align: center;
+                td {
+                    padding: 0.5rem 0em;
+                }
+            }
+            .Row:hover {
+                background-color: rgba($color: #000000, $alpha: 0.3);
+            }
+            .CallInTheMoney {
+                td:nth-child(-n + 7) {
+                    background-color: rgba($color: #ffffe0, $alpha: 0.5);
+                }
+            }
+            .PutInTheMoney {
+                td:nth-child(n + 9):nth-child(n-13) {
+                    background-color: rgba($color: #ffffe0, $alpha: 0.5);
+                }
+            }
+
+            .up {
+                font-weight: bold;
+                color: green;
+            }
+            .down {
+                font-weight: bold;
+                color: red;
+            }
         }
     }
 }

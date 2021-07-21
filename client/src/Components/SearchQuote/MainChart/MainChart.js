@@ -5,7 +5,6 @@ import "./MainChart.scss";
 
 //Import Custom Util Components
 import Card from "../../StyledComponents/Card";
-import Divider from "../../StyledComponents/Divider";
 
 //Import clsx
 import clsx from "clsx";
@@ -67,7 +66,7 @@ export default function MainChart({ previousClose }) {
                 ))}
             </ul>
             {/* <Divider /> */}
-            <Card>
+            <Card id="Card_MainChart">
                 {currentTab === "Overview" && <Overview symbol={nav.symbol} />}
                 {currentTab === "Chart" && (
                     <Chart previousClose={previousClose} symbol={nav.symbol} />

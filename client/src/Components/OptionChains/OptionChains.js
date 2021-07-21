@@ -49,22 +49,32 @@ export default function OptionChains({ symbol }) {
                 //setSymbol={setSymbol}
             />
 
-            <Card>
-                <span>Option's Exp Date : </span>
-                <select
-                    value={exp === null ? "" : exp}
-                    onChange={(e) => setExp(e.target.value)}
-                >
-                    {expirationDates.length !== 0 &&
-                        expirationDates.map((d, idx) => {
-                            var date = new Date(d * 1000);
-                            return (
-                                <option value={d} key={d + idx}>
-                                    {properDate(date)}
-                                </option>
-                            );
-                        })}
-                </select>
+            <Card id="OptionChainCard">
+                <div className="OptionChainHeader">
+                    <div className="Title">
+                        {`${symbol}'s Option Chains ${properDate(
+                            new Date(exp * 1000)
+                        )}`}
+                    </div>
+                    <span>
+                        Option's Exp Date
+                        <select
+                            value={exp === null ? "" : exp}
+                            onChange={(e) => setExp(e.target.value)}
+                        >
+                            {expirationDates.length !== 0 &&
+                                expirationDates.map((d, idx) => {
+                                    var date = new Date(d * 1000);
+                                    return (
+                                        <option value={d} key={d + idx}>
+                                            {properDate(date)}
+                                        </option>
+                                    );
+                                })}
+                        </select>{" "}
+                    </span>
+                </div>
+
                 <DataGrid symbol={symbol} data={data} exp={exp} />
             </Card>
         </div>

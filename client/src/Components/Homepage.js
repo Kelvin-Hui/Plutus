@@ -1,18 +1,17 @@
 import React from "react";
 
-//Import NavDrawer
-import NavDrawer from "./StyledComponents/NavDrawer";
+//Import SidePanel
+import SidePanel from "./StyledComponents/SidePanel";
 //Import Contents
 import Dashboard from "./Dashboard/Dashboard";
 //import SearchQuote from "./SearchQuote";
-import SearchQuote from "./SearchQuote2/";
+import SearchQuote from "./SearchQuote/";
 import OptionChains from "./OptionChains";
 import MarketNews from "./MarketNews";
 
 //NAV
 //Import UserContext
 import UserContext from "../Context/UserContext";
-import SidePanel from "./StyledComponents/SidePanel";
 
 export default function Homepage() {
     //NAV

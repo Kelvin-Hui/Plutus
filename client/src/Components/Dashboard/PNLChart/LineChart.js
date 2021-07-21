@@ -58,7 +58,7 @@ export default function LineChart({ userInfo, transactions }) {
     }
 
     function drawChart() {
-        var margin = { top: 40, bottom: 20, left: 70, right: 70 };
+        var margin = { top: 10, bottom: 25, left: 70, right: 70 };
 
         let width =
             ref.current !== null
@@ -68,7 +68,7 @@ export default function LineChart({ userInfo, transactions }) {
                 : 1150;
         let height =
             ref.current !== null
-                ? ref.current.parentElement.offsetHeight * 0.85
+                ? ref.current.parentElement.offsetHeight * 0.95
                 : 400;
 
         var svg = d3
@@ -99,7 +99,7 @@ export default function LineChart({ userInfo, transactions }) {
             .tickFormat(function (d) {
                 return format(d);
             })
-            .ticks(6);
+            .ticks(Math.round(width / 200));
 
         var y = d3
             .scaleLinear()
@@ -317,6 +317,11 @@ export default function LineChart({ userInfo, transactions }) {
             var x0 = x.invert(d3.pointer(event)[0]);
             var i = bisect(transactions, x0, 0);
             var selectedData = transactions[i];
+
+            if (selectedData === undefined) {
+                //pass
+                return;
+            }
 
             focus.attr(
                 "transform",

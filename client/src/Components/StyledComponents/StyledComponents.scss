@@ -17,15 +17,12 @@
     background-color: rgba($color: grey, $alpha: 0.5);
     width: 80%;
     align-self: center;
-    // border-top: 1px black solid;
-    // align-self: center;
-    // width: 80%;
-    // margin: 8px 0px;
 }
 
 //SidePanel
 .SidePanel {
-    width: 15%;
+    width: minmax(64px, 120px);
+
     height: 100vh;
 
     display: flex;
@@ -34,22 +31,54 @@
     color: white;
 
     &.Collapsed {
-        // width: (5%);
-        max-width: 65px;
+        // max-width: clamp(64px, 5%, 64px);
+        max-width: 64px;
     }
 
     .Dialog {
         .Card {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: space-evenly;
+            text-align: center;
+            font-weight: bolder;
+            font-size: calc(0.75rem + 0.5vw);
+            .UserName,
+            .JoinDate {
+                color: black;
+                position: relative;
+                width: 50%;
+                &::before {
+                    content: attr(text);
+                    display: block;
+                    position: relative;
+                    color: gray;
+                    border-bottom: 1px solid black;
+                }
+            }
             button {
                 width: 50%;
+                font-size: calc(0.5rem + 0.5vw);
                 padding: 8px 16px;
                 border: 1px solid black;
                 border-radius: 10px;
                 background-color: red;
                 color: white;
+                position: relative;
+
+                &:hover::before {
+                    content: "👈🏼Irreversible!";
+                    display: block;
+                    position: absolute;
+                    padding: 8px 16px;
+                    bottom: 0;
+                    z-index: 20;
+                    background-color: rgba($color: gray, $alpha: 1);
+                    border-radius: 10px;
+                    right: 0;
+                    transform: translateX(105%);
+                }
             }
         }
     }
@@ -59,6 +88,10 @@
         font-family: system-ui;
         font-weight: bold;
         margin: 20% 0px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
 
         span.Collapsed {
             display: none;
@@ -84,7 +117,6 @@
 
         padding: 8px 0px;
         margin: 0;
-        margin-top: 70%;
 
         .NavItem {
             padding: 8px 16px;
@@ -140,15 +172,15 @@
             }
 
             .NavItemIcon {
-                height: 25px;
-                width: 25px;
+                height: 25px !important;
+                width: 25px !important;
                 margin: 10px 10px 10px 0px;
-                vertical-align: middle;
+                //vertical-align: middle;
                 fill: gray;
             }
             .NavItemText {
                 line-height: 1.5;
-                font-size: 1rem;
+                font-size: calc(0.5rem + 0.5vw);
                 font-weight: 500;
             }
         }
@@ -198,13 +230,6 @@
     padding: 24px 24px;
     margin: auto auto;
 
-    // box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.05),
-    //     0 5px 15px 0 rgba(0, 0, 0, 0.05);
-    // transition: ease box-shadow 0.5s;
-    // &:hover {
-    //     box-shadow: 0 15px 60px 0 rgba(0, 0, 0, 0.15),
-    //         0 5px 25px 0 rgba(0, 0, 0, 0.15);
-    // }
     box-shadow: 0 15px 60px rgba($color: black, $alpha: 0.15),
         0px 5px 25px rgba($color: black, $alpha: 0.15);
     transition: ease box-shadow 0.5s;
@@ -253,8 +278,9 @@
     .Card {
         position: relative;
         height: 50%;
-        width: 50%;
-        margin: 10% auto 10% auto;
+        width: 30%;
+
+        margin: auto;
         padding: 8px 24px;
     }
 }
@@ -297,23 +323,6 @@
             background-image: url("../../Assets/success.svg");
         }
     }
-    // &.Warning {
-    //     background-color: #ffa000;
-    // }
-
-    // .SnackLogo {
-    //     visibility: hidden;
-    //     width: 5%;
-    //     fill: white;
-    //     margin: 0px 16px;
-
-    //     &.Error,
-    //     &.Info,
-    //     &.Success,
-    //     &.Warning {
-    //         visibility: visible;
-    //     }
-    // }
 }
 
 .Snackbar.Show {
@@ -368,5 +377,15 @@
     }
     100% {
         transform: rotate(360deg);
+    }
+}
+
+//ReadMore
+
+.ReadMoreText {
+    span {
+        color: lightseagreen;
+        text-decoration: underline;
+        cursor: pointer;
     }
 }

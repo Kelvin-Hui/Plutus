@@ -50,8 +50,10 @@ export default function DonutChart({ donutChartData, portfolioValue }) {
         let parentSize = 256;
         if (ref.current !== null) {
             parentSize = Math.min(
-                ref.current.parentElement.offsetHeight * 0.9,
-                ref.current.parentElement.offsetWidth * 0.9
+                ref.current.parentElement.offsetHeight * 0.8,
+                (ref.current.parentElement.offsetWidth -
+                    document.getElementById("InfoContainer").offsetWidth) *
+                    0.9
             );
         }
 
@@ -147,20 +149,17 @@ export default function DonutChart({ donutChartData, portfolioValue }) {
         svg.append("text")
             .attr("id", "text1")
             .attr("text-anchor", "middle")
-            .attr("font-size", "1vw")
+            .attr("font-size", "calc(1rem + 0.1vw)")
             .attr("font-weight", "bold")
-            .attr("dy", "-1.5em")
-            .text("Hover Symbols For");
-
+            .attr("dy", "-1.5em");
         svg.append("text")
             .attr("id", "text2")
             .attr("text-anchor", "middle")
-            .attr("font-size", "1vw")
-            .text("More Detail");
+            .attr("font-size", "calc(1rem + 0.1vw)");
         svg.append("text")
             .attr("id", "text3")
             .attr("text-anchor", "middle")
-            .attr("font-size", "1vw")
+            .attr("font-size", "calc(1rem + 0.1vw)")
             .attr("dy", "2em");
     }
 

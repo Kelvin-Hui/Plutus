@@ -1,7 +1,7 @@
 import React from "react";
 
 //Import scss
-import "./SearchQuote2.scss";
+import "./SearchQuote.scss";
 
 //Import SearchInput
 import SearchInput from "../StyledComponents/SearchInput";
