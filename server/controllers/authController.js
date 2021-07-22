@@ -4,7 +4,6 @@ let UserPortfolio = require("../models/userPortfolioModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
-const { prev } = require("cheerio/lib/api/traversing");
 
 exports.createAccount = async (req, res) => {
     console.log("called create account");

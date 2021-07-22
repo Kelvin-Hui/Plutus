@@ -50,7 +50,7 @@ export default function LineChart({ userInfo, transactions }) {
         //             reDrawChart();
         //         }, 500);
         //     })
-    });
+    }, [transactions]);
 
     function reDrawChart() {
         d3.select(ref.current).select("#LineChart").remove();
@@ -99,7 +99,7 @@ export default function LineChart({ userInfo, transactions }) {
             .tickFormat(function (d) {
                 return format(d);
             })
-            .ticks(Math.round(width / 200));
+            .ticks(4);
 
         var y = d3
             .scaleLinear()

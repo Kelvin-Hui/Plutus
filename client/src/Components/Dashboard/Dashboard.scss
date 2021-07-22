@@ -138,15 +138,22 @@
                 display: flex;
                 justify-content: center;
                 div {
-                    .yAxis,
                     .xAxis {
                         path {
                             display: none;
                         }
                         text {
-                            font-size: calc(0.75rem + 0.2vw);
-                            color: gray;
-                            opacity: 0.75;
+                            font-size: calc(0.1rem + 1vw);
+                            color: rgba(black, 0.85);
+                        }
+                    }
+                    .yAxis {
+                        path {
+                            display: none;
+                        }
+                        text {
+                            font-size: calc(0.3rem + 0.85vw);
+                            color: rgba(black, 0.85);
                         }
                     }
                 }
@@ -155,7 +162,7 @@
 
         .Portfolio {
             grid-area: Portfolio;
-            place-self: center stretch;
+            place-self: stretch;
 
             .Header {
                 margin: 16px;
@@ -207,7 +214,7 @@
         }
         .Transactions {
             grid-area: Transactions;
-            place-self: center stretch;
+            place-self: stretch;
             .Header {
                 margin: 16px;
                 font-weight: bold;
@@ -251,6 +258,31 @@
                             color: lightseagreen;
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .PortfolioChart {
+        .Card {
+            flex-direction: column;
+        }
+    }
+}
+@media only screen and (max-width: 900px) {
+    .Contentpage {
+        .Dashboard {
+            display: flex;
+            flex-direction: column;
+            .AccountInfo {
+                margin-bottom: 5%;
+            }
+            .PortfolioChart {
+                .Card {
+                    min-height: 400px;
+                    flex-direction: row;
                 }
             }
         }

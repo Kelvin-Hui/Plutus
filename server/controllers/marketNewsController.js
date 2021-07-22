@@ -62,7 +62,7 @@ exports.getNews = async (req, res) => {
                         newsThumbnail: newsThumbnail,
                     });
                 });
-                if (news !== []) {
+                if (news.length !== 0) {
                     localRedis.SETEX(
                         `News_${symbol}`,
                         3600,
@@ -72,11 +72,12 @@ exports.getNews = async (req, res) => {
                         status: "success",
                         data: news,
                     });
+                } else {
+                    return res.status(200).json({
+                        status: "success",
+                        data: news,
+                    });
                 }
-                return res.status(200).json({
-                    status: "success",
-                    data: news,
-                });
             }
         });
     } catch (error) {

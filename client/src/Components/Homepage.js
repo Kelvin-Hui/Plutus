@@ -16,7 +16,6 @@ import UserContext from "../Context/UserContext";
 export default function Homepage() {
     //NAV
     const { nav } = React.useContext(UserContext);
-    //const [currContent, setCurrContent] = React.useState("Dashboard");
 
     React.useEffect(() => {}, [nav.symbol]);
 

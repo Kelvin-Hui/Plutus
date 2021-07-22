@@ -21,6 +21,7 @@ export default function Revenue({ symbol }) {
     const yearMap = { Annual: "yearly", Quarterly: "quarterly" };
 
     React.useEffect(() => {
+        var temp;
         const getRevenue = async () => {
             const response = await axios.get(
                 `http://localhost:5000/api/searchQuote/getData?symbol=${symbol}&type=revenue`
@@ -28,13 +29,26 @@ export default function Revenue({ symbol }) {
             if (response.data.status !== "fail") {
                 setData(response.data.data);
                 reDrawChart(response.data.data);
+                window.addEventListener("resize", function () {
+                    clearTimeout(response.data.data);
+                    temp = setTimeout(() => {
+                        reDrawChart(response.data.data);
+                    }, 500);
+                });
             }
         };
         if (Object.keys(data).length === 0) {
             getRevenue();
         } else {
-            reDrawChart();
+            reDrawChart(data);
         }
+
+        return window.removeEventListener("resize", function () {
+            clearTimeout(temp);
+            temp = setTimeout(() => {
+                reDrawChart();
+            }, 500);
+        });
     }, [year, symbol]);
 
     function reDrawChart(bcData) {
@@ -45,16 +59,21 @@ export default function Revenue({ symbol }) {
     function drawBarChart(bcData = null) {
         var margin = { top: 30, right: 70, bottom: 30, left: 70 };
         var width =
-            ref.current.parentElement.offsetWidth * 0.95 -
-            margin.left -
-            margin.right;
+            ref.current !== null
+                ? ref.current.parentElement.offsetWidth * 0.95 -
+                  margin.left -
+                  margin.right
+                : 900;
+
         let yearOptions = document.getElementById("YearOptions");
         var height =
-            (ref.current.parentElement.offsetHeight -
-                yearOptions.offsetHeight -
-                margin.top -
-                margin.bottom) *
-            0.9;
+            ref.current !== null
+                ? (ref.current.parentElement.offsetHeight -
+                      yearOptions.offsetHeight -
+                      margin.top -
+                      margin.bottom) *
+                  0.9
+                : 370;
 
         var svg = d3
             .select(ref.current)
@@ -67,9 +86,9 @@ export default function Revenue({ symbol }) {
             .style("position", "relative");
 
         const barChartData =
-            Object.keys(data).length === 0
-                ? bcData.financialsChart[yearMap[year]]
-                : data.financialsChart[yearMap[year]];
+            bcData == null
+                ? data.financialsChart[yearMap[year]]
+                : bcData.financialsChart[yearMap[year]];
 
         //x Range and Domain
         var x = d3
@@ -308,20 +327,24 @@ export default function Revenue({ symbol }) {
 
     return (
         <div ref={ref} className="RevenueChart">
-            <ul className="YearOptions" id="YearOptions">
-                {yearOptions.map((y, idx) => (
-                    <li
-                        className={clsx({
-                            Options: true,
-                            Current: year === y,
-                        })}
-                        onClick={() => setYear(y)}
-                        key={idx}
-                    >
-                        {y}
-                    </li>
-                ))}
-            </ul>
+            {Object.keys(data).length === 0 ? (
+                <div className="EmptyData">Not Applicable ...</div>
+            ) : (
+                <ul className="YearOptions" id="YearOptions">
+                    {yearOptions.map((y, idx) => (
+                        <li
+                            className={clsx({
+                                Options: true,
+                                Current: year === y,
+                            })}
+                            onClick={() => setYear(y)}
+                            key={idx}
+                        >
+                            {y}
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 }

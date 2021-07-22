@@ -34,7 +34,7 @@ export default function KeyData({ keyData }) {
                                 datalabel={Object.keys(d)}
                                 key={"DataLeft_" + idx}
                             >
-                                {keyData[Object.values(d)]}
+                                {keyData[Object.values(d)] || "N/A"}
                             </div>
                         );
                     })}
@@ -45,7 +45,7 @@ export default function KeyData({ keyData }) {
                                 datalabel={Object.keys(d)}
                                 key={"DataRight_" + idx}
                             >
-                                {keyData[Object.values(d)]}
+                                {keyData[Object.values(d)] || "N/A"}
                             </div>
                         );
                     })}

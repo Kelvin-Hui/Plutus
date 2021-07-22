@@ -10,18 +10,35 @@ import * as d3 from "d3";
 
 export default function Earning({ symbol }) {
     const ref = React.useRef();
+    const [data, setData] = React.useState({});
 
     React.useEffect(() => {
+        var temp;
         const getEarning = async () => {
             const response = await axios.get(
                 `http://localhost:5000/api/searchQuote/getData?symbol=${symbol}&type=earning`
             );
             if (response.data.status !== "fail") {
+                setData(response.data.data);
                 reDrawChart(response.data.data);
+                window.addEventListener("resize", function () {
+                    clearTimeout(temp);
+                    temp = setTimeout(() => {
+                        reDrawChart(response.data.data);
+                    }, 500);
+                });
             }
         };
+        if (Object.keys(data).length === 0) {
+            getEarning();
+        }
 
-        getEarning();
+        return window.removeEventListener("resize", function () {
+            clearTimeout(temp);
+            temp = setTimeout(() => {
+                reDrawChart(data);
+            }, 500);
+        });
     }, [symbol]);
 
     function reDrawChart(data) {
@@ -32,15 +49,19 @@ export default function Earning({ symbol }) {
     function drawEarningChart(data) {
         var margin = { top: 30, right: 70, bottom: 40, left: 70 };
         var width =
-            ref.current.parentElement.offsetWidth * 0.95 -
-            margin.left -
-            margin.right;
+            ref.current !== null
+                ? ref.current.parentElement.offsetWidth * 0.95 -
+                  margin.left -
+                  margin.right
+                : 900;
 
         var height =
-            (ref.current.parentElement.offsetHeight -
-                margin.top -
-                margin.bottom) *
-            0.9;
+            ref.current !== null
+                ? (ref.current.parentElement.offsetHeight -
+                      margin.top -
+                      margin.bottom) *
+                  0.9
+                : 370;
 
         var svg = d3
             .select(ref.current)
@@ -283,5 +304,12 @@ export default function Earning({ symbol }) {
             })
             .on("mouseout", mouseout);
     }
-    return <div className="EarningChart" ref={ref}></div>;
+
+    return (
+        <div className="EarningChart" ref={ref}>
+            {Object.keys(data).length === 0 && (
+                <div className="EmptyData">Not Applicable ...</div>
+            )}
+        </div>
+    );
 }

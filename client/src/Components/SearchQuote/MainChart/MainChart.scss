@@ -40,9 +40,17 @@
         position: relative;
         height: clamp(50vh, 100%, 50vh);
         padding: 1%;
+        div {
+            .EmptyData {
+                font-weight: bold;
+                align-self: center;
+            }
+        }
         .ChartContainer {
             display: flex;
             flex-direction: column;
+            position: relative;
+
             .IntervalOptions {
                 @extend %ColumnNav;
                 justify-content: flex-end;
@@ -51,15 +59,43 @@
                     padding: 0 0.2rem;
                 }
             }
+
+            .BtnGroup {
+                position: absolute;
+                top: 10%;
+                right: 25px;
+                //border: 1px solid black;
+                display: flex;
+                flex-direction: column;
+
+                span {
+                    border-bottom: 1.5px solid white;
+
+                    &.on {
+                        color: lightskyblue !important;
+                        border-color: gray;
+                    }
+                    .ChartToolsIcon {
+                        height: 25px !important;
+                        width: 25px !important;
+                        margin: 30% 0% 0% 0%;
+                    }
+                }
+            }
+
             #PriceChart {
                 align-self: center;
+                .ohlcDataBox {
+                    font-weight: 600;
+                    font-size: calc(0.75rem + 0.2vw);
+                }
             }
         }
         .Overview {
             display: flex;
             flex-direction: column;
             height: 100%;
-            justify-content: space-between;
+            justify-content: space-around;
             padding: 1%;
             .About {
                 padding: 1rem;
@@ -92,6 +128,7 @@
                 align-self: center;
             }
         }
+
         .RevenueChart {
             display: flex;
             flex-direction: column;
@@ -108,11 +145,15 @@
             }
         }
         .EarningChart {
+            display: flex;
+            flex-direction: column;
             position: relative;
-            .tooltip {
-            }
         }
         .Financial {
+            &.Empty {
+                display: flex;
+                flex-direction: column;
+            }
             .StatementOptions {
                 @extend %ColumnNav;
                 justify-content: flex-start;

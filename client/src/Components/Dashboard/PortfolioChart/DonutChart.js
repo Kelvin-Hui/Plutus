@@ -50,10 +50,10 @@ export default function DonutChart({ donutChartData, portfolioValue }) {
         let parentSize = 256;
         if (ref.current !== null) {
             parentSize = Math.min(
-                ref.current.parentElement.offsetHeight * 0.8,
+                ref.current.parentElement.offsetHeight * 0.95,
                 (ref.current.parentElement.offsetWidth -
                     document.getElementById("InfoContainer").offsetWidth) *
-                    0.9
+                    0.95
             );
         }
 
@@ -132,7 +132,7 @@ export default function DonutChart({ donutChartData, portfolioValue }) {
             .append("text")
             .style("font-weight", "bold")
             .attr("text-anchor", "middle")
-            .attr("font-size", "0.8vw")
+            .attr("font-size", "0.65rem")
             .attr("transform", function (d) {
                 return (
                     "translate(" +

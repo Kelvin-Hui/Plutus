@@ -12,6 +12,7 @@ exports.checkSymbol = async (req, res) => {
             timeout: 1000,
             params: {
                 modules: "summaryProfile",
+                // modules: "price",
             },
         });
 

@@ -294,8 +294,8 @@ exports.getInfo = async (req, res) => {
                           priceResult.regularMarketChangePercent.fmt,
                       color:
                           priceResult.regularMarketChange.raw > 0
-                              ? "00FF00"
-                              : "#FF0000",
+                              ? "green"
+                              : "red",
                   }
                 : {};
 
@@ -308,6 +308,13 @@ exports.getInfo = async (req, res) => {
                       high: summaryDetailResult.dayHigh.raw.toFixed(2),
                       low: summaryDetailResult.dayLow.raw.toFixed(2),
                       close: priceResult.regularMarketPrice.raw.toFixed(2),
+                      volume: summaryDetailResult.volume.fmt,
+                      averageVolume: summaryDetailResult.averageVolume.fmt,
+                      marketCap: summaryDetailResult.marketCap.fmt,
+                      ma50: summaryDetailResult.fiftyDayAverage.raw.toFixed(2),
+                      ma200: summaryDetailResult.twoHundredDayAverage.raw.toFixed(
+                          2
+                      ),
                   }
                 : {};
 
