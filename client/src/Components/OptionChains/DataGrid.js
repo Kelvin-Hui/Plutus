@@ -47,14 +47,47 @@ export default function DataGrid({ symbol, data, exp }) {
     return (
         <table className="OptionsGrid">
             <thead>
-                <tr className="CALLPUT">
-                    <th colSpan="7">Calls</th>
+                {/* <div className="CALLPUT">
+                    <span className="Calls">Calls</span>
+                    <span className="Puts">Puts</span>
+                </div> */}
+                <tr className="CALLPUT ColSpan3">
+                    <th colspan={3} className="Calls">
+                        Calls
+                    </th>
                     <th></th>
-                    <th colSpan="7">Puts</th>
+                    <th colspan={3} className="Puts">
+                        Puts
+                    </th>
+                </tr>
+                <tr className="CALLPUT ColSpan5">
+                    <th colspan={5} className="Calls">
+                        Calls
+                    </th>
+                    <th></th>
+                    <th colspan={5} className="Puts">
+                        Puts
+                    </th>
+                </tr>
+                <tr className="CALLPUT ColSpan7">
+                    <th colspan={7} className="Calls">
+                        Calls
+                    </th>
+                    <th></th>
+                    <th colspan={7} className="Puts">
+                        Puts
+                    </th>
                 </tr>
                 <tr className="Row ColName">
                     {columns.map((col, idx) => {
-                        return <th key={col + idx}>{col}</th>;
+                        return (
+                            <th
+                                className={col.replaceAll(" ", "")}
+                                key={col + idx}
+                            >
+                                {col}
+                            </th>
+                        );
                     })}
                 </tr>
             </thead>
@@ -90,15 +123,17 @@ export default function DataGrid({ symbol, data, exp }) {
                                 id={"Option_Strike@" + data.strikes}
                                 key={"data_" + idx}
                             >
-                                <td>{c.openInterest || " - "}</td>
+                                <td className="OpenInterest">
+                                    {c.openInterest || " - "}
+                                </td>
                                 <td>{c.volume || " - "}</td>
-                                <td>
+                                <td className="ImpliedVolatility">
                                     {parseFloat(
                                         c.impliedVolatility * 100
                                     ).toFixed(2) + "%" || " - "}
                                 </td>
-                                <td>{c.bid || " - "}</td>
-                                <td>{c.ask || " - "}</td>
+                                <td className="Bid">{c.bid || " - "}</td>
+                                <td className="Ask">{c.ask || " - "}</td>
                                 <td>{c.lastPrice || " - "}</td>
                                 <td
                                     className={clsx({
@@ -136,15 +171,17 @@ export default function DataGrid({ symbol, data, exp }) {
                                         "%" || " - "}
                                 </td>
                                 <td>{p.lastPrice || " - "}</td>
-                                <td>{p.bid || " - "}</td>
-                                <td>{p.ask || " - "}</td>
-                                <td>
+                                <td className="Bid">{p.bid || " - "}</td>
+                                <td className="Ask">{p.ask || " - "}</td>
+                                <td className="ImpliedVolatility">
                                     {parseFloat(
                                         p.impliedVolatility * 100
                                     ).toFixed(2) + "%" || " - "}
                                 </td>
                                 <td>{p.volume || " - "}</td>
-                                <td>{p.openInterest || " - "}</td>
+                                <td className="OpenInterest">
+                                    {p.openInterest || " - "}
+                                </td>
                             </tr>
                         );
                     })

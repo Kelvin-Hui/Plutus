@@ -21,7 +21,6 @@ export default function Portfolio({ portfolioData, portfolioValue }) {
         "Last Price",
         "Market Value",
         "Portfolio Diversity",
-        // "Today Return",
         "Total Return",
     ];
 
@@ -33,7 +32,14 @@ export default function Portfolio({ portfolioData, portfolioValue }) {
                     <thead>
                         <tr className="ColName">
                             {columns.map((col, idx) => {
-                                return <th key={col + idx}>{col}</th>;
+                                return (
+                                    <th
+                                        className={col.replace(" ", "")}
+                                        key={col + idx}
+                                    >
+                                        {col}
+                                    </th>
+                                );
                             })}
                         </tr>
                     </thead>
@@ -60,28 +66,30 @@ export default function Portfolio({ portfolioData, portfolioValue }) {
                                         >
                                             {data.symbol}
                                         </td>
-                                        <td>{data.companyName}</td>
-                                        <td>{data.position}</td>
-                                        <td>${data.averageCost}</td>
-                                        <td>${data.currentPrice}</td>
-                                        <td>${data.marketValue}</td>
-                                        <td>
+                                        <td className="CompanyName">
+                                            {data.companyName}
+                                        </td>
+                                        <td className="Position">
+                                            {data.position}
+                                        </td>
+                                        <td className="AverageCost">
+                                            ${data.averageCost}
+                                        </td>
+                                        <td className="LastPrice">
+                                            ${data.currentPrice}
+                                        </td>
+                                        <td className="MarketValue">
+                                            ${data.marketValue}
+                                        </td>
+                                        <td className="PortfolioDiversity">
                                             {parseFloat(
                                                 data.marketValue /
                                                     portfolioValue
                                             ).toFixed(2) + "%"}
                                         </td>
-                                        {/* <td
-                                            className={clsx({
-                                                Up: todayReturnGain,
-                                                Down: !todayReturnGain,
-                                            })}
-                                        >
-                                            ${data.todayReturn.raw}(
-                                            {data.todayReturn.fmt})
-                                        </td> */}
                                         <td
                                             className={clsx({
+                                                TotalReturn: true,
                                                 Up: totalReturnGain,
                                                 Down: !totalReturnGain,
                                             })}

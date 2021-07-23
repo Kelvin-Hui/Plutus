@@ -62,7 +62,7 @@
         @extend %boxShadowAnimation;
 
         height: 50%;
-        width: 25%;
+        width: clamp(325px, 30%, 500px);
         perspective: 500px;
 
         .Form {

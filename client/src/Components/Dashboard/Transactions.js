@@ -22,7 +22,7 @@ export default function Transactions({ transactions }) {
         "Symbol",
         "Transaction Type",
         "Quantity",
-        "Average Price Per Share ($)",
+        "Average Price Per Share",
         "Total Amount",
         "Profit & Loss",
     ];
@@ -34,7 +34,14 @@ export default function Transactions({ transactions }) {
                     <thead>
                         <tr className="ColName">
                             {columns.map((col, idx) => {
-                                return <th key={col + idx}>{col}</th>;
+                                return (
+                                    <th
+                                        className={col.replaceAll(" ", "")}
+                                        key={col + idx}
+                                    >
+                                        {col}
+                                    </th>
+                                );
                             })}
                         </tr>
                     </thead>
@@ -72,8 +79,10 @@ export default function Transactions({ transactions }) {
                                             {data.quantity > 0 ? "Buy" : "Sell"}
                                         </td>
                                         <td>{Math.abs(data.quantity)}</td>
-                                        <td>${data.price}</td>
-                                        <td>
+                                        <td className="AveragePricePerShare">
+                                            ${data.price}
+                                        </td>
+                                        <td className="TotalAmount">
                                             $
                                             {(
                                                 data.price *

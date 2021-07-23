@@ -44,6 +44,7 @@
             flex-direction: column;
             justify-content: space-evenly;
 
+            width: 100%;
             .Header {
                 display: flex;
                 flex-direction: column;
@@ -362,6 +363,101 @@
                         align-items: center;
                         justify-content: center;
                         font-size: calc(1.5rem + 0.1vw);
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .Snackbar {
+        left: 0%;
+        width: 100%;
+    }
+    .Contentpage {
+        .SearchQuote {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+
+            .SearchInput {
+                margin-top: 2%;
+                width: 75%;
+                align-self: center;
+            }
+            .StockInfo {
+            }
+            .KeyData {
+                .Card {
+                    width: 95%;
+                    margin: 2.5%;
+                }
+            }
+            .MainChart {
+                height: 50vh;
+                margin: 2.5%;
+                .Columns {
+                    padding: 5% 0;
+                    font-size: 1.2rem;
+                }
+                .Financial {
+                    .YearOptions,
+                    .StatementOptions {
+                        font-size: 0.8rem;
+                    }
+                }
+
+                #PriceChart {
+                    g {
+                        .xAxis {
+                            path,
+                            text,
+                            .tick {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+            .OrderPanel {
+                margin: 20% 2.5% 2.5% 2.5%;
+            }
+            .TransactionHistory {
+                margin: 2.5%;
+                .TableContainer {
+                    margin: 0 auto;
+                    table {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .Contentpage {
+        .SearchQuote {
+            .StockInfo {
+                .PriceChange {
+                    h5 {
+                        font-size: 0.75rem;
+                    }
+                }
+            }
+            .MainChart {
+                .Columns {
+                    padding: 5% 0;
+                    font-size: 0.75rem;
+                }
+                .Financial {
+                    .YearOptions,
+                    .StatementOptions {
+                        font-size: 0.55rem;
+                    }
+                    .TableContainer {
+                        font-size: 0.75rem;
                     }
                 }
             }

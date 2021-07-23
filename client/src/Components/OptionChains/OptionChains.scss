@@ -36,7 +36,16 @@
             width: 100%;
             overflow-y: scroll;
             .CALLPUT {
+                &.ColSpan3,
+                &.ColSpan5 {
+                    display: none;
+                }
+                font-weight: bolder;
                 font-size: calc(1.25rem + 0.2vw);
+                .Calls,
+                .Puts {
+                    align-self: center;
+                }
             }
 
             .ColName {
@@ -77,6 +86,56 @@
             .down {
                 font-weight: bold;
                 color: red;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .Contentpage {
+        .SearchInput {
+            .Inputarea {
+                width: 75%;
+            }
+        }
+        #OptionChainCard {
+            .OptionsGrid {
+                .CALLPUT {
+                    &.ColSpan7,
+                    &.ColSpan3 {
+                        display: none;
+                    }
+                    &.ColSpan5 {
+                        display: table-row;
+                    }
+                }
+                .ImpliedVolatility,
+                .Bid,
+                .Ask {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .Contentpage {
+        #OptionChainCard {
+            .OptionsGrid {
+                font-size: 0.75rem;
+                .CALLPUT {
+                    &.ColSpan7,
+                    &.ColSpan5 {
+                        display: none;
+                    }
+                    &.ColSpan3 {
+                        display: table-row;
+                    }
+                }
+                .OpenInterest {
+                    display: none;
+                }
             }
         }
     }

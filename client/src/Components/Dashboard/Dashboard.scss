@@ -273,6 +273,7 @@
 }
 @media only screen and (max-width: 900px) {
     .Contentpage {
+        height: calc(100vh - 60px) !important;
         .Dashboard {
             display: flex;
             flex-direction: column;
@@ -283,6 +284,59 @@
                 .Card {
                     min-height: 400px;
                     flex-direction: row;
+                }
+            }
+
+            .PNLChart {
+                .Card {
+                    div {
+                        .xAxis {
+                            path,
+                            text,
+                            .tick {
+                                display: none;
+                            }
+                        }
+                        .yAxis {
+                            text {
+                                font-size: calc(0.5rem + 0.85vw);
+                                color: rgba(black, 0.85);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .StatContainer {
+        flex-direction: column !important;
+        .TotalReturn {
+            font-size: calc(1.75rem + 0.2vw) !important;
+        }
+    }
+    .Portfolio {
+        .Card {
+            font-size: calc(0.75rem) !important;
+            .PortfolioTable {
+                .CompanyName,
+                .AverageCost,
+                .MarketValue,
+                .PortfolioDiversity {
+                    display: none;
+                }
+            }
+        }
+    }
+    .Transactions {
+        .Card {
+            font-size: calc(0.75rem) !important;
+            .TransactionsTable {
+                .TotalAmount,
+                .AveragePricePerShare {
+                    display: none;
                 }
             }
         }

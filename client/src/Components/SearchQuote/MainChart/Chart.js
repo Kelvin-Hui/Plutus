@@ -272,11 +272,13 @@ export default function Chart({ previousClose, symbol }) {
 
         //Add Area
         //Lowest Point
-        const lowest = d3.min(priceData, function (d) {
-            if (d.low !== null) {
-                return d.low * 0.995;
-            }
-        });
+        // const lowest = d3.min(priceData, function (d) {
+        //     if (d.low !== null) {
+        //         return d.low * 0.995;
+        //     }
+        // });
+
+        const lowest = d3.min(HighLow);
 
         if (!chartTools.Zoomin) {
             svg.append("path")

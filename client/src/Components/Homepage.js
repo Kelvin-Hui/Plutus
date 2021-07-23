@@ -21,6 +21,10 @@ export default function Homepage() {
 
     return (
         <div className="Homepage">
+            {/* <div className="MobileHeadline">
+                <span>Plutus</span>
+            </div> */}
+
             <SidePanel />
 
             {nav.currentPage === "Dashboard" && <Dashboard />}
