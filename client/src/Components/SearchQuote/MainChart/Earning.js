@@ -205,7 +205,7 @@ export default function Earning({ symbol }) {
             .attr("text-anchor", "left")
             .style("alignment-baseline", "middle");
 
-        //Created Tooltips
+        //Create Tooltips
 
         var tooltip = d3
             .select(ref.current)

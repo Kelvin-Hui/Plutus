@@ -35,22 +35,24 @@ export default function SearchInput(props) {
     }
 
     function enter(e) {
-        let valid = check(e.target.value.toUpperCase());
+        if (e.target.value.toUpperCase() != nav.symbol) {
+            let valid = check(e.target.value.toUpperCase());
 
-        if (props.setNews !== undefined) {
-            props.setNews([]);
-        }
-
-        valid.then(function (v) {
-            if (v) {
-                //props.setSymbol(e.target.value.toUpperCase());
-                setNav({ ...nav, symbol: e.target.value.toUpperCase() });
-            } else {
-                toggleSnackbar("Error", "Error ! Symbol Not Found !");
+            if (props.setNews !== undefined) {
+                props.setNews([]);
             }
 
-            setError(!v);
-        });
+            valid.then(function (v) {
+                if (v) {
+                    //props.setSymbol(e.target.value.toUpperCase());
+                    setNav({ ...nav, symbol: e.target.value.toUpperCase() });
+                } else {
+                    toggleSnackbar("Error", "Error ! Symbol Not Found !");
+                }
+
+                setError(!v);
+            });
+        }
     }
     return (
         <>

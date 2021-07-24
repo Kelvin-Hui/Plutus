@@ -303,7 +303,7 @@
                     overflow-y: auto;
                     overflow-x: auto;
                     align-self: center;
-                    width: 95%;
+                    //width: 95%;
                     table {
                         text-align: center;
                         border-collapse: collapse;
@@ -387,6 +387,7 @@
                 align-self: center;
             }
             .StockInfo {
+                width: 95%;
             }
             .KeyData {
                 .Card {
@@ -427,6 +428,7 @@
                 margin: 2.5%;
                 .TableContainer {
                     margin: 0 auto;
+                    width: 95%;
                     table {
                         width: 100%;
                     }
@@ -458,6 +460,25 @@
                     }
                     .TableContainer {
                         font-size: 0.75rem;
+                    }
+                }
+                .Card {
+                    .ChartContainer {
+                        .BtnGroup {
+                            flex-direction: row;
+                            top: unset;
+                            bottom: 0% !important;
+                            left: calc(50% - 60px);
+                            height: calc(20px * 1.5);
+                            span {
+                                margin: 0% 10px;
+                                .ChartToolsIcon {
+                                    height: 20px !important;
+                                    width: 20px !important;
+                                    margin: 30% 0% 0% 0%;
+                                }
+                            }
+                        }
                     }
                 }
             }

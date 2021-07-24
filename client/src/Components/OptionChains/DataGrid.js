@@ -19,7 +19,9 @@ export default function DataGrid({ symbol, data, exp }) {
             const result = await axios.get(
                 `http://localhost:5000/api/optionChains?symbol=${symbol}&date=${exp}`
             );
-            setOptionData(result.data.data.optionsData);
+            console.log(result);
+            console.log(result.data);
+            setOptionData(result.data.optionsData);
         };
         if (exp !== null) {
             fetchData();
@@ -52,29 +54,29 @@ export default function DataGrid({ symbol, data, exp }) {
                     <span className="Puts">Puts</span>
                 </div> */}
                 <tr className="CALLPUT ColSpan3">
-                    <th colspan={3} className="Calls">
+                    <th colSpan={3} className="Calls">
                         Calls
                     </th>
                     <th></th>
-                    <th colspan={3} className="Puts">
+                    <th colSpan={3} className="Puts">
                         Puts
                     </th>
                 </tr>
                 <tr className="CALLPUT ColSpan5">
-                    <th colspan={5} className="Calls">
+                    <th colSpan={5} className="Calls">
                         Calls
                     </th>
                     <th></th>
-                    <th colspan={5} className="Puts">
+                    <th colSpan={5} className="Puts">
                         Puts
                     </th>
                 </tr>
                 <tr className="CALLPUT ColSpan7">
-                    <th colspan={7} className="Calls">
+                    <th colSpan={7} className="Calls">
                         Calls
                     </th>
                     <th></th>
-                    <th colspan={7} className="Puts">
+                    <th colSpan={7} className="Puts">
                         Puts
                     </th>
                 </tr>

@@ -103,7 +103,7 @@ export default function Chart({ previousClose, symbol }) {
     }
 
     function drawChart(pData = null) {
-        var margin = { top: 30, right: 50, bottom: 30, left: 50 };
+        var margin = { top: 30, right: 30, bottom: 30, left: 40 };
         let intervalOptions = document.getElementById("intervalOptions");
         var width =
             ref.current !== null

@@ -6,26 +6,48 @@ exports.getNews = async (req, res) => {
     try {
         const { symbol } = req.query;
 
-        //Check Exchange
         const yahoo_url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
-        const result = await axios({
-            method: "get",
-            url: yahoo_url,
-            timeout: 5000,
-            params: {
-                modules: "price",
-            },
+
+        //Redis Check Exchange
+        const exchangeName = await new Promise((resolve) => {
+            localRedis.get(`Exchange_${symbol}`, async (err, data) => {
+                if (err) return null;
+                if (data != null) {
+                    resolve(data);
+                } else {
+                    try {
+                        const result = await axios({
+                            method: "get",
+                            url: yahoo_url,
+                            timeout: 5000,
+                            params: {
+                                modules: "price",
+                            },
+                        });
+                        exchange_Name =
+                            result.data.quoteSummary.result[0].price
+                                .exchangeName;
+                        exchange_Name = exchange_Name.replace("GS", "");
+                        exchange_Name = exchange_Name.replace("GM", "");
+                        exchange_Name = exchange_Name.replace(" ", "");
+
+                        localRedis.SETEX(
+                            `Exchange_${symbol}`,
+                            31556952,
+                            exchange_Name
+                        );
+
+                        resolve(exchange_Name);
+                    } catch (error) {
+                        return null;
+                    }
+                }
+            });
         });
-        let exchangeName =
-            result.data.quoteSummary.result[0].price.exchangeName;
-        exchangeName = exchangeName.replace("GS", "");
-        exchangeName = exchangeName.replace("GM", "");
-        exchangeName = exchangeName.replace(" ", "");
-        console.log(symbol + " : " + exchangeName);
 
         const url = `https://www.google.com/finance/quote/${symbol}:${exchangeName}`;
 
-        //Redis
+        //Redis Get News
         localRedis.get(`News_${symbol}`, async (err, data) => {
             if (err) console.log(err);
             if (data != null) {

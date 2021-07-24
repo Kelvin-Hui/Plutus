@@ -108,19 +108,39 @@ export default function Revenue({ symbol }) {
             .attr("transform", `translate(0,${height})`);
 
         //y Range and Domain
+        // var y = d3
+        //     .scaleLinear()
+        //     .domain([
+        //         d3.min(barChartData, function (d) {
+        //             return d.earnings.raw > 0
+        //                 ? d.earnings.raw * 0.5
+        //                 : d.earnings.raw * 1.2;
+        //         }),
+        //         d3.max(barChartData, function (d) {
+        //             return d.revenue.raw * 1.2;
+        //         }),
+        //     ])
+        //     .range([height, 0]);
+
         var y = d3
             .scaleLinear()
             .domain([
                 d3.min(barChartData, function (d) {
-                    return d.earnings.raw > 0
-                        ? d.earnings.raw * 0.5
-                        : d.earnings.raw * 1.2;
+                    return d.earnings.raw > 0 ? 0 : d.earnings.raw * 1.5;
                 }),
                 d3.max(barChartData, function (d) {
                     return d.revenue.raw * 1.2;
                 }),
             ])
             .range([height, 0]);
+        console.log([
+            d3.min(barChartData, function (d) {
+                return d.earnings.raw > 0 ? 0 : d.earnings.raw;
+            }),
+            d3.max(barChartData, function (d) {
+                return d.revenue.raw * 1.2;
+            }),
+        ]);
 
         //convert currency function
         function convertCurrency(labelValue) {
@@ -165,39 +185,55 @@ export default function Revenue({ symbol }) {
                 return d.earnings.raw;
             }) < 0;
 
-        var focus = svg
-            .append("g")
-            .attr("class", "foucs")
-            .style("display", "none");
-        focus
-            .append("rect")
-            .attr("class", "tooltip")
-            .attr("width", x.bandwidth() * 4)
-            .attr("height", 50)
-            .attr("rx", 5)
-            .attr("ry", 5)
-            .attr("fill", "white")
-            .attr("stroke", "black")
-            .attr("stroke-width", "3");
-        focus
-            .append("text")
-            .attr("class", "revenue")
-            .attr("font-weight", "bold")
-            .attr("x", 15)
-            .attr("y", 20);
-
-        focus
-            .append("text")
-            .attr("class", "earnings")
-            .attr("font-weight", "bold")
-            .attr("fill", "blue")
-            .attr("x", 15)
-            .attr("y", 40);
-
         //Picking Color
         const colorRevenue = "#536db5";
         const colorPositiveEarning = "#69b3a2";
         const colorNegativeEarning = "#b55353";
+
+        //Create Tooltips
+        var tooltip = d3
+            .select(ref.current)
+            .append("div")
+            .attr("class", "tooltip")
+            .style("display", "block")
+            .style("position", "absolute")
+            .style("opacity", 0)
+            .style("z-index", 2)
+            .style("border", "2px solid black")
+            .style("border-radius", "15px")
+            .style("text-align", "center")
+            .style("background-color", "white")
+            .style("font-size", "calc(0.75rem + 0.2vw)")
+            .style("padding", "calc(0.2rem + 0.1vw)");
+
+        // var focus = svg
+        //     .append("g")
+        //     .attr("class", "foucs")
+        //     .style("display", "none");
+        // focus
+        //     .append("rect")
+        //     .attr("class", "tooltip")
+        //     .attr("width", x.bandwidth() * 4)
+        //     .attr("height", 50)
+        //     .attr("rx", 5)
+        //     .attr("ry", 5)
+        //     .attr("fill", "white")
+        //     .attr("stroke", "black")
+        //     .attr("stroke-width", "3");
+        // focus
+        //     .append("text")
+        //     .attr("class", "revenue")
+        //     .attr("font-weight", "bold")
+        //     .attr("x", 15)
+        //     .attr("y", 20);
+
+        // focus
+        //     .append("text")
+        //     .attr("class", "earnings")
+        //     .attr("font-weight", "bold")
+        //     .attr("fill", "blue")
+        //     .attr("x", 15)
+        //     .attr("y", 40);
 
         //Creating Legend
         var legend = svg
@@ -250,30 +286,49 @@ export default function Revenue({ symbol }) {
 
         function mouseover() {
             var data = d3.select(this).data()[0];
+            console.log(data);
 
-            focus.attr(
-                "transform",
-                `translate(${x(data.date) - x.bandwidth() * 1.5},${
-                    y(data.revenue.raw) - 75
-                })`
+            tooltip
+                .style("top", y(data.revenue.raw * 1.1) + "px")
+                .style("left", x(data.date) + x.bandwidth() * 1.25 + "px");
+            tooltip.html(
+                `<b> ${
+                    data.date
+                } </b><br/><b style=color:${colorRevenue}> Revenue : ${
+                    data.revenue.fmt
+                } </b><br/><b style=color:${
+                    data.earnings.raw > 0
+                        ? colorPositiveEarning
+                        : colorNegativeEarning
+                }> Earning : ${data.earnings.fmt}</b>`
             );
-            focus.style("display", "block");
-            focus
-                .select(".revenue")
-                .text(`Revenue : ${data.revenue.fmt}`)
-                .attr("fill", colorRevenue);
-            focus
-                .select(".earnings")
-                .text(`Earnings : ${data.earnings.fmt}`)
-                .attr(
-                    "fill",
-                    data.earnings.raw < 0
-                        ? colorNegativeEarning
-                        : colorPositiveEarning
-                );
+
+            tooltip.transition().duration(50).style("opacity", 1);
+
+            // focus.attr(
+            //     "transform",
+            //     `translate(${x(data.date) - x.bandwidth() * 1.5},${
+            //         y(data.revenue.raw) - 75
+            //     })`
+            // );
+            // focus.style("display", "block");
+            // focus
+            //     .select(".revenue")
+            //     .text(`Revenue : ${data.revenue.fmt}`)
+            //     .attr("fill", colorRevenue);
+            // focus
+            //     .select(".earnings")
+            //     .text(`Earnings : ${data.earnings.fmt}`)
+            //     .attr(
+            //         "fill",
+            //         data.earnings.raw < 0
+            //             ? colorNegativeEarning
+            //             : colorPositiveEarning
+            //     );
         }
         function mouseout() {
-            focus.style("display", "none");
+            tooltip.transition().duration(50).style("opacity", 0);
+            // focus.style("display", "none");
         }
 
         // Add Revenue Bars
@@ -312,7 +367,7 @@ export default function Revenue({ symbol }) {
             .attr("height", function (d) {
                 return negativeAmount
                     ? d.earnings.raw < 0
-                        ? height - y(0)
+                        ? y(d.earnings.raw) - y(0)
                         : y(0) - y(d.earnings.raw)
                     : height - y(d.earnings.raw);
             })
