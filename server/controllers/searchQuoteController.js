@@ -1,4 +1,5 @@
 const axios = require("axios");
+const localRedis = require("../local-redis");
 
 function calcPeriod1() {
     //market open time 930am EST for today;
@@ -50,143 +51,153 @@ function calcPeriod1() {
     }
 }
 
-exports.getQuote = async (req, res) => {
-    try {
-        const { symbol, type } = req.query;
+// exports.getQuote = async (req, res) => {
+//     try {
+//         const { symbol, type } = req.query;
 
-        if (type == "Chart") {
-            const url_chart = `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}`;
-            const url_kS = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
+//         if (type == "Chart") {
+//             const url_chart = `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}`;
+//             const url_kS = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
 
-            const response_chart = await axios({
-                method: "get",
-                url: url_chart,
-                timeout: 2000,
-                params: {
-                    symbol: symbol,
-                    period1: calcPeriod1(),
-                    period2: 9999999999,
-                    interval: "1m",
-                },
-            });
+//             const response_chart = await axios({
+//                 method: "get",
+//                 url: url_chart,
+//                 timeout: 2000,
+//                 params: {
+//                     symbol: symbol,
+//                     period1: calcPeriod1(),
+//                     period2: 9999999999,
+//                     interval: "1m",
+//                 },
+//             });
 
-            const response_kS = await axios({
-                method: "get",
-                url: url_kS,
-                timeout: 2000,
-                params: {
-                    modules: "summaryDetail",
-                },
-            });
+//             const response_kS = await axios({
+//                 method: "get",
+//                 url: url_kS,
+//                 timeout: 2000,
+//                 params: {
+//                     modules: "summaryDetail",
+//                 },
+//             });
 
-            const result_chart = response_chart.data.chart.result[0];
-            const result_kS =
-                response_kS.data.quoteSummary.result[0].summaryDetail;
+//             const result_chart = response_chart.data.chart.result[0];
+//             const result_kS =
+//                 response_kS.data.quoteSummary.result[0].summaryDetail;
 
-            return res.status(200).json({
-                status: "success",
-                data: {
-                    ohlcData:
-                        result_chart.timestamp === undefined
-                            ? []
-                            : result_chart.timestamp.map((time, idx) => ({
-                                  date: time * 1000,
-                                  high: result_chart.indicators.quote[0].high[
-                                      idx
-                                  ],
-                                  low: result_chart.indicators.quote[0].low[
-                                      idx
-                                  ],
-                                  open: result_chart.indicators.quote[0].open[
-                                      idx
-                                  ],
-                                  close: result_chart.indicators.quote[0].close[
-                                      idx
-                                  ],
-                                  volume: result_chart.indicators.quote[0]
-                                      .volume[idx],
-                              })),
-                    summaryDetail: {
-                        askRange:
-                            result_kS.ask.raw + " x " + result_kS.askSize.raw,
-                        bidRange:
-                            result_kS.bid.raw + " x " + result_kS.bidSize.raw,
-                        prevClose: result_kS.previousClose.raw,
-                        open: result_kS.open.raw,
-                        dayRange:
-                            result_kS.dayLow.raw +
-                            " - " +
-                            result_kS.dayHigh.raw,
-                        fiftyTwoWeekRange:
-                            result_kS.fiftyTwoWeekLow.raw +
-                            " - " +
-                            result_kS.fiftyTwoWeekHigh.raw,
+//             return res.status(200).json({
+//                 status: "success",
+//                 data: {
+//                     ohlcData:
+//                         result_chart.timestamp === undefined
+//                             ? []
+//                             : result_chart.timestamp.map((time, idx) => ({
+//                                   date: time * 1000,
+//                                   high: result_chart.indicators.quote[0].high[
+//                                       idx
+//                                   ],
+//                                   low: result_chart.indicators.quote[0].low[
+//                                       idx
+//                                   ],
+//                                   open: result_chart.indicators.quote[0].open[
+//                                       idx
+//                                   ],
+//                                   close: result_chart.indicators.quote[0].close[
+//                                       idx
+//                                   ],
+//                                   volume: result_chart.indicators.quote[0]
+//                                       .volume[idx],
+//                               })),
+//                     summaryDetail: {
+//                         askRange:
+//                             result_kS.ask.raw + " x " + result_kS.askSize.raw,
+//                         bidRange:
+//                             result_kS.bid.raw + " x " + result_kS.bidSize.raw,
+//                         prevClose: result_kS.previousClose.raw,
+//                         open: result_kS.open.raw,
+//                         dayRange:
+//                             result_kS.dayLow.raw +
+//                             " - " +
+//                             result_kS.dayHigh.raw,
+//                         fiftyTwoWeekRange:
+//                             result_kS.fiftyTwoWeekLow.raw +
+//                             " - " +
+//                             result_kS.fiftyTwoWeekHigh.raw,
 
-                        volume: result_kS.volume.longFmt,
-                        avgVolume: result_kS.averageVolume.longFmt,
-                        fiftyMA: result_kS.fiftyDayAverage.raw,
-                        twoHundredMA: result_kS.twoHundredDayAverage.raw,
-                    },
-                },
-            });
-        } else if (type == "Summary") {
-            const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
+//                         volume: result_kS.volume.longFmt,
+//                         avgVolume: result_kS.averageVolume.longFmt,
+//                         fiftyMA: result_kS.fiftyDayAverage.raw,
+//                         twoHundredMA: result_kS.twoHundredDayAverage.raw,
+//                     },
+//                 },
+//             });
+//         } else if (type == "Summary") {
+//             const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
 
-            const response = await axios({
-                method: "get",
-                url: url,
-                timeout: 2000,
-                params: {
-                    modules: "incomeStatementHistory,price,summaryProfile",
-                },
-            });
-            const result = response.data.quoteSummary.result[0];
+//             const response = await axios({
+//                 method: "get",
+//                 url: url,
+//                 timeout: 2000,
+//                 params: {
+//                     modules: "incomeStatementHistory,price,summaryProfile",
+//                 },
+//             });
+//             const result = response.data.quoteSummary.result[0];
 
-            return res.status(200).json({
-                status: "success",
-                data: {
-                    companyInfo: {
-                        companyName: result.price.longName || null,
-                        companySymbol: result.price.symbol || null,
-                        currentPrice:
-                            result.price.regularMarketPrice.raw || null,
-                        percent:
-                            result.price.regularMarketChangePercent || null,
+//             return res.status(200).json({
+//                 status: "success",
+//                 data: {
+//                     companyInfo: {
+//                         companyName: result.price.longName || null,
+//                         companySymbol: result.price.symbol || null,
+//                         currentPrice:
+//                             result.price.regularMarketPrice.raw || null,
+//                         percent:
+//                             result.price.regularMarketChangePercent || null,
 
-                        tags:
-                            result.summaryProfile.sector === undefined
-                                ? []
-                                : [
-                                      result.summaryProfile.sector,
-                                      result.summaryProfile.industry,
-                                  ],
+//                         tags:
+//                             result.summaryProfile.sector === undefined
+//                                 ? []
+//                                 : [
+//                                       result.summaryProfile.sector,
+//                                       result.summaryProfile.industry,
+//                                   ],
 
-                        businessSummary:
-                            result.summaryProfile.longBusinessSummary || null,
-                        website: result.summaryProfile.website || null,
-                    },
-                    incomeRevenueYearly:
-                        result.incomeStatementHistory === undefined
-                            ? []
-                            : result.incomeStatementHistory.incomeStatementHistory
-                                  .reverse()
-                                  .map((d) => ({
-                                      date: d.endDate,
-                                      netIncome: d.netIncome,
-                                      totalRevenue: d.totalRevenue,
-                                  })),
-                },
-            });
-        }
-    } catch (error) {
-        return res.status(400).json({
-            status: "fail",
-            error: error,
-        });
-    }
-};
+//                         businessSummary:
+//                             result.summaryProfile.longBusinessSummary || null,
+//                         website: result.summaryProfile.website || null,
+//                     },
+//                     incomeRevenueYearly:
+//                         result.incomeStatementHistory === undefined
+//                             ? []
+//                             : result.incomeStatementHistory.incomeStatementHistory
+//                                   .reverse()
+//                                   .map((d) => ({
+//                                       date: d.endDate,
+//                                       netIncome: d.netIncome,
+//                                       totalRevenue: d.totalRevenue,
+//                                   })),
+//                 },
+//             });
+//         }
+//     } catch (error) {
+//         return res.status(400).json({
+//             status: "fail",
+//             error: error,
+//         });
+//     }
+// };
 
 exports.getChart = async (req, res) => {
+    const intervalExpire = {
+        "1m": 30,
+        "5m": 150,
+        "15m": 900,
+        "30m": 1800,
+        "1h": 3600,
+        "1d": 86400,
+        "1mo": 86400,
+        "3mo": 86400,
+    };
     try {
         let { symbol, interval } = req.query;
         if (!symbol) {
@@ -200,44 +211,100 @@ exports.getChart = async (req, res) => {
             interval = "1m";
         }
 
-        const url = `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}`;
-        const response = await axios({
-            method: "get",
-            url: url,
-            timeout: 2000,
-            params: {
-                symbol: symbol,
-                period1: interval === "1m" ? calcPeriod1() : null,
-                period2: 9999999999,
-                interval: interval,
-                includePrePost: interval === "1m" ? false : true,
-            },
+        localRedis.get(`Chart_${symbol}_${interval}`, async (err, data) => {
+            if (err)
+                return res.status(200).json({
+                    status: "fail",
+                    error: err,
+                });
+            if (data !== null) {
+                return res.status(200).json({
+                    status: "success",
+                    data: JSON.parse(data),
+                });
+            } else {
+                try {
+                    const url = `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}`;
+                    const response = await axios({
+                        method: "get",
+                        url: url,
+                        timeout: 2000,
+                        params: {
+                            symbol: symbol,
+                            period1: interval === "1m" ? calcPeriod1() : null,
+                            period2: 9999999999,
+                            interval: interval,
+                            includePrePost: interval === "1m" ? false : true,
+                        },
+                    });
+                    const result = response.data.chart.result[0];
+                    const quote = result.indicators.quote[0];
+                    const ohlcData = result.timestamp.map((time, idx) => ({
+                        date: time * 1000,
+                        open: quote.open[idx],
+                        high: quote.high[idx],
+                        low: quote.low[idx],
+                        close: quote.close[idx],
+                        volume: quote.volume[idx],
+                    }));
+
+                    localRedis.SETEX(
+                        `Chart_${symbol}_${interval}`,
+                        intervalExpire[interval],
+                        JSON.stringify(ohlcData)
+                    );
+
+                    return res.status(200).json({
+                        status: "success",
+                        data: ohlcData,
+                    });
+                } catch (err) {
+                    return res.status(200).json({
+                        status: "fail",
+                        error: err,
+                    });
+                }
+            }
         });
 
-        if (!response) {
-            return res.status(200).json({
-                status: "fail",
-                message: "Fail Response!",
-                data: [],
-            });
-        }
+        // const url = `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}`;
+        // const response = await axios({
+        //     method: "get",
+        //     url: url,
+        //     timeout: 2000,
+        //     params: {
+        //         symbol: symbol,
+        //         period1: interval === "1m" ? calcPeriod1() : null,
+        //         period2: 9999999999,
+        //         interval: interval,
+        //         includePrePost: interval === "1m" ? false : true,
+        //     },
+        // });
 
-        const result = response.data.chart.result[0];
-        const quote = result.indicators.quote[0];
-        const ohlcData = result.timestamp.map((time, idx) => ({
-            // humanDate: new Date(time * 1000).toLocaleString(),
-            date: time * 1000,
-            open: quote.open[idx],
-            high: quote.high[idx],
-            low: quote.low[idx],
-            close: quote.close[idx],
-            volume: quote.volume[idx],
-        }));
+        // if (!response) {
+        //     return res.status(200).json({
+        //         status: "fail",
+        //         message: "Fail Response!",
+        //         data: [],
+        //     });
+        // }
 
-        return res.status(200).json({
-            status: "success",
-            data: ohlcData,
-        });
+        // const result = response.data.chart.result[0];
+        // const quote = result.indicators.quote[0];
+        // const ohlcData = result.timestamp.map((time, idx) => ({
+        //     // humanDate: new Date(time * 1000).toLocaleString(),
+        //     date: time * 1000,
+        //     open: quote.open[idx],
+        //     high: quote.high[idx],
+        //     low: quote.low[idx],
+        //     close: quote.close[idx],
+        //     volume: quote.volume[idx],
+        // }));
+
+        // return res.status(200).json({
+        //     status: "success",
+        //     data: ohlcData,
+        // });
     } catch (error) {
         return res.status(200).json({
             status: "fail",
@@ -256,71 +323,109 @@ exports.getInfo = async (req, res) => {
                 data: {},
             });
         }
-        const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
-        const response = await axios({
-            method: "get",
-            url: url,
-            timeout: 3000,
-            params: {
-                modules: "price,summaryProfile,summaryDetail",
-            },
-        });
-        if (!response) {
-            return res.status(200).json({
-                status: "fail",
-                message: "Fail Response!",
-                data: {},
-            });
-        }
-        const priceResult = response.data.quoteSummary.result[0].price || [];
-        const summaryProfileResult =
-            response.data.quoteSummary.result[0].summaryProfile || [];
-        const summaryDetailResult =
-            response.data.quoteSummary.result[0].summaryDetail || [];
 
-        let stockInfo =
-            priceResult !== [] && summaryProfileResult !== []
-                ? {
-                      name: priceResult.shortName,
-                      website: summaryProfileResult.website,
-                      symbol: symbol,
-                      exchangeName: priceResult.exchangeName.toUpperCase(),
-                      sector: summaryProfileResult.sector || null,
-                      industry: summaryProfileResult.industry || null,
-                      lastPrice: priceResult.regularMarketPrice.raw.toFixed(2),
-                      currency: priceResult.currency,
-                      priceChange: priceResult.regularMarketChange.fmt,
-                      priceChangePercent:
-                          priceResult.regularMarketChangePercent.fmt,
-                      color:
-                          priceResult.regularMarketChange.raw > 0
-                              ? "green"
-                              : "red",
-                  }
-                : {};
+        localRedis.get(`Info_${symbol}`, async (err, data) => {
+            if (err)
+                return res.status(200).json({
+                    status: "fail",
+                    error: err,
+                });
+            if (data !== null) {
+                return res.status(200).json({
+                    status: "success",
+                    data: JSON.parse(data),
+                });
+            } else {
+                try {
+                    const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
+                    const response = await axios({
+                        method: "get",
+                        url: url,
+                        timeout: 3000,
+                        params: {
+                            modules: "price,summaryProfile,summaryDetail",
+                        },
+                    });
+                    const priceResult =
+                        response.data.quoteSummary.result[0].price || [];
+                    const summaryProfileResult =
+                        response.data.quoteSummary.result[0].summaryProfile ||
+                        [];
+                    const summaryDetailResult =
+                        response.data.quoteSummary.result[0].summaryDetail ||
+                        [];
 
-        let keyData =
-            summaryDetailResult !== []
-                ? {
-                      previousClose:
-                          summaryDetailResult.previousClose.raw.toFixed(2),
-                      open: summaryDetailResult.open.raw.toFixed(2),
-                      high: summaryDetailResult.dayHigh.raw.toFixed(2),
-                      low: summaryDetailResult.dayLow.raw.toFixed(2),
-                      close: priceResult.regularMarketPrice.raw.toFixed(2),
-                      volume: summaryDetailResult.volume.fmt,
-                      averageVolume: summaryDetailResult.averageVolume.fmt,
-                      marketCap: summaryDetailResult.marketCap.fmt,
-                      ma50: summaryDetailResult.fiftyDayAverage.raw.toFixed(2),
-                      ma200: summaryDetailResult.twoHundredDayAverage.raw.toFixed(
-                          2
-                      ),
-                  }
-                : {};
+                    let stockInfo =
+                        priceResult !== [] && summaryProfileResult !== []
+                            ? {
+                                  name: priceResult.shortName,
+                                  website: summaryProfileResult.website,
+                                  symbol: symbol,
+                                  exchangeName:
+                                      priceResult.exchangeName.toUpperCase(),
+                                  sector: summaryProfileResult.sector || null,
+                                  industry:
+                                      summaryProfileResult.industry || null,
+                                  lastPrice:
+                                      priceResult.regularMarketPrice.raw.toFixed(
+                                          2
+                                      ),
+                                  currency: priceResult.currency,
+                                  priceChange:
+                                      priceResult.regularMarketChange.fmt,
+                                  priceChangePercent:
+                                      priceResult.regularMarketChangePercent
+                                          .fmt,
+                                  color:
+                                      priceResult.regularMarketChange.raw > 0
+                                          ? "green"
+                                          : "red",
+                              }
+                            : {};
 
-        return res.status(200).json({
-            status: "success",
-            data: { stockInfo: stockInfo, keyData: keyData },
+                    let keyData =
+                        summaryDetailResult !== []
+                            ? {
+                                  previousClose:
+                                      summaryDetailResult.previousClose.raw.toFixed(
+                                          2
+                                      ),
+                                  open: summaryDetailResult.open.raw.toFixed(2),
+                                  high: summaryDetailResult.dayHigh.raw.toFixed(
+                                      2
+                                  ),
+                                  low: summaryDetailResult.dayLow.raw.toFixed(
+                                      2
+                                  ),
+                                  close: priceResult.regularMarketPrice.raw.toFixed(
+                                      2
+                                  ),
+                                  volume: summaryDetailResult.volume.fmt,
+                                  averageVolume:
+                                      summaryDetailResult.averageVolume.fmt,
+                                  marketCap: summaryDetailResult.marketCap.fmt,
+                                  ma50: summaryDetailResult.fiftyDayAverage.raw.toFixed(
+                                      2
+                                  ),
+                                  ma200: summaryDetailResult.twoHundredDayAverage.raw.toFixed(
+                                      2
+                                  ),
+                              }
+                            : {};
+                    let d = { stockInfo: stockInfo, keyData: keyData };
+
+                    localRedis.SETEX(`Info_${symbol}`, 5, JSON.stringify(d));
+                    return res.status(200).json({
+                        status: "success",
+                        data: { stockInfo: stockInfo, keyData: keyData },
+                    });
+                } catch (err) {
+                    return res.status(200).json({
+                        status: "fail",
+                        error: err,
+                    });
+                }
+            }
         });
     } catch (error) {
         return res.status(200).json({
@@ -405,30 +510,78 @@ exports.getData = async (req, res) => {
                 message: "Missing Parameter",
             });
         }
-        const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
 
-        const response = await axios({
-            method: "get",
-            url: url,
-            timeout: 3000,
-            params: {
-                modules: type_modules[type],
-            },
+        let redisType = type[0].toUpperCase() + type.slice(1);
+
+        localRedis.get(`${redisType}_${symbol}`, async (err, data) => {
+            if (err)
+                return res.status(200).json({
+                    status: "fail",
+                    error: err,
+                });
+            if (data !== null) {
+                return res.status(200).json({
+                    status: "success",
+                    data: JSON.parse(data),
+                });
+            } else {
+                try {
+                    const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
+
+                    const response = await axios({
+                        method: "get",
+                        url: url,
+                        timeout: 3000,
+                        params: {
+                            modules: type_modules[type],
+                        },
+                    });
+                    const result = response.data.quoteSummary.result[0];
+
+                    const d = extractData(result, type);
+
+                    localRedis.SETEX(
+                        `${redisType}_${symbol}`,
+                        86400,
+                        JSON.stringify(d)
+                    );
+                    return res.status(200).json({
+                        status: "success",
+                        data: d,
+                    });
+                } catch (err) {
+                    return res.status(200).json({
+                        status: "fail",
+                        error: err,
+                    });
+                }
+            }
         });
 
-        if (!response) {
-            return res.status(200).json({
-                status: "fail",
-                message: "Fail Response!",
-            });
-        }
+        // const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
 
-        const result = response.data.quoteSummary.result[0];
+        // const response = await axios({
+        //     method: "get",
+        //     url: url,
+        //     timeout: 3000,
+        //     params: {
+        //         modules: type_modules[type],
+        //     },
+        // });
 
-        return res.status(200).json({
-            status: "success",
-            data: extractData(result, type),
-        });
+        // if (!response) {
+        //     return res.status(200).json({
+        //         status: "fail",
+        //         message: "Fail Response!",
+        //     });
+        // }
+
+        // const result = response.data.quoteSummary.result[0];
+
+        // return res.status(200).json({
+        //     status: "success",
+        //     data: extractData(result, type),
+        // });
     } catch (error) {
         return res.status(200).json({
             status: "fail",

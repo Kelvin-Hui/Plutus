@@ -98,7 +98,7 @@ exports.getOptionChains = async (req, res) => {
                         const response = await axios({
                             method: "get",
                             url: url,
-                            timeout: 2000,
+                            timeout: 5000,
                             params: { date: date },
                         });
                         const result = response.data.optionChain.result[0];
@@ -115,6 +115,7 @@ exports.getOptionChains = async (req, res) => {
                     } catch (err) {
                         return res.status(200).json({
                             status: "fail",
+                            optionsData: {},
                             error: err,
                         });
                     }

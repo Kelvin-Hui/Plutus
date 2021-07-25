@@ -17,7 +17,6 @@ const Homepage = React.lazy(() => import("./Components/Homepage"));
 const Login = React.lazy(() => import("./Components/Auth/Login"));
 
 function App() {
-    console.log("App Rendering");
     const [userInfo, setUserInfo] = React.useState(null);
     //NAV
     const [nav, setNav] = React.useState({

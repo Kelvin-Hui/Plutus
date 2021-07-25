@@ -204,6 +204,17 @@ export default function Login() {
                 </div>
 
                 <div className="Footer">Kelvin Hui ©2021</div>
+                <span className="BgCredit">
+                    <a
+                        target="_blank"
+                        href={
+                            "https://www.vecteezy.com/vector-art/570478-candle-stick-graph-chart-of-stock-market-investment-trading-bullish-point-bearish-point-trend-of-graph-vector-design"
+                        }
+                        alt="Bg Credit"
+                    >
+                        BG Credit
+                    </a>
+                </span>
             </div>
         </>
     );

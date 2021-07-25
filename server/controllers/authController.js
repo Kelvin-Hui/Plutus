@@ -1,6 +1,7 @@
 let User = require("../models/userModel");
 let UserPortfolio = require("../models/userPortfolioModel");
 
+const localRedis = require("../local-redis");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
@@ -192,18 +193,57 @@ exports.getDashboardInfo = async (req, res) => {
 
         for (var i = 0; i < symbolArray.length; i++) {
             const symbol = symbolArray[i];
-            let url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}?modules=price`;
 
-            let response = await axios.get(url);
+            const pC_cP_cN = await new Promise((resolve) => {
+                localRedis.get(`CurrentInfo_${symbol}`, async (err, data) => {
+                    if (err) return null;
+                    if (data != null) {
+                        resolve(JSON.parse(data));
+                    } else {
+                        try {
+                            let url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}?modules=price`;
+                            let response = await axios.get(url);
+                            let currentInfo = {
+                                previousClose:
+                                    response.data.quoteSummary.result[0].price
+                                        .regularMarketPreviousClose.raw,
+                                currentPrice:
+                                    response.data.quoteSummary.result[0].price
+                                        .regularMarketPrice.raw,
+                                companyName:
+                                    response.data.quoteSummary.result[0].price
+                                        .shortName,
+                            };
+                            localRedis.SETEX(
+                                `CurrentInfo_${symbol}`,
+                                5,
+                                JSON.stringify(currentInfo)
+                            );
+                            resolve(currentInfo);
+                        } catch (err) {
+                            return null;
+                        }
+                    }
+                });
+            });
 
-            const previousClose =
-                response.data.quoteSummary.result[0].price
-                    .regularMarketPreviousClose.raw;
-            const currentPrice =
-                response.data.quoteSummary.result[0].price.regularMarketPrice
-                    .raw;
-            const companyName =
-                response.data.quoteSummary.result[0].price.shortName;
+            const previousClose = pC_cP_cN.previousClose;
+            const currentPrice = pC_cP_cN.currentPrice;
+            const companyName = pC_cP_cN.companyName;
+
+            // const symbol = symbolArray[i];
+            // let url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}?modules=price`;
+
+            // let response = await axios.get(url);
+
+            // const previousClose =
+            //     response.data.quoteSummary.result[0].price
+            //         .regularMarketPreviousClose.raw;
+            // const currentPrice =
+            //     response.data.quoteSummary.result[0].price.regularMarketPrice
+            //         .raw;
+            // const companyName =
+            //     response.data.quoteSummary.result[0].price.shortName;
             const position = existingPortfolio.portfolio.get(symbol);
             const unitPrice = existingPortfolio.unitPrice.get(symbol);
             const marketValue = Math.abs(position) * currentPrice;

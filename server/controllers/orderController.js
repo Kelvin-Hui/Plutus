@@ -2,10 +2,38 @@ let UserPortfolio = require("../models/userPortfolioModel");
 
 const axios = require("axios");
 
+function marketHours() {
+    let now = new Date();
+
+    let day = now.getUTCDay();
+
+    //WeekDay so 1-5 mon - fri;
+    if (day !== 0 || day !== 6) {
+        //between 9 to 4;
+        if (now.getUTCHours() >= 13 && now.getUTCHours < 20) {
+            // if before 930 return false;
+            if (now.getUTCHours() === 13 && now.getUTCMinutes() < 30) {
+                return false;
+            }
+            //return true;
+            return true;
+        }
+    } else {
+        return false;
+    }
+}
+
 exports.buy = async (req, res) => {
     console.log("Buy Stock");
     try {
         const { userID, symbol, quantity } = req.body;
+
+        if (!marketHours()) {
+            return res.status(200).json({
+                status: "fail",
+                message: "Order Fail ! Market Not Open !",
+            });
+        }
 
         if (quantity <= 0) {
             return res.status(200).json({
@@ -127,6 +155,13 @@ exports.sell = async (req, res) => {
     console.log("Sell Stock");
     try {
         const { userID, symbol, quantity } = req.body;
+
+        if (!marketHours()) {
+            return res.status(200).json({
+                status: "fail",
+                message: "Order Fail ! Market Not Open !",
+            });
+        }
 
         if (quantity >= 0) {
             return res.status(200).json({
