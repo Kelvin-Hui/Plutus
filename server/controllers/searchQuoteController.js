@@ -1,6 +1,7 @@
 const axios = require("axios");
 const localRedis = require("../local-redis");
 
+//Calculate Timestamp for Price Data
 function calcPeriod1() {
     //market open time 930am EST for today;
     let market = new Date();
@@ -51,142 +52,7 @@ function calcPeriod1() {
     }
 }
 
-// exports.getQuote = async (req, res) => {
-//     try {
-//         const { symbol, type } = req.query;
-
-//         if (type == "Chart") {
-//             const url_chart = `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}`;
-//             const url_kS = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
-
-//             const response_chart = await axios({
-//                 method: "get",
-//                 url: url_chart,
-//                 timeout: 2000,
-//                 params: {
-//                     symbol: symbol,
-//                     period1: calcPeriod1(),
-//                     period2: 9999999999,
-//                     interval: "1m",
-//                 },
-//             });
-
-//             const response_kS = await axios({
-//                 method: "get",
-//                 url: url_kS,
-//                 timeout: 2000,
-//                 params: {
-//                     modules: "summaryDetail",
-//                 },
-//             });
-
-//             const result_chart = response_chart.data.chart.result[0];
-//             const result_kS =
-//                 response_kS.data.quoteSummary.result[0].summaryDetail;
-
-//             return res.status(200).json({
-//                 status: "success",
-//                 data: {
-//                     ohlcData:
-//                         result_chart.timestamp === undefined
-//                             ? []
-//                             : result_chart.timestamp.map((time, idx) => ({
-//                                   date: time * 1000,
-//                                   high: result_chart.indicators.quote[0].high[
-//                                       idx
-//                                   ],
-//                                   low: result_chart.indicators.quote[0].low[
-//                                       idx
-//                                   ],
-//                                   open: result_chart.indicators.quote[0].open[
-//                                       idx
-//                                   ],
-//                                   close: result_chart.indicators.quote[0].close[
-//                                       idx
-//                                   ],
-//                                   volume: result_chart.indicators.quote[0]
-//                                       .volume[idx],
-//                               })),
-//                     summaryDetail: {
-//                         askRange:
-//                             result_kS.ask.raw + " x " + result_kS.askSize.raw,
-//                         bidRange:
-//                             result_kS.bid.raw + " x " + result_kS.bidSize.raw,
-//                         prevClose: result_kS.previousClose.raw,
-//                         open: result_kS.open.raw,
-//                         dayRange:
-//                             result_kS.dayLow.raw +
-//                             " - " +
-//                             result_kS.dayHigh.raw,
-//                         fiftyTwoWeekRange:
-//                             result_kS.fiftyTwoWeekLow.raw +
-//                             " - " +
-//                             result_kS.fiftyTwoWeekHigh.raw,
-
-//                         volume: result_kS.volume.longFmt,
-//                         avgVolume: result_kS.averageVolume.longFmt,
-//                         fiftyMA: result_kS.fiftyDayAverage.raw,
-//                         twoHundredMA: result_kS.twoHundredDayAverage.raw,
-//                     },
-//                 },
-//             });
-//         } else if (type == "Summary") {
-//             const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
-
-//             const response = await axios({
-//                 method: "get",
-//                 url: url,
-//                 timeout: 2000,
-//                 params: {
-//                     modules: "incomeStatementHistory,price,summaryProfile",
-//                 },
-//             });
-//             const result = response.data.quoteSummary.result[0];
-
-//             return res.status(200).json({
-//                 status: "success",
-//                 data: {
-//                     companyInfo: {
-//                         companyName: result.price.longName || null,
-//                         companySymbol: result.price.symbol || null,
-//                         currentPrice:
-//                             result.price.regularMarketPrice.raw || null,
-//                         percent:
-//                             result.price.regularMarketChangePercent || null,
-
-//                         tags:
-//                             result.summaryProfile.sector === undefined
-//                                 ? []
-//                                 : [
-//                                       result.summaryProfile.sector,
-//                                       result.summaryProfile.industry,
-//                                   ],
-
-//                         businessSummary:
-//                             result.summaryProfile.longBusinessSummary || null,
-//                         website: result.summaryProfile.website || null,
-//                     },
-//                     incomeRevenueYearly:
-//                         result.incomeStatementHistory === undefined
-//                             ? []
-//                             : result.incomeStatementHistory.incomeStatementHistory
-//                                   .reverse()
-//                                   .map((d) => ({
-//                                       date: d.endDate,
-//                                       netIncome: d.netIncome,
-//                                       totalRevenue: d.totalRevenue,
-//                                   })),
-//                 },
-//             });
-//         }
-//     } catch (error) {
-//         return res.status(400).json({
-//             status: "fail",
-//             error: error,
-//         });
-//     }
-// };
-
+//Get Stock's Price Chart Data
 exports.getChart = async (req, res) => {
     const intervalExpire = {
         "1m": 30,
@@ -199,7 +65,10 @@ exports.getChart = async (req, res) => {
         "3mo": 86400,
     };
     try {
+        //get Symbol Interval
         let { symbol, interval } = req.query;
+
+        //If symbol Missing, Return Fail Message;
         if (!symbol) {
             return res.status(200).json({
                 status: "fail",
@@ -207,22 +76,29 @@ exports.getChart = async (req, res) => {
                 data: {},
             });
         }
+        //Set Interval as 1m as default
         if (!interval) {
             interval = "1m";
         }
 
+        //Redis
         localRedis.get(`Chart_${symbol}_${interval}`, async (err, data) => {
+            //If Redis Error;
             if (err)
                 return res.status(200).json({
                     status: "fail",
                     error: err,
                 });
+            //If Value Not Equal Null;
             if (data !== null) {
                 return res.status(200).json({
                     status: "success",
                     data: JSON.parse(data),
                 });
-            } else {
+            }
+            //If Key Not Found In Redis
+            else {
+                // Call API for data;
                 try {
                     const url = `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}`;
                     const response = await axios({
@@ -248,6 +124,7 @@ exports.getChart = async (req, res) => {
                         volume: quote.volume[idx],
                     }));
 
+                    //Store it in redis based on interval;
                     localRedis.SETEX(
                         `Chart_${symbol}_${interval}`,
                         intervalExpire[interval],
@@ -266,45 +143,6 @@ exports.getChart = async (req, res) => {
                 }
             }
         });
-
-        // const url = `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}`;
-        // const response = await axios({
-        //     method: "get",
-        //     url: url,
-        //     timeout: 2000,
-        //     params: {
-        //         symbol: symbol,
-        //         period1: interval === "1m" ? calcPeriod1() : null,
-        //         period2: 9999999999,
-        //         interval: interval,
-        //         includePrePost: interval === "1m" ? false : true,
-        //     },
-        // });
-
-        // if (!response) {
-        //     return res.status(200).json({
-        //         status: "fail",
-        //         message: "Fail Response!",
-        //         data: [],
-        //     });
-        // }
-
-        // const result = response.data.chart.result[0];
-        // const quote = result.indicators.quote[0];
-        // const ohlcData = result.timestamp.map((time, idx) => ({
-        //     // humanDate: new Date(time * 1000).toLocaleString(),
-        //     date: time * 1000,
-        //     open: quote.open[idx],
-        //     high: quote.high[idx],
-        //     low: quote.low[idx],
-        //     close: quote.close[idx],
-        //     volume: quote.volume[idx],
-        // }));
-
-        // return res.status(200).json({
-        //     status: "success",
-        //     data: ohlcData,
-        // });
     } catch (error) {
         return res.status(200).json({
             status: "fail",
@@ -313,9 +151,12 @@ exports.getChart = async (req, res) => {
     }
 };
 
+//Get Stock's Overview Info
 exports.getInfo = async (req, res) => {
     try {
+        //get Symbol
         const { symbol } = req.query;
+        //If symbol Missing, Return Fail Message;
         if (!symbol) {
             return res.status(200).json({
                 status: "fail",
@@ -324,18 +165,24 @@ exports.getInfo = async (req, res) => {
             });
         }
 
+        //Redis
         localRedis.get(`Info_${symbol}`, async (err, data) => {
+            //If Redis Error;
             if (err)
                 return res.status(200).json({
                     status: "fail",
                     error: err,
                 });
+            //If Value Not Equal Null;
             if (data !== null) {
                 return res.status(200).json({
                     status: "success",
                     data: JSON.parse(data),
                 });
-            } else {
+            }
+            //If Key Not Found In Redis
+            else {
+                // Call API for data;
                 try {
                     const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
                     const response = await axios({
@@ -414,6 +261,7 @@ exports.getInfo = async (req, res) => {
                             : {};
                     let d = { stockInfo: stockInfo, keyData: keyData };
 
+                    //Store it in redis for 5 sec
                     localRedis.SETEX(`Info_${symbol}`, 5, JSON.stringify(d));
                     return res.status(200).json({
                         status: "success",
@@ -443,6 +291,7 @@ const type_modules = {
     financial:
         "incomeStatementHistory,incomeStatementHistoryQuarterly,cashflowStatementHistory,cashflowStatementHistoryQuarterly,balanceSheetHistory,balanceSheetHistoryQuarterly",
 };
+//Function taht extract data based on differnt type;
 function extractData(data, type) {
     if (data === undefined) {
         return {};
@@ -495,15 +344,20 @@ function extractData(data, type) {
         }
     }
 }
+
+//Get Stock's Financial Info;
 exports.getData = async (req, res) => {
     try {
+        // Get Symbol Type
         const { symbol, type } = req.query;
+        //If symbol Missing, Return Fail Message;
         if (!symbol) {
             return res.status(200).json({
                 status: "fail",
                 message: "Missing Symbol!",
             });
         }
+        //If type Missing, Return Fail Message;
         if (!type) {
             return res.status(200).json({
                 status: "fail",
@@ -511,21 +365,28 @@ exports.getData = async (req, res) => {
             });
         }
 
+        // format the type
         let redisType = type[0].toUpperCase() + type.slice(1);
 
+        //Redis
         localRedis.get(`${redisType}_${symbol}`, async (err, data) => {
+            //If Redis Error;
             if (err)
                 return res.status(200).json({
                     status: "fail",
                     error: err,
                 });
+            //If Value Not Equal Null;
             if (data !== null) {
                 return res.status(200).json({
                     status: "success",
                     data: JSON.parse(data),
                 });
-            } else {
+            }
+            //If Key Not Found In Redis
+            else {
                 try {
+                    // Call API for data;
                     const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
 
                     const response = await axios({
@@ -557,31 +418,6 @@ exports.getData = async (req, res) => {
                 }
             }
         });
-
-        // const url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
-
-        // const response = await axios({
-        //     method: "get",
-        //     url: url,
-        //     timeout: 3000,
-        //     params: {
-        //         modules: type_modules[type],
-        //     },
-        // });
-
-        // if (!response) {
-        //     return res.status(200).json({
-        //         status: "fail",
-        //         message: "Fail Response!",
-        //     });
-        // }
-
-        // const result = response.data.quoteSummary.result[0];
-
-        // return res.status(200).json({
-        //     status: "success",
-        //     data: extractData(result, type),
-        // });
     } catch (error) {
         return res.status(200).json({
             status: "fail",

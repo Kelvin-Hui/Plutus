@@ -1,33 +1,39 @@
+// Import Mongoose Model;
 let UserPortfolio = require("../models/userPortfolioModel");
 
 const axios = require("axios");
 
+// Return Market Hours (True / False)
 function marketHours() {
     let now = new Date();
 
     let day = now.getUTCDay();
 
-    //WeekDay so 1-5 mon - fri;
+    //WeekDay
     if (day !== 0 || day !== 6) {
-        //between 9 to 4;
+        //Between 9 to 4;
         if (now.getUTCHours() >= 13 && now.getUTCHours < 20) {
-            // if before 930 return false;
+            // If before 930 Return false;
             if (now.getUTCHours() === 13 && now.getUTCMinutes() < 30) {
                 return false;
             }
-            //return true;
+            //Return true;
             return true;
         }
-    } else {
+    }
+    //WeekEnd
+    else {
         return false;
     }
 }
 
+// Buy Order
 exports.buy = async (req, res) => {
-    console.log("Buy Stock");
     try {
+        //Get UserID Symbol Quantity
         const { userID, symbol, quantity } = req.body;
 
+        //If not market hours, Return Fail Message;
         if (!marketHours()) {
             return res.status(200).json({
                 status: "fail",
@@ -35,6 +41,7 @@ exports.buy = async (req, res) => {
             });
         }
 
+        //If Quantity < 0, Return Fail Message;
         if (quantity <= 0) {
             return res.status(200).json({
                 status: "fail",
@@ -45,6 +52,7 @@ exports.buy = async (req, res) => {
         const existingPortfolio = await UserPortfolio.findOne({
             userID: userID,
         });
+        // If User Portfolio Not exist, Return Fail Message;
         if (!existingPortfolio) {
             return res.status(200).json({
                 status: "fail",
@@ -64,6 +72,7 @@ exports.buy = async (req, res) => {
         const currentPrice =
             response.data.quoteSummary.result[0].price.regularMarketPrice.raw;
 
+        // If currentPrice not exist, Return Fail Message;
         if (!currentPrice) {
             return res.status(200).json({
                 status: "fail",
@@ -71,6 +80,7 @@ exports.buy = async (req, res) => {
             });
         }
 
+        // Calculate PNL and Update it
         const totalPrice = Math.abs(currentPrice * quantity);
         let balance = existingPortfolio.balance;
 
@@ -135,6 +145,7 @@ exports.buy = async (req, res) => {
                 },
             }
         );
+
         return res.status(200).json({
             status: "success",
             message: `Bought ${quantity} Share of ${symbol} @ ${currentPrice} !`,
@@ -151,11 +162,13 @@ exports.buy = async (req, res) => {
     }
 };
 
+// Sell Order
 exports.sell = async (req, res) => {
-    console.log("Sell Stock");
     try {
+        //Get UserID Symbol Quantity
         const { userID, symbol, quantity } = req.body;
 
+        //If not market hours, Return Fail Message;
         if (!marketHours()) {
             return res.status(200).json({
                 status: "fail",
@@ -163,6 +176,7 @@ exports.sell = async (req, res) => {
             });
         }
 
+        //If Quantity > 0, Return Fail Message;
         if (quantity >= 0) {
             return res.status(200).json({
                 status: "fail",
@@ -173,6 +187,7 @@ exports.sell = async (req, res) => {
         const existingPortfolio = await UserPortfolio.findOne({
             userID: userID,
         });
+        // If User Portfolio Not exist, Return Fail Message;
         if (!existingPortfolio) {
             return res.status(200).json({
                 status: "fail",
@@ -191,12 +206,15 @@ exports.sell = async (req, res) => {
         const currentPrice =
             response.data.quoteSummary.result[0].price.regularMarketPrice.raw;
 
+        // If currentPrice not exist, Return Fail Message;
         if (!currentPrice) {
             return res.status(200).json({
                 status: "fail",
                 message: "Order Fail ! Please Try Again !",
             });
         }
+
+        // Calculate PNL and Update it
         const totalPrice = Math.abs(currentPrice * quantity);
         let balance = existingPortfolio.balance;
 
@@ -280,18 +298,23 @@ exports.sell = async (req, res) => {
     }
 };
 
+// Reset Account
 exports.reset = async (req, res) => {
     try {
+        // Get UserID
         const { userID } = req.body;
+
         const existingPortfolio = await UserPortfolio.findOne({
             userID: userID,
         });
+        // If User Portfolio Not exist, Return Fail Message;
         if (!existingPortfolio) {
             return res.status(200).json({
                 status: "fail",
                 message: "Fail Reset! Portfolio Doesn't Exist !",
             });
         }
+        // Update It on MongoDB
         const updatedPortfolio = await UserPortfolio.findByIdAndUpdate(
             existingPortfolio._id,
             {

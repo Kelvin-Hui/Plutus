@@ -54,9 +54,9 @@ export default function Transactions({ transactions }) {
                                         key={"transactions_" + idx}
                                     >
                                         <td>
-                                            {new Date(
-                                                data.date
-                                            ).toLocaleString()}
+                                            {new Date(data.date)
+                                                .toLocaleString()
+                                                .replace(",", " ")}
                                         </td>
                                         <td
                                             className="Symbol"

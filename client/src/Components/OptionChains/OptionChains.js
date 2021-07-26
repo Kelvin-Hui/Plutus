@@ -52,7 +52,7 @@ export default function OptionChains({ symbol }) {
             <Card id="OptionChainCard">
                 <div className="OptionChainHeader">
                     <div className="Title">
-                        {`${symbol}'s Option Chains ${properDate(
+                        {`${symbol}'s Option Chains - ${properDate(
                             new Date(exp * 1000)
                         )}`}
                     </div>

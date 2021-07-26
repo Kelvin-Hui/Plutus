@@ -560,7 +560,7 @@ export default function Chart({ previousClose, symbol }) {
 
             var bisectDate = d3.bisector(function (d) {
                 return d.date;
-            }).left;
+            }).center;
 
             var dataIdx = bisectDate(priceData, x.invert(mousePos[0]));
             var data = priceData[dataIdx];

@@ -112,9 +112,12 @@ export default function LineChart({ userInfo, transactions }) {
             )
             .range([height, 0]);
 
-        var yAxis = d3.axisLeft(y).tickFormat(function (d) {
-            return "$" + d;
-        });
+        var yAxis = d3
+            .axisLeft(y)
+            .tickFormat(function (d) {
+                return "$" + d;
+            })
+            .ticks(4);
 
         var xTick = svg
             .append("g")

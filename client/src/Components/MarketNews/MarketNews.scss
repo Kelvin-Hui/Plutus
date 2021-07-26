@@ -35,3 +35,11 @@
         }
     }
 }
+
+@media only screen and (max-width: 900px) {
+    .Contentpage {
+        .NewsCardGrid {
+            row-gap: 2.5%;
+        }
+    }
+}

@@ -1,8 +1,10 @@
 const axios = require("axios");
 const localRedis = require("../local-redis");
 
+// Check If symbol exist
 exports.checkSymbol = async (req, res) => {
     try {
+        // get symbol
         const { symbol } = req.query;
 
         //Redis
@@ -23,11 +25,12 @@ exports.checkSymbol = async (req, res) => {
             }
             //If Key Not Found In Redis
             else {
+                // Call Yahoo Finance Check If it exist.
                 try {
                     const response = await axios({
                         method: "get",
                         url: `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`,
-                        timeout: 1000,
+                        timeout: 2000,
                         params: {
                             modules: "summaryProfile",
                         },
@@ -47,20 +50,6 @@ exports.checkSymbol = async (req, res) => {
                 });
             }
         });
-
-        // const response = await axios({
-        //     method: "get",
-        //     url: `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`,
-        //     timeout: 1000,
-        //     params: {
-        //         modules: "summaryProfile",
-        //     },
-        // });
-
-        // return res.status(200).json({
-        //     status: "success",
-        //     valid: true,
-        // });
     } catch (error) {
         return res.status(200).json({
             status: "fail",

@@ -1,3 +1,4 @@
+//Import Required Modules
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -30,18 +31,20 @@ mongoose.set("useFindAndModify", false);
 
 //Routes
 const authRouter = require("./routes/authRoute");
-const optionChainsRouter = require("./routes/optionChainsRoute");
-const searchQuoteRouter = require("./routes/searchQuoteRoute");
-const getNewsRouter = require("./routes/marketNewsRoute");
 const checkValidSymbolRouter = require("./routes/checkValidSymbolRoute");
+const dashboardRouter = require("./routes/dashboardRoute");
+const getNewsRouter = require("./routes/marketNewsRoute");
+const optionChainsRouter = require("./routes/optionChainsRoute");
 const orderRouter = require("./routes/orderRoute");
+const searchQuoteRouter = require("./routes/searchQuoteRoute");
 
-app.use("/api/optionChains", optionChainsRouter);
-app.use("/api/searchQuote", searchQuoteRouter);
-app.use("/api/marketNews", getNewsRouter);
-app.use("/api/checkSymbol", checkValidSymbolRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/checkSymbol", checkValidSymbolRouter);
+app.use("/api/dashboard", dashboardRouter);
+app.use("/api/marketNews", getNewsRouter);
+app.use("/api/optionChains", optionChainsRouter);
 app.use("/api/order", orderRouter);
+app.use("/api/searchQuote", searchQuoteRouter);
 
 //App
 app.listen(port, () => {

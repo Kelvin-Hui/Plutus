@@ -20,7 +20,7 @@ import AccountInfo from "./AccountInfo";
 
 export default function Dashboard() {
     const { userInfo } = React.useContext(UserContext);
-    const url = "http://localhost:5000/api/auth/getDashboardInfo";
+    const url = "http://localhost:5000/api/dashboard/getDashboardInfo";
 
     const [userData, setUserData] = React.useState({
         userPortfolio: userInfo,

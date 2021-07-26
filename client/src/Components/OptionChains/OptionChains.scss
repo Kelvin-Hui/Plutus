@@ -34,29 +34,50 @@
         }
         .OptionsGrid {
             width: 100%;
+            margin: 1% 0% 0% 0%;
             overflow-y: scroll;
+            border-collapse: collapse;
             .CALLPUT {
                 &.ColSpan3,
-                &.ColSpan5 {
+                &.ColSpan4 {
                     display: none;
                 }
                 font-weight: bolder;
                 font-size: calc(1.25rem + 0.2vw);
                 .Calls,
+                th,
                 .Puts {
-                    align-self: center;
+                    // align-self: center;
+                    // border: 3px solid black;
+                    // border-bottom: 0;
+                    position: sticky;
+                    padding: 1% 0%;
+                    top: 0;
+                    background: white;
+                    z-index: 30;
                 }
             }
 
             .ColName {
                 th {
+                    // &:first-child {
+                    //     border-left: 3px solid;
+                    // }
+                    // &:last-child {
+                    //     border-right: 3px solid;
+                    // }
+                    text-decoration: underline;
                     position: sticky;
                     padding: 1% 0%;
-                    top: 0;
+                    top: calc(2.5rem + 0.4vw);
                     z-index: 30;
                     background: white;
                     border-bottom: 3px solid black;
                 }
+                // .Strike {
+                //     border-left: 3px solid;
+                //     border-right: 3px solid;
+                // }
             }
 
             .Row {
@@ -105,7 +126,7 @@
                     &.ColSpan3 {
                         display: none;
                     }
-                    &.ColSpan5 {
+                    &.ColSpan4 {
                         display: table-row;
                     }
                 }
@@ -126,7 +147,7 @@
                 font-size: 0.75rem;
                 .CALLPUT {
                     &.ColSpan7,
-                    &.ColSpan5 {
+                    &.ColSpan4 {
                         display: none;
                     }
                     &.ColSpan3 {

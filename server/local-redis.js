@@ -4,6 +4,7 @@ const redisClient = redis.createClient(6379, "localhost");
 
 module.exports = redisClient;
 
+//Exit Redis If Any Unexpected
 process.on("exit", function () {
     console.log("exit");
     console.log("Exiting Redis Connections !");

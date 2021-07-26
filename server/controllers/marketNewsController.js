@@ -2,8 +2,10 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const localRedis = require("../local-redis");
 
+//Scrape Market News
 exports.getNews = async (req, res) => {
     try {
+        // Get Symbol
         const { symbol } = req.query;
 
         const yahoo_url = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${symbol}`;
@@ -11,10 +13,15 @@ exports.getNews = async (req, res) => {
         //Redis Check Exchange
         const exchangeName = await new Promise((resolve) => {
             localRedis.get(`Exchange_${symbol}`, async (err, data) => {
+                //If Redis Error;
                 if (err) return null;
+                //If Value Not Equal Null;
                 if (data != null) {
                     resolve(data);
-                } else {
+                }
+                //If Key Not Found In Redis
+                else {
+                    //Get Exchange Name
                     try {
                         const result = await axios({
                             method: "get",
@@ -31,12 +38,14 @@ exports.getNews = async (req, res) => {
                         exchange_Name = exchange_Name.replace("GM", "");
                         exchange_Name = exchange_Name.replace(" ", "");
 
+                        //Store For 1 year
                         localRedis.SETEX(
                             `Exchange_${symbol}`,
-                            31556952,
+                            31536000,
                             exchange_Name
                         );
 
+                        //Return exchange name;
                         resolve(exchange_Name);
                     } catch (error) {
                         return null;
@@ -49,14 +58,21 @@ exports.getNews = async (req, res) => {
 
         //Redis Get News
         localRedis.get(`News_${symbol}`, async (err, data) => {
-            if (err) console.log(err);
+            //If Redis Error;
+            if (err)
+                return res.status(200).json({
+                    status: "fail",
+                    error: err,
+                });
+            //If Value Not Equal Null;
             if (data != null) {
                 return res.status(200).json({
                     status: "success",
                     data: JSON.parse(data),
                 });
-            } else {
-                console.log(url);
+            }
+            //If Key Not Found In Redis
+            else {
                 const response = await axios({
                     method: "get",
                     url: url,

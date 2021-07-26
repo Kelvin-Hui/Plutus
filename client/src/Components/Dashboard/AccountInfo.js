@@ -12,10 +12,6 @@ export default function AccountInfo({ userInfo, portfolioValue, todayPNL }) {
         fmt:
             (Math.abs((portfolioValue - 25000) / 25000) * 100).toFixed(2) + "%",
     };
-    // const todayReturn = {
-    //     raw: todayPNL.raw.toFixed(2),
-    //     fmt: todayPNL.fmt + "%",
-    // };
 
     const totalReturnGain = totalReturn.raw >= 0;
     return (

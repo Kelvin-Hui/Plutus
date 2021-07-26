@@ -49,10 +49,6 @@ export default function DataGrid({ symbol, data, exp }) {
     return (
         <table className="OptionsGrid">
             <thead>
-                {/* <div className="CALLPUT">
-                    <span className="Calls">Calls</span>
-                    <span className="Puts">Puts</span>
-                </div> */}
                 <tr className="CALLPUT ColSpan3">
                     <th colSpan={3} className="Calls">
                         Calls
@@ -62,12 +58,12 @@ export default function DataGrid({ symbol, data, exp }) {
                         Puts
                     </th>
                 </tr>
-                <tr className="CALLPUT ColSpan5">
-                    <th colSpan={5} className="Calls">
+                <tr className="CALLPUT ColSpan4">
+                    <th colSpan={4} className="Calls">
                         Calls
                     </th>
                     <th></th>
-                    <th colSpan={5} className="Puts">
+                    <th colSpan={4} className="Puts">
                         Puts
                     </th>
                 </tr>

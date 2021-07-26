@@ -25,8 +25,8 @@ export default function StockInfo({ stockInfo }) {
                         {stockInfo.symbol} : {stockInfo.exchangeName}
                     </h4>
                     <div>
-                        {stockInfo.sector && <div>{stockInfo.sector}</div>}
-                        {stockInfo.industry && <div>{stockInfo.industry}</div>}
+                        {stockInfo.sector && <div>#{stockInfo.sector}</div>}
+                        {stockInfo.industry && <div>#{stockInfo.industry}</div>}
                     </div>
                 </div>
             </div>

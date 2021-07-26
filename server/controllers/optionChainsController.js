@@ -1,6 +1,7 @@
 const axios = require("axios");
 const localRedis = require("../local-redis");
 
+// Process Options's Data
 function processData(data) {
     var strikes = data.strikes;
     let cIdx = 0;
@@ -30,24 +31,32 @@ function processData(data) {
     });
 }
 
+// Get Option Chain
 exports.getOptionChains = async (req, res) => {
     try {
+        // Get symbol date and Type
         const { symbol, date, type } = req.query;
         const url = `https://query2.finance.yahoo.com/v7/finance/options/${symbol}`;
 
+        //return all the expiration date for symbol;
         if (type === "exp") {
             localRedis.get(`OptionExp_${symbol}`, async (err, data) => {
+                //If Redis Error;
                 if (err)
                     return res.status(200).json({
                         status: "fail",
                         error: err,
                     });
+                //If Value Not Equal Null;
                 if (data !== null) {
                     return res.status(200).json({
                         status: "success",
                         data: JSON.parse(data),
                     });
-                } else {
+                }
+                //If Key Not Found In Redis
+                else {
+                    //Call API to obtain data.
                     try {
                         const response = await axios({
                             method: "get",
@@ -80,20 +89,27 @@ exports.getOptionChains = async (req, res) => {
                     }
                 }
             });
-        } else {
+        }
+        //return option data for specific date.
+        else {
             localRedis.get(`Option_${symbol}_${date}`, async (err, data) => {
+                //If Redis Error;
                 if (err) {
                     return res.status(200).json({
                         status: "fail",
                         error: err,
                     });
                 }
+                //If Value Not Equal Null;
                 if (data !== null) {
                     return res.status(200).json({
                         status: "success",
                         optionsData: JSON.parse(data),
                     });
-                } else {
+                }
+                //If Key Not Found In Redis
+                else {
+                    //Call API to obtain data.
                     try {
                         const response = await axios({
                             method: "get",
