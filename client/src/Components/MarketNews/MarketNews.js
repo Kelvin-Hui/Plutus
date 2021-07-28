@@ -13,21 +13,29 @@ import Card from "../StyledComponents/Card";
 import Snackbar from "../StyledComponents/Snackbar";
 
 export default function MarketNews({ symbol }) {
-    //const [symbol, setSymbol] = React.useState("AAPL");
     const [news, setNews] = React.useState([]);
 
-    // React.useEffect(() => {
-    //     axios
-    //         .get(`http://localhost:5000/api/marketNews?symbol=${symbol}`)
-    //         .then((response) => setNews(response.data.data));
-    // }, [symbol]);
+    function toggleSnackbar(status, msg) {
+        var snack = document.getElementsByClassName("Snackbar")[0];
+
+        snack.className = `Snackbar ${status} Show`;
+        snack.textContent = msg;
+
+        setTimeout(function () {
+            snack.className = "Snackbar";
+        }, 1900);
+    }
 
     React.useEffect(() => {
         const fetchData = async () => {
             const result = await axios(
                 `http://localhost:5000/api/marketNews?symbol=${symbol}`
             );
-            setNews(result.data.data);
+            if (result.data.status == "fail") {
+                toggleSnackbar("Error", result.data.message);
+            } else {
+                setNews(result.data.data);
+            }
         };
         fetchData();
     }, [symbol]);

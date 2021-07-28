@@ -80,8 +80,12 @@ exports.getNews = async (req, res) => {
                 });
 
                 const $ = cheerio.load(response.data);
-                const newsTable = $(".D6ciZd > .yY3Lee");
+
+                const newsTable = $("main > .Nqt7U > .yY3Lee");
+
                 let news = [];
+
+                //console.log(newsTable);
 
                 newsTable.each(function () {
                     const newsSource = $(this).find(".sfyJob").text();
@@ -112,7 +116,8 @@ exports.getNews = async (req, res) => {
                     });
                 } else {
                     return res.status(200).json({
-                        status: "success",
+                        status: "fail",
+                        message: "Please Try again!",
                         data: news,
                     });
                 }

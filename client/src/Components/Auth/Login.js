@@ -13,12 +13,6 @@ import Snackbar from "../StyledComponents/Snackbar";
 //Import UserContext
 import UserContext from "../../Context/UserContext";
 
-//Import React Router Dom
-import { useHistory } from "react-router-dom";
-
-//Import clsx
-import clsx from "clsx";
-
 //Import Axios for API calling
 import axios from "axios";
 
@@ -29,7 +23,6 @@ export default function Login() {
     const registerPassword = React.useRef();
 
     const { setUserInfo } = React.useContext(UserContext);
-    const history = useHistory();
 
     const url = "http://localhost:5000/api/auth/";
 
@@ -56,7 +49,6 @@ export default function Login() {
 
         setTimeout(function () {
             snack.className = "Snackbar";
-            //snack.className = snack.className.replace("Show", "");
         }, 1900);
     }
 

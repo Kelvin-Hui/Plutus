@@ -58,7 +58,7 @@ export default function LineChart({ userInfo, transactions }) {
     }
 
     function drawChart() {
-        var margin = { top: 10, bottom: 25, left: 70, right: 70 };
+        var margin = { top: 20, bottom: 25, left: 70, right: 70 };
 
         let width =
             ref.current !== null
@@ -133,7 +133,7 @@ export default function LineChart({ userInfo, transactions }) {
             .datum(transactions)
             .attr("fill", "none")
             .attr("stroke", "#000000")
-            .attr("stroke-width", 1)
+            .attr("stroke-width", 2)
             .attr("stroke-linecap", "round")
             .attr("stroke-dasharray", "5,5")
             .attr(
@@ -182,7 +182,7 @@ export default function LineChart({ userInfo, transactions }) {
                     ? "#69b3a2"
                     : "#FF0000"
             )
-            .attr("stroke-width", 4)
+            .attr("stroke-width", 3)
             .attr("stroke-linecap", "round")
             .attr(
                 "d",
@@ -194,7 +194,7 @@ export default function LineChart({ userInfo, transactions }) {
                     .y(function (d) {
                         return y(d.currentBalance);
                     })
-                    .curve(d3.curveMonotoneX)
+                    .curve(d3.curveStep)
             );
 
         line.append("g").attr("class", "brush").call(brush);
@@ -230,7 +230,7 @@ export default function LineChart({ userInfo, transactions }) {
                             .y(function (d) {
                                 return y(d.currentBalance);
                             })
-                            .curve(d3.curveMonotoneX)
+                            .curve(d3.curveStep)
                     );
             }
         }
@@ -256,93 +256,97 @@ export default function LineChart({ userInfo, transactions }) {
                         .y(function (d) {
                             return y(d.currentBalance);
                         })
-                        .curve(d3.curveMonotoneX)
+                        .curve(d3.curveStep)
                 );
         });
 
-        //Line Cursor
-        var bisect = d3.bisector(function (d) {
-            return d.date;
-        }).left;
-
-        var focus = svg
+        var dataBox = svg
             .append("g")
-            .attr("class", "foucs")
-            .style("display", "none");
-        focus
-            .append("circle")
-            .attr(
-                "fill",
-                transactions[transactions.length - 1].currentBalance >= 0
-                    ? "#69b3a2"
-                    : "#FF0000"
-            )
-            .attr("r", 5);
-        focus
-            .append("rect")
-            .attr("class", "tooltip")
-            .attr("width", 110)
-            .attr("height", 75)
-            .attr("fill", "white")
+            .attr("class", "dataBox")
+            .attr("opacity", 0)
+            .style("display", "block");
+        var date = dataBox
+            .append("text")
+            .attr("class", "Date")
+            .text("Date : ")
+            .attr("x", 0)
+            .attr("y", 0);
+        var realizedPNL = dataBox
+            .append("text")
+            .attr("class", "RealizedPNL")
+            .text("Realized PNL : ")
+            .attr("x", 0)
+            .attr("y", 20);
+
+        var verticalLine = svg
+            .append("line")
+            .attr("opacity", 0)
+            .attr("y1", 0)
+            .attr("y2", height)
             .attr("stroke", "black")
-            .attr("stroke-width", "3")
-            .attr("x", -50)
-            .attr("y", -100)
-            .attr("rx", 4)
-            .attr("ry", 4);
+            .attr("stroke-width", 1)
+            .attr("pointer-events", "none")
+            .attr("z-index", 1);
 
-        focus
-            .append("text")
-            .attr("class", "date")
-
-            .attr("x", -35)
-            .attr("y", -75);
-        focus
-            .append("text")
-            .attr("class", "hour")
-            .attr("x", -15)
-            .attr("y", -55);
-        focus
-            .append("text")
-            .attr("class", "balance")
-            .attr("font-weight", "bold")
-            .attr("x", -45)
-            .attr("y", -35);
-
-        function mouseover() {
-            focus.style("display", "block");
-        }
+        function mouseover() {}
         function mouseout() {
-            focus.style("display", "none");
+            verticalLine.attr("opacity", 0);
+            dataBox.attr("opacity", 0);
         }
 
         function mousemove(event) {
-            var x0 = x.invert(d3.pointer(event)[0]);
-            var i = bisect(transactions, x0, 0);
-            var selectedData = transactions[i];
+            var mousePos = d3.pointer(event);
+
+            var bisectDate = d3.bisector(function (d) {
+                return d.date;
+            }).center;
+            var dataIdx = bisectDate(transactions, x.invert(mousePos[0]));
+            var selectedData = transactions[dataIdx];
 
             if (selectedData === undefined) {
                 //pass
                 return;
             }
 
-            focus.attr(
-                "transform",
-                `translate(${x(selectedData.date)},${y(
+            dataBox.attr("opacity", 1);
+            date.text(
+                `Date : ${new Date(selectedData.date)
+                    .toLocaleString()
+                    .replace(",", "")}`
+            );
+            realizedPNL.text(
+                `Realized PNL : $ ${Number(
                     selectedData.currentBalance
-                )})`
+                ).toLocaleString("en")}`
             );
 
-            focus.select(".date").text(selectedData.date.toLocaleDateString());
-            focus.select(".hour").text(hourFormat(selectedData.date));
-            focus
-                .select(".balance")
-                .text(
-                    "$" +
-                        Number(
-                            selectedData.currentBalance.toFixed(2)
-                        ).toLocaleString("en")
-                );
+            realizedPNL.style(
+                "fill",
+                selectedData.currentBalance > 25000 ? "green" : "red"
+            );
+
+            verticalLine
+                .attr("x1", mousePos[0] < 0 ? 0 : mousePos[0])
+                .attr("x2", mousePos[0] < 0 ? 0 : mousePos[0])
+                .attr("opacity", 0.5);
+
+            // focus.attr(
+            //     "transform",
+            //     `translate(${x(selectedData.date)},${y(
+            //         selectedData.currentBalance
+            //     )})`
+            // );
+
+            // focus.select(".date").text(selectedData.date.toLocaleDateString());
+            // focus.select(".hour").text(hourFormat(selectedData.date));
+            // focus
+            //     .select(".balance")
+            //     .text(
+            //         "$" +
+            //             Number(
+            //                 selectedData.currentBalance.toFixed(2)
+            //             ).toLocaleString("en")
+            //     );
         }
 
         svg.on("mouseover", mouseover)
