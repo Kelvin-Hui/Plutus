@@ -56,12 +56,19 @@ export default function SidePanel() {
 
     function resetAccount(e) {
         e.preventDefault();
+        const token = localStorage.getItem("Auth Token");
+        let axiosConfig = {
+            headers: {
+                Authorization: token,
+            },
+        };
         const resetOrder = async () => {
             const res = await axios.post(
                 "http://localhost:5000/api/order/reset",
                 {
                     userID: userInfo.userID,
-                }
+                },
+                axiosConfig
             );
             if (res.data.status == "fail") {
                 toggleSnackbar("Error", res.data.message);

@@ -11,8 +11,6 @@
 
 .Contentpage {
     .Dashboard {
-        // display: flex;
-        // flex-direction: column;
         display: grid;
         margin: 2%;
         column-gap: 2%;
@@ -227,11 +225,6 @@
                 padding-top: 0;
                 margin-bottom: 2%;
                 .TransactionsTable {
-                    // &::before {
-                    //     content: "Recent Transactions";
-                    //     @extend %CardBeforeHeader;
-                    // }
-                    //margin-top: 1.25em;
                     width: 100%;
                     text-align: center;
                     border-collapse: collapse;

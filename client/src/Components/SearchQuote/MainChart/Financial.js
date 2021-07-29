@@ -31,18 +31,10 @@ export default function Financial({ symbol }) {
         IncomeStatement: {
             "Total Revenue": "totalRevenue",
             "Cost Of Revenue": "costOfRevenue",
-            //Total Revenue - Cost of Revenue = Gross Profit
             "Gross Profit": "grossProfit",
-
             "Selling General Administrative ": "sellingGeneralAdministrative",
             "Research & Development": "researchDevelopment",
-            //Gross Profit - Sellingxxx  - Research = opertaing income
             "Operating Income": "operatingIncome",
-
-            //Operating Income - income expense = Pretax Income
-            //totla expense = cost of revenue + selling general + resaearch
-            // total revenue -= total expense = operasing income..
-            // "Totoal Expense": "totalOperatingExpenses",
             "Income Before Tax (EBIT)": "incomeBeforeTax",
             "Income Tax Expense": "incomeTaxExpense",
             "Net Income": "netIncomeApplicableToCommonShares",

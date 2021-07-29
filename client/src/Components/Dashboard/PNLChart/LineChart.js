@@ -27,29 +27,12 @@ export default function LineChart({ userInfo, transactions }) {
             }, 500);
         });
 
-        // document
-        //     .getElementById("CollapsedBtn")
-        //     .addEventListener("click", function () {
-        //         clearTimeout(temp);
-        //         temp = setTimeout(() => {
-        //             reDrawChart();
-        //         }, 500);
-        //     });
-
         return window.removeEventListener("resize", function () {
             clearTimeout(temp);
             temp = setTimeout(() => {
                 reDrawChart();
             }, 500);
         });
-        // document
-        //     .getElementById("CollapsedBtn")
-        //     .removeEventListener("click", function () {
-        //         clearTimeout(temp);
-        //         temp = setTimeout(() => {
-        //             reDrawChart();
-        //         }, 500);
-        //     })
     }, [transactions]);
 
     function reDrawChart() {
@@ -83,6 +66,7 @@ export default function LineChart({ userInfo, transactions }) {
                 "translate(" + margin.left + "," + margin.top + ")"
             );
 
+        //x domain and range
         var x = d3
             .scaleTime()
             .domain(
@@ -101,6 +85,7 @@ export default function LineChart({ userInfo, transactions }) {
             })
             .ticks(4);
 
+        //y domain and range
         var y = d3
             .scaleLinear()
             .domain(
@@ -119,16 +104,19 @@ export default function LineChart({ userInfo, transactions }) {
             })
             .ticks(4);
 
+        // x axis
         var xTick = svg
             .append("g")
             .attr("class", "xAxis")
             .call(xAxis)
             .attr("transform", `translate(0,${height})`);
-
+        // y axis
         var yTick = svg.append("g").attr("class", "yAxis").call(yAxis);
 
+        // y gridline
         yTick.selectAll(".tick line").attr("x2", width).attr("opacity", 0.1);
 
+        // starting balance gridline
         svg.append("path")
             .datum(transactions)
             .attr("fill", "none")
@@ -234,7 +222,7 @@ export default function LineChart({ userInfo, transactions }) {
                     );
             }
         }
-
+        //reset
         svg.on("dblclick", function () {
             x.domain(
                 d3.extent(transactions, function (d) {
@@ -329,24 +317,6 @@ export default function LineChart({ userInfo, transactions }) {
                 .attr("x1", mousePos[0] < 0 ? 0 : mousePos[0])
                 .attr("x2", mousePos[0] < 0 ? 0 : mousePos[0])
                 .attr("opacity", 0.5);
-
-            // focus.attr(
-            //     "transform",
-            //     `translate(${x(selectedData.date)},${y(
-            //         selectedData.currentBalance
-            //     )})`
-            // );
-
-            // focus.select(".date").text(selectedData.date.toLocaleDateString());
-            // focus.select(".hour").text(hourFormat(selectedData.date));
-            // focus
-            //     .select(".balance")
-            //     .text(
-            //         "$" +
-            //             Number(
-            //                 selectedData.currentBalance.toFixed(2)
-            //             ).toLocaleString("en")
-            //     );
         }
 
         svg.on("mouseover", mouseover)

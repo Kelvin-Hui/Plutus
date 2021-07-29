@@ -159,6 +159,13 @@ export default function Earning({ symbol }) {
         const colorBeats = "#69b3a2";
         const colorMiss = "#b55353";
 
+        //Check Miss
+        const earningMiss = earningChartData
+            .filter(function (d) {
+                return d.actual !== undefined;
+            })
+            .find((el) => el.actual.raw < el.estimate.raw);
+
         //Creating Legend
         var legend = svg
             .append("g")
@@ -175,20 +182,31 @@ export default function Earning({ symbol }) {
             .attr("cy", 100)
             .attr("r", "calc(0.3rem + 0.1vw)")
             .style("fill", "gray");
-        legend
-            .append("circle")
-            .attr("cx", 85)
-            .attr("cy", 125)
-            .attr("r", "calc(0.3rem + 0.1vw)")
 
-            .style("fill", colorBeats);
-        legend
-            .append("circle")
-            .attr("cx", 115)
-            .attr("cy", 125)
-            .attr("r", "calc(0.3rem + 0.1vw)")
+        if (earningMiss !== undefined) {
+            legend
+                .append("circle")
+                .attr("cx", 85)
+                .attr("cy", 125)
+                .attr("r", "calc(0.3rem + 0.1vw)")
 
-            .style("fill", colorMiss);
+                .style("fill", colorBeats);
+            legend
+                .append("circle")
+                .attr("cx", 115)
+                .attr("cy", 125)
+                .attr("r", "calc(0.3rem + 0.1vw)")
+
+                .style("fill", colorMiss);
+        } else {
+            legend
+                .append("circle")
+                .attr("cx", 100)
+                .attr("cy", 125)
+                .attr("r", "calc(0.3rem + 0.1vw)")
+
+                .style("fill", colorBeats);
+        }
 
         legend
             .append("text")

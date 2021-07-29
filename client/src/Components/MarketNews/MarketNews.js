@@ -27,9 +27,16 @@ export default function MarketNews({ symbol }) {
     }
 
     React.useEffect(() => {
+        const token = localStorage.getItem("Auth Token");
+        let axiosConfig = {
+            headers: {
+                Authorization: token,
+            },
+        };
         const fetchData = async () => {
-            const result = await axios(
-                `http://localhost:5000/api/marketNews?symbol=${symbol}`
+            const result = await axios.get(
+                `http://localhost:5000/api/marketNews?symbol=${symbol}`,
+                axiosConfig
             );
             if (result.data.status == "fail") {
                 toggleSnackbar("Error", result.data.message);
@@ -41,15 +48,11 @@ export default function MarketNews({ symbol }) {
     }, [symbol]);
 
     const sampleData = [1, 2, 3, 4, 5, 6];
-
-    console.log(news);
-
     return (
         <div className="Contentpage">
             <Snackbar />
             <SearchInput
                 placeholder="Search For Stock Quote (default : AAPL)"
-                //setSymbol={setSymbol}
                 setNews={setNews}
             />
             <div className="NewsCardGrid">

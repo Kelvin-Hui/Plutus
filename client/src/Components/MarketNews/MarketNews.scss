@@ -1,7 +1,6 @@
 .Contentpage {
     .NewsCardGrid {
         display: grid;
-        //width: 100%;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         margin: 2.5%;
         row-gap: 5%;
@@ -20,9 +19,6 @@
                     object-fit: contain;
                     width: fill;
                     height: 150px;
-
-                    // width: 200px;
-                    // height: 150px;
                 }
             }
             .Title {

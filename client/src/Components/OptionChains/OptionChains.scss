@@ -47,9 +47,6 @@
                 .Calls,
                 th,
                 .Puts {
-                    // align-self: center;
-                    // border: 3px solid black;
-                    // border-bottom: 0;
                     position: sticky;
                     padding: 1% 0%;
                     top: 0;
@@ -60,12 +57,6 @@
 
             .ColName {
                 th {
-                    // &:first-child {
-                    //     border-left: 3px solid;
-                    // }
-                    // &:last-child {
-                    //     border-right: 3px solid;
-                    // }
                     text-decoration: underline;
                     position: sticky;
                     padding: 1% 0%;
@@ -74,10 +65,6 @@
                     background: white;
                     border-bottom: 3px solid black;
                 }
-                // .Strike {
-                //     border-left: 3px solid;
-                //     border-right: 3px solid;
-                // }
             }
 
             .Row {

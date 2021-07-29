@@ -4,7 +4,6 @@ import React from "react";
 import "./StyledComponents.scss";
 
 export default function ReadMore({ readMore, setReadMore, children }) {
-    //const [readMore, setReadMore] = React.useState(true);
     const text = children;
     return (
         <p className="ReadMoreText">

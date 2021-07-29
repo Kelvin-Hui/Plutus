@@ -18,7 +18,6 @@ const Login = React.lazy(() => import("./Components/Auth/Login"));
 
 function App() {
     const [userInfo, setUserInfo] = React.useState(null);
-    //NAV
     const [nav, setNav] = React.useState({
         currentPage: "Dashboard",
         symbol: "AAPL",
@@ -64,7 +63,6 @@ function App() {
         <React.Suspense fallback={<Spinner />}>
             <Router>
                 <UserContext.Provider
-                    //NAV
                     value={{ userInfo, setUserInfo, nav, setNav }}
                 >
                     <Switch>

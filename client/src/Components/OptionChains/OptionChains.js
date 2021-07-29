@@ -21,16 +21,21 @@ function properDate(d) {
 }
 
 export default function OptionChains({ symbol }) {
-    console.log("OC");
-    //const [symbol, setSymbol] = React.useState("AAPL");
     const [exp, setExp] = React.useState(null);
     const [expirationDates, setExpirationDates] = React.useState([]);
     const [data, setData] = React.useState([]);
 
     React.useEffect(() => {
+        const token = localStorage.getItem("Auth Token");
+        let axiosConfig = {
+            headers: {
+                Authorization: token,
+            },
+        };
         const fetchData = async () => {
             const result = await axios.get(
-                `http://localhost:5000/api/optionChains?symbol=${symbol}&type=exp`
+                `http://localhost:5000/api/optionChains?symbol=${symbol}&type=exp`,
+                axiosConfig
             );
             ReactDOM.unstable_batchedUpdates(() => {
                 setExp(result.data.data.exp);
@@ -44,10 +49,7 @@ export default function OptionChains({ symbol }) {
     return (
         <div className="Contentpage">
             <Snackbar />
-            <SearchInput
-                placeholder="Search For Stock Quote (default : AAPL)"
-                //setSymbol={setSymbol}
-            />
+            <SearchInput placeholder="Search For Stock Quote (default : AAPL)" />
 
             <Card id="OptionChainCard">
                 <div className="OptionChainHeader">

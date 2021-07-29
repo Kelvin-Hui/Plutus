@@ -25,6 +25,7 @@ export default function OrderPanel({ lastPrice }) {
 
     const url = "http://localhost:5000/api/order/";
 
+    //toggle snackbar
     function toggleSnackbar(status, msg) {
         var snack = document.getElementsByClassName("Snackbar")[0];
 
@@ -36,6 +37,7 @@ export default function OrderPanel({ lastPrice }) {
         }, 1900);
     }
 
+    //Place order
     function placeOrder(e, idx) {
         e.preventDefault();
         let _url = url + (idx === 0 ? "buy" : "sell");
@@ -44,12 +46,23 @@ export default function OrderPanel({ lastPrice }) {
 
         let quantity = idx === 0 ? Shares[idx].value : -Shares[idx].value;
 
+        const token = localStorage.getItem("Auth Token");
+        let axiosConfig = {
+            headers: {
+                Authorization: token,
+            },
+        };
+
         const sendOrder = async () => {
-            const res = await axios.post(_url, {
-                userID: userInfo.userID,
-                symbol: nav.symbol,
-                quantity: Math.round(quantity),
-            });
+            const res = await axios.post(
+                _url,
+                {
+                    userID: userInfo.userID,
+                    symbol: nav.symbol,
+                    quantity: Math.round(quantity),
+                },
+                axiosConfig
+            );
             if (res.data.status == "fail") {
                 toggleSnackbar("Error", res.data.message);
             } else {
@@ -66,6 +79,7 @@ export default function OrderPanel({ lastPrice }) {
         sendOrder();
     }
 
+    //calculate diffeent total price
     function reCalculate(e, idx) {
         let totalCost = document.getElementsByClassName("TotalCost");
 

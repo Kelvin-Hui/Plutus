@@ -68,35 +68,6 @@ export default function Chart({ previousClose, symbol }) {
         }
     }, [chartTools]);
 
-    // React.useEffect(() => {
-    //     const getChart = async () => {
-    //         const response = await axios.get(
-    //             `http://localhost:5000/api/searchQuote/getChart?symbol=${symbol}&interval=${intervals}`
-    //         );
-    //         if (response.data.status !== "fail") {
-    //             setData(response.data.data);
-    //             reDrawChart(response.data.data);
-    //         }
-    //     };
-
-    //     if (previousClose) {
-    //         getChart();
-    //     }
-
-    //     //reDrawChart(priceData);
-    // }, [previousClose, symbol, intervals, chartTools]);
-
-    function toggleSnackbar(status, msg) {
-        var snack = document.getElementsByClassName("Snackbar")[0];
-
-        snack.className = `Snackbar ${status} Show`;
-        snack.textContent = msg;
-
-        setTimeout(function () {
-            snack.className = "Snackbar";
-        }, 1900);
-    }
-
     function reDrawChart(pData) {
         d3.select(ref.current).select("#PriceChart").remove();
         drawChart(pData);
@@ -147,10 +118,6 @@ export default function Chart({ previousClose, symbol }) {
                 })
             )
             .range([0, width]);
-        var allDates = priceData.map(function (data) {
-            return new Date(data.date);
-        });
-
         // var x_not1m = d3.scaleBand().domain(allDates).range([0, width]);
 
         //x Range and Domain (For 1m)
@@ -192,22 +159,7 @@ export default function Chart({ previousClose, symbol }) {
         HighLow.push(pC);
 
         //y Range and Domain
-        var y = d3
-            .scaleLinear()
-            // .domain([
-            //     d3.min(priceData, function (d) {
-            //         if (d.low !== null) {
-            //             return d.low * 0.995;
-            //         }
-            //     }),
-            //     d3.max(priceData, function (d) {
-            //         if (d.high !== null) {
-            //             return d.high * 1.015;
-            //         }
-            //     }),
-            // ])
-            .domain(d3.extent(HighLow))
-            .range([height, 0]);
+        var y = d3.scaleLinear().domain(d3.extent(HighLow)).range([height, 0]);
 
         //xAxis
         const format = d3.timeFormat("%m/%d/%y %H:%M");
@@ -216,22 +168,6 @@ export default function Chart({ previousClose, symbol }) {
             .append("g")
             .attr("class", "xAxis")
             .call(d3.axisBottom(x))
-            // .call(
-            //     intervals === "1m"
-            //         ? d3.axisBottom(x).tickFormat(function (d) {
-            //               return hourFormat(d);
-            //           })
-            //         : d3
-            //               .axisBottom(x)
-            //               .tickFormat(function (d) {
-            //                   return dateFormat(d);
-            //               })
-            //               .tickValues(
-            //                   x.domain().filter(function (d, i) {
-            //                       return !(i % dataLength);
-            //                   })
-            //               )
-            // )
             .attr("transform", `translate(0,${height})`);
 
         //yAxis
@@ -269,14 +205,6 @@ export default function Chart({ previousClose, symbol }) {
 
         //Create Grid Line
         yAxis.selectAll(".tick line").attr("x2", width).attr("opacity", 0.1);
-
-        //Add Area
-        //Lowest Point
-        // const lowest = d3.min(priceData, function (d) {
-        //     if (d.low !== null) {
-        //         return d.low * 0.995;
-        //     }
-        // });
 
         const lowest = d3.min(HighLow);
 

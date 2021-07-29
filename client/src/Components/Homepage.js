@@ -14,17 +14,12 @@ import MarketNews from "./MarketNews";
 import UserContext from "../Context/UserContext";
 
 export default function Homepage() {
-    //NAV
     const { nav } = React.useContext(UserContext);
 
     React.useEffect(() => {}, [nav.symbol]);
 
     return (
         <div className="Homepage">
-            {/* <div className="MobileHeadline">
-                <span>Plutus</span>
-            </div> */}
-
             <SidePanel />
 
             {nav.currentPage === "Dashboard" && <Dashboard />}

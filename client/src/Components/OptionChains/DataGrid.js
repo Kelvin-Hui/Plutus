@@ -5,22 +5,21 @@ import axios from "axios";
 //Import clsx
 import clsx from "clsx";
 
-function properDate(d) {
-    return (
-        d.getUTCMonth() + 1 + "/" + d.getUTCDate() + "/" + d.getUTCFullYear()
-    );
-}
-
 export default function DataGrid({ symbol, data, exp }) {
     const [optionData, setOptionData] = React.useState(data);
 
     React.useEffect(() => {
+        const token = localStorage.getItem("Auth Token");
+        let axiosConfig = {
+            headers: {
+                Authorization: token,
+            },
+        };
         const fetchData = async () => {
             const result = await axios.get(
-                `http://localhost:5000/api/optionChains?symbol=${symbol}&date=${exp}`
+                `http://localhost:5000/api/optionChains?symbol=${symbol}&date=${exp}`,
+                axiosConfig
             );
-            console.log(result);
-            console.log(result.data);
             setOptionData(result.data.optionsData);
         };
         if (exp !== null) {

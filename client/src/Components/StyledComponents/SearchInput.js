@@ -13,7 +13,6 @@ import UserContext from "../../Context/UserContext";
 
 export default function SearchInput(props) {
     const [error, setError] = React.useState(false);
-    //NAV
     const { nav, setNav } = React.useContext(UserContext);
 
     async function check(symbol) {
@@ -44,7 +43,6 @@ export default function SearchInput(props) {
 
             valid.then(function (v) {
                 if (v) {
-                    //props.setSymbol(e.target.value.toUpperCase());
                     setNav({ ...nav, symbol: e.target.value.toUpperCase() });
                 } else {
                     toggleSnackbar("Error", "Error ! Symbol Not Found !");
@@ -60,7 +58,6 @@ export default function SearchInput(props) {
                 <input
                     className={clsx({ Inputarea: true, Error: error })}
                     type="search"
-                    // placeholder={props.placeholder}
                     placeholder={nav.symbol}
                     onKeyDown={(e) => {
                         e.key === "Enter" && enter(e);

@@ -20,8 +20,7 @@ import Earning from "./Earning";
 import Financial from "../MainChart/Financial";
 
 export default function MainChart({ previousClose }) {
-    const { userInfo, setUserInfo, nav, setNav } =
-        React.useContext(UserContext);
+    const { nav, setNav } = React.useContext(UserContext);
     const [currentTab, setCurrentTab] = React.useState("Chart");
     const Tabs = [
         "Overview",

@@ -28,6 +28,7 @@ export default function Dashboard() {
         portfolioValue: 0,
     });
 
+    //toggleSnackbar
     function toggleSnackbar(status, msg) {
         var snack = document.getElementsByClassName("Snackbar")[0];
 
@@ -40,8 +41,17 @@ export default function Dashboard() {
     }
 
     React.useEffect(() => {
+        const token = localStorage.getItem("Auth Token");
+        let axiosConfig = {
+            headers: {
+                Authorization: token,
+            },
+        };
         const getDashboardInfo = async () => {
-            const res = await axios.get(url + `?userID=${userInfo.userID}`);
+            const res = await axios.get(
+                url + `?userID=${userInfo.userID}`,
+                axiosConfig
+            );
 
             if (res.data.status == "fail") {
                 toggleSnackbar("Error", res.data.message);
@@ -52,13 +62,6 @@ export default function Dashboard() {
 
         getDashboardInfo();
     }, [userInfo.reset]);
-
-    // let todayReturn = { raw: 0, fmt: 0 };
-    // userData.portfolioData.map((data, idx) => {
-    //     todayReturn.raw += parseFloat(data.todayReturn.raw);
-    //     todayReturn.fmt += parseFloat(data.todayReturn.fmt.split("%")[0]);
-    // });
-    // console.log(todayReturn);
 
     return (
         <div className="Contentpage">

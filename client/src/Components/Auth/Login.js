@@ -27,6 +27,7 @@ export default function Login() {
     const url = "http://localhost:5000/api/auth/";
 
     function toggleFlip() {
+        //Flip The Login Card & Register Card
         const form = document.querySelector(".Form");
         if (form.className === "Form") {
             form.className = "Form Flipped";
@@ -41,6 +42,7 @@ export default function Login() {
         }
     }
 
+    //toggleSnackbar
     function toggleSnackbar(status, msg) {
         var snack = document.getElementsByClassName("Snackbar")[0];
 
@@ -51,10 +53,9 @@ export default function Login() {
             snack.className = "Snackbar";
         }, 1900);
     }
-
+    //log user in
     function login(e) {
         e.preventDefault();
-        console.log("login");
         let user = loginUsername.current.value;
         let pw = loginPassword.current.value;
         const submit = async (user, pw) => {
@@ -84,10 +85,9 @@ export default function Login() {
         };
         submit(user, pw);
     }
-
+    //Register New User
     function register(e) {
         e.preventDefault();
-        console.log("register!");
         let user = registerUsername.current.value;
         let pw = registerPassword.current.value;
         const submit = async (user, pw) => {
@@ -107,6 +107,7 @@ export default function Login() {
         submit(user, pw);
     }
 
+    //Keyboard Shortcut;
     const hitEnter = (e) => {
         if (e.key === "Enter") {
             const form = document.querySelector(".Form");
