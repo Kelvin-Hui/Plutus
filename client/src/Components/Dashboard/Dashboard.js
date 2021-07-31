@@ -20,7 +20,7 @@ import AccountInfo from "./AccountInfo";
 
 export default function Dashboard() {
     const { userInfo } = React.useContext(UserContext);
-    const url = "http://localhost:5000/api/dashboard/getDashboardInfo";
+    const url = "https://www.plutusbackend.com/api/dashboard/getDashboardInfo";
 
     const [userData, setUserData] = React.useState({
         userPortfolio: userInfo,
@@ -53,7 +53,7 @@ export default function Dashboard() {
                 axiosConfig
             );
 
-            if (res.data.status == "fail") {
+            if (res.data.status === "fail") {
                 toggleSnackbar("Error", res.data.message);
             } else {
                 setUserData(res.data.data);

@@ -15,7 +15,11 @@ export default function StockInfo({ stockInfo }) {
                 <div className="CompanyName">
                     <h1>{stockInfo.name}</h1>
                     {stockInfo.website && (
-                        <a target="_blank" href={stockInfo.website}>
+                        <a
+                            target="_blank"
+                            rel="noreferrer"
+                            href={stockInfo.website}
+                        >
                             <Websitelogo className="webLogo" />
                         </a>
                     )}

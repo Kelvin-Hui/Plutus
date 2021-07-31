@@ -11,6 +11,7 @@ export default function NewsCard({ data }) {
                     className="ThumbnailPic"
                     href={data.newsLink}
                     target="_blank"
+                    rel="noreferrer"
                 >
                     <img alt="thumbnailPic" src={data.newsThumbnail} />
                 </a>

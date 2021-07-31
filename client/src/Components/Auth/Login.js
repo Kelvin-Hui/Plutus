@@ -24,7 +24,7 @@ export default function Login() {
 
     const { setUserInfo } = React.useContext(UserContext);
 
-    const url = "http://localhost:5000/api/auth/";
+    const url = "https://www.plutusbackend.com/api/auth/";
 
     function toggleFlip() {
         //Flip The Login Card & Register Card
@@ -63,7 +63,7 @@ export default function Login() {
                 username: user,
                 password: pw,
             });
-            if (res.data.status == "fail") {
+            if (res.data.status === "fail") {
                 toggleSnackbar("Error", res.data.message);
                 loginUsername.current.style.border = "3px solid red";
                 loginPassword.current.style.border = "3px solid red";
@@ -95,7 +95,7 @@ export default function Login() {
                 username: user,
                 password: pw,
             });
-            if (res.data.status == "fail") {
+            if (res.data.status === "fail") {
                 toggleSnackbar("Error", res.data.message);
                 registerUsername.current.style.border = "3px solid red";
                 registerPassword.current.style.border = "3px solid red";
@@ -200,6 +200,7 @@ export default function Login() {
                 <span className="BgCredit">
                     <a
                         target="_blank"
+                        rel="noreferrer"
                         href={
                             "https://www.vecteezy.com/vector-art/570478-candle-stick-graph-chart-of-stock-market-investment-trading-bullish-point-bearish-point-trend-of-graph-vector-design"
                         }

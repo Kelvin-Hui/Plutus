@@ -11,9 +11,7 @@ export default function DonutChart({ donutChartData, portfolioValue }) {
     const { setNav } = React.useContext(UserContext);
 
     React.useEffect(() => {
-        {
-            donutChartData.length !== 0 && reDrawChart();
-        }
+        donutChartData.length !== 0 && reDrawChart();
 
         var temp;
 
@@ -33,7 +31,7 @@ export default function DonutChart({ donutChartData, portfolioValue }) {
     });
 
     function reDrawChart() {
-        const svg = d3.select(ref.current).select("#DonutChart").remove();
+        d3.select(ref.current).select("#DonutChart").remove();
         drawChart();
     }
 

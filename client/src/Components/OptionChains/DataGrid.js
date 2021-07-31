@@ -17,7 +17,7 @@ export default function DataGrid({ symbol, data, exp }) {
         };
         const fetchData = async () => {
             const result = await axios.get(
-                `http://localhost:5000/api/optionChains?symbol=${symbol}&date=${exp}`,
+                `https://www.plutusbackend.com/api/optionChains?symbol=${symbol}&date=${exp}`,
                 axiosConfig
             );
             setOptionData(result.data.optionsData);
@@ -34,9 +34,9 @@ export default function DataGrid({ symbol, data, exp }) {
         "Bid",
         "Ask",
         "Last",
-        "% Change",
+        "%Change",
         "Strike",
-        "% Change",
+        "%Change",
         "Last",
         "Bid",
         "Ask",
@@ -105,82 +105,105 @@ export default function DataGrid({ symbol, data, exp }) {
                         </td>
                     </tr>
                 ) : (
-                    Object.keys(optionData).length != 0 &&
+                    Object.keys(optionData).length !== 0 &&
                     optionData.map((data, idx) => {
-                        const c = data.calls != undefined ? data.calls : {};
-                        const p = data.puts != undefined ? data.puts : {};
+                        const c = data.calls !== undefined ? data.calls : {};
+                        const p = data.puts !== undefined ? data.puts : {};
 
-                        return (
-                            <tr
-                                className={clsx({
-                                    Row: true,
-                                    CallInTheMoney: c.inTheMoney,
-                                    PutInTheMoney: p.inTheMoney,
-                                })}
-                                id={"Option_Strike@" + data.strikes}
-                                key={"data_" + idx}
-                            >
-                                <td className="OpenInterest">
-                                    {c.openInterest || " - "}
-                                </td>
-                                <td>{c.volume || " - "}</td>
-                                <td className="ImpliedVolatility">
-                                    {parseFloat(
-                                        c.impliedVolatility * 100
-                                    ).toFixed(2) + "%" || " - "}
-                                </td>
-                                <td className="Bid">{c.bid || " - "}</td>
-                                <td className="Ask">{c.ask || " - "}</td>
-                                <td>{c.lastPrice || " - "}</td>
-                                <td
-                                    className={clsx({
-                                        percentChange: true,
-                                        up:
-                                            parseFloat(c.percentChange).toFixed(
-                                                2
-                                            ) > 0,
-                                        down:
-                                            parseFloat(c.percentChange).toFixed(
-                                                2
-                                            ) < 0,
-                                    })}
-                                >
-                                    {parseFloat(c.percentChange).toFixed(2) +
-                                        "%" || " - "}
-                                </td>
-                                <td id={"strike_" + data.strikes}>
-                                    <b>{data.strikes}</b>
-                                </td>
-                                <td
-                                    className={clsx({
-                                        percentChange: true,
-                                        up:
-                                            parseFloat(p.percentChange).toFixed(
-                                                2
-                                            ) > 0,
-                                        down:
-                                            parseFloat(p.percentChange).toFixed(
-                                                2
-                                            ) < 0,
-                                    })}
-                                >
-                                    {parseFloat(p.percentChange).toFixed(2) +
-                                        "%" || " - "}
-                                </td>
-                                <td>{p.lastPrice || " - "}</td>
-                                <td className="Bid">{p.bid || " - "}</td>
-                                <td className="Ask">{p.ask || " - "}</td>
-                                <td className="ImpliedVolatility">
-                                    {parseFloat(
-                                        p.impliedVolatility * 100
-                                    ).toFixed(2) + "%" || " - "}
-                                </td>
-                                <td>{p.volume || " - "}</td>
-                                <td className="OpenInterest">
-                                    {p.openInterest || " - "}
-                                </td>
-                            </tr>
-                        );
+                        if (c !== null && p !== null) {
+                            if (
+                                Object.keys(c).length !== 0 &&
+                                Object.keys(p).length !== 0
+                            ) {
+                                return (
+                                    <tr
+                                        className={clsx({
+                                            Row: true,
+                                            CallInTheMoney:
+                                                c === null
+                                                    ? false
+                                                    : c.inTheMoney,
+                                            PutInTheMoney:
+                                                p === null
+                                                    ? false
+                                                    : p.inTheMoney,
+                                        })}
+                                        id={"Option_Strike@" + data.strikes}
+                                        key={"data_" + idx}
+                                    >
+                                        <td className="OpenInterest">
+                                            {c.openInterest || " - "}
+                                        </td>
+                                        <td>{c.volume || " - "}</td>
+                                        <td className="ImpliedVolatility">
+                                            {parseFloat(
+                                                c.impliedVolatility * 100
+                                            ).toFixed(2) + "%" || " - "}
+                                        </td>
+                                        <td className="Bid">
+                                            {c.bid || " - "}
+                                        </td>
+                                        <td className="Ask">
+                                            {c.ask || " - "}
+                                        </td>
+                                        <td>{c.lastPrice || " - "}</td>
+                                        <td
+                                            className={clsx({
+                                                percentChange: true,
+                                                up:
+                                                    parseFloat(
+                                                        c.percentChange
+                                                    ).toFixed(2) > 0,
+                                                down:
+                                                    parseFloat(
+                                                        c.percentChange
+                                                    ).toFixed(2) < 0,
+                                            })}
+                                        >
+                                            {parseFloat(
+                                                c.percentChange
+                                            ).toFixed(2) + "%" || " - "}
+                                        </td>
+                                        <td id={"strike_" + data.strikes}>
+                                            <b>{data.strikes}</b>
+                                        </td>
+                                        <td
+                                            className={clsx({
+                                                percentChange: true,
+                                                up:
+                                                    parseFloat(
+                                                        p.percentChange
+                                                    ).toFixed(2) > 0,
+                                                down:
+                                                    parseFloat(
+                                                        p.percentChange
+                                                    ).toFixed(2) < 0,
+                                            })}
+                                        >
+                                            {parseFloat(
+                                                p.percentChange
+                                            ).toFixed(2) + "%" || " - "}
+                                        </td>
+                                        <td>{p.lastPrice || " - "}</td>
+                                        <td className="Bid">
+                                            {p.bid || " - "}
+                                        </td>
+                                        <td className="Ask">
+                                            {p.ask || " - "}
+                                        </td>
+                                        <td className="ImpliedVolatility">
+                                            {parseFloat(
+                                                p.impliedVolatility * 100
+                                            ).toFixed(2) + "%" || " - "}
+                                        </td>
+                                        <td>{p.volume || " - "}</td>
+                                        <td className="OpenInterest">
+                                            {p.openInterest || " - "}
+                                        </td>
+                                    </tr>
+                                );
+                            }
+                        }
                     })
                 )}
             </tbody>

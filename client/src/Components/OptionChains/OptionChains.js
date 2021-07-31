@@ -34,7 +34,7 @@ export default function OptionChains({ symbol }) {
         };
         const fetchData = async () => {
             const result = await axios.get(
-                `http://localhost:5000/api/optionChains?symbol=${symbol}&type=exp`,
+                `https://www.plutusbackend.com/api/optionChains?symbol=${symbol}&type=exp`,
                 axiosConfig
             );
             ReactDOM.unstable_batchedUpdates(() => {

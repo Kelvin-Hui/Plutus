@@ -86,7 +86,6 @@ exports.loginAccount = async (req, res) => {
 
         // If Existing User Not Found, Return Fail Message;
         if (!existingUser) {
-            console.log("username doesn't exist!");
             return res.status(200).json({
                 status: "fail",
                 message: "Invalid Credentials! Please Try Again!",
@@ -96,7 +95,6 @@ exports.loginAccount = async (req, res) => {
         const match = await bcrypt.compare(password, existingUser.password);
         // If Password Not Match, Return Fail Message;
         if (!match) {
-            console.log("password not match");
             return res.status(200).json({
                 status: "fail",
                 message: "Invalid Credentials! Please Try Again!",
@@ -155,7 +153,6 @@ exports.validateToken = async (req, res) => {
         const existingUser = await User.findById(validation.id);
         // If No Existing User, Return Fail Message;
         if (!existingUser) {
-            console.log("No User!");
             return res.status(400).json({ status: "fail" });
         }
 

@@ -43,7 +43,7 @@ export default function Chart({ previousClose, symbol }) {
         var temp;
         const getChart = async () => {
             const response = await axios.get(
-                `http://localhost:5000/api/searchQuote/getChart?symbol=${symbol}&interval=${intervals}`
+                `https://www.plutusbackend.com/api/searchQuote/getChart?symbol=${symbol}&interval=${intervals}`
             );
             if (response.data.status !== "fail") {
                 setData(response.data.data);
@@ -162,8 +162,6 @@ export default function Chart({ previousClose, symbol }) {
         var y = d3.scaleLinear().domain(d3.extent(HighLow)).range([height, 0]);
 
         //xAxis
-        const format = d3.timeFormat("%m/%d/%y %H:%M");
-        const hourFormat = d3.timeFormat("%H:%M");
         var xAxis = svg
             .append("g")
             .attr("class", "xAxis")
@@ -188,17 +186,17 @@ export default function Chart({ previousClose, symbol }) {
             .selectAll(".tick text")
             .attr("fill", "gray")
             .attr("font-size", function () {
-                if (intervals == "30m" || intervals == "1d") {
-                    return "calc(0.5rem+0.15vw)";
+                if (intervals === "30m" || intervals === "1d") {
+                    return "calc(0.5rem+0.2vw)";
                 }
 
-                return "calc(0.75rem + 0.15vw)";
+                return "calc(0.5rem + 0.2vw)";
             });
 
         yAxis
             .selectAll(".tick text")
             .attr("fill", "gray")
-            .attr("font-size", "calc(0.75rem + 0.15vw)");
+            .attr("font-size", "calc(0.5rem + 0.2vw)");
 
         //Get Rid of yAxis path domain
         yAxis.select(".domain").style("display", "none");
@@ -249,8 +247,7 @@ export default function Chart({ previousClose, symbol }) {
                     return updateChart(event);
                 });
 
-            var clip = svg
-                .append("defs")
+            svg.append("defs")
                 .append("svg:clipPath")
                 .attr("id", "clip")
                 .append("svg:rect")
@@ -370,35 +367,33 @@ export default function Chart({ previousClose, symbol }) {
         }
 
         // only for 1m
-        {
-            intervals === "1m" &&
-                svg
-                    .append("path")
-                    .datum(wholeDayTimeLine)
-                    .attr("fill", "none")
-                    .attr("stroke", "#000000")
-                    .attr("stroke-width", 1)
-                    .attr("stroke-linecap", "round")
-                    .attr("stroke-dasharray", "10,10")
-                    .attr(
-                        "d",
-                        d3
-                            .line()
-                            .x(function (d) {
-                                return x(d);
-                            })
-                            .y(y(previousClose))
-                    );
+        if (intervals === "1m") {
+            svg.append("path")
+                .datum(wholeDayTimeLine)
+                .attr("fill", "none")
+                .attr("stroke", "#000000")
+                .attr("stroke-width", 1)
+                .attr("stroke-linecap", "round")
+                .attr("stroke-dasharray", "10,10")
+                .attr(
+                    "d",
+                    d3
+                        .line()
+                        .x(function (d) {
+                            return x(d);
+                        })
+                        .y(y(previousClose))
+                );
         }
+
         //Previous Close Tag
         if (intervals === "1m") {
-            var previousCloseTag = svg
-                .append("text")
+            svg.append("text")
                 .text("$" + previousClose)
                 .attr("id", "previousCloseTag")
-                .attr("x", -margin.left)
-                .attr("y", y(previousClose))
-                .attr("font-size", "1em")
+                .attr("x", 0)
+                .attr("y", y(previousClose) * 0.98)
+                .attr("font-size", "0.75rem")
                 .attr("fill", "gray");
         }
 

@@ -2,7 +2,7 @@ import React from "react";
 import "./App.scss";
 
 //Import React Router Dom
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 
 //Import UserContext;
 import UserContext from "./Context/UserContext";
@@ -37,7 +37,7 @@ function App() {
                 },
             };
 
-            const url = "http://localhost:5000/api/auth/validate";
+            const url = "https://www.plutusbackend.com/api/auth/validate";
             const validate = await axios.post(url, null, axiosConfig);
             if (validate.data.status === "success") {
                 setUserInfo({

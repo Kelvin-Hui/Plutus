@@ -16,7 +16,7 @@ export default function Earning({ symbol }) {
         var temp;
         const getEarning = async () => {
             const response = await axios.get(
-                `http://localhost:5000/api/searchQuote/getData?symbol=${symbol}&type=earning`
+                `https://www.plutusbackend.com/api/searchQuote/getData?symbol=${symbol}&type=earning`
             );
             if (response.data.status !== "fail") {
                 setData(response.data.data);
@@ -47,12 +47,13 @@ export default function Earning({ symbol }) {
     }
 
     function drawEarningChart(data) {
-        var margin = { top: 30, right: 70, bottom: 40, left: 70 };
+        var margin = { top: 40, right: 70, bottom: 40, left: 70 };
         var width =
             ref.current !== null
-                ? ref.current.parentElement.offsetWidth * 0.95 -
-                  margin.left -
-                  margin.right
+                ? (ref.current.parentElement.offsetWidth -
+                      margin.left -
+                      margin.right) *
+                  0.95
                 : 900;
 
         var height =
@@ -71,6 +72,7 @@ export default function Earning({ symbol }) {
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`)
+
             .style("position", "relative");
 
         //Need to format data first;
@@ -118,11 +120,11 @@ export default function Earning({ symbol }) {
         xAxis
             .selectAll(".tick text")
             .attr("fill", "gray")
-            .attr("font-size", "calc(0.6rem + 0.15vw)");
+            .attr("font-size", "calc(0.4rem + 0.2vw)");
 
         //Add new line to xAxis
         function beat_miss(date) {
-            const data = earningChartData.find((el) => el.date == date);
+            const data = earningChartData.find((el) => el.date === date);
             if (!data) return "";
             if (!data.actual) return [" TBD ", "black"];
             return data.actual.raw > data.estimate.raw
@@ -134,7 +136,6 @@ export default function Earning({ symbol }) {
             var el = d3.select(this);
 
             let result = beat_miss(el.data());
-
             var tspan = el
                 .append("tspan")
                 .text(result[0])
@@ -172,13 +173,13 @@ export default function Earning({ symbol }) {
             .attr("class", "legend")
             .attr(
                 "transform",
-                `translate(${width - margin.left - margin.right}, ${
-                    -margin.top - margin.bottom
+                `translate(${width - margin.right * 1.25}, ${
+                    0 - margin.top - margin.bottom * 2
                 })`
             );
         legend
             .append("circle")
-            .attr("cx", 100)
+            .attr("cx", 95)
             .attr("cy", 100)
             .attr("r", "calc(0.3rem + 0.1vw)")
             .style("fill", "gray");
@@ -186,14 +187,14 @@ export default function Earning({ symbol }) {
         if (earningMiss !== undefined) {
             legend
                 .append("circle")
-                .attr("cx", 85)
+                .attr("cx", 90)
                 .attr("cy", 125)
                 .attr("r", "calc(0.3rem + 0.1vw)")
 
                 .style("fill", colorBeats);
             legend
                 .append("circle")
-                .attr("cx", 115)
+                .attr("cx", 100)
                 .attr("cy", 125)
                 .attr("r", "calc(0.3rem + 0.1vw)")
 
@@ -201,7 +202,7 @@ export default function Earning({ symbol }) {
         } else {
             legend
                 .append("circle")
-                .attr("cx", 100)
+                .attr("cx", 95)
                 .attr("cy", 125)
                 .attr("r", "calc(0.3rem + 0.1vw)")
 
@@ -210,17 +211,19 @@ export default function Earning({ symbol }) {
 
         legend
             .append("text")
-            .attr("x", 140)
+            .attr("x", 110)
             .attr("y", 100)
             .text("Estimate")
             .attr("text-anchor", "left")
+            .style("font-size", "0.65rem")
             .style("alignment-baseline", "middle");
         legend
             .append("text")
-            .attr("x", 140)
+            .attr("x", 110)
             .attr("y", 125)
             .text("Actual")
             .attr("text-anchor", "left")
+            .style("font-size", "0.65rem")
             .style("alignment-baseline", "middle");
 
         //Create Tooltips
@@ -236,20 +239,8 @@ export default function Earning({ symbol }) {
             .style("border", "2px solid black")
             .style("border-radius", "15px")
             .style("background-color", "white")
-            .style("font-size", "calc(0.75rem + 0.3vw)")
+            .style("font-size", "calc(0.5rem + 0.3vw)")
             .style("padding", "calc(0.2rem + 0.3vw)");
-
-        function mouseover(event, d) {
-            tooltip
-                .style("top", y(d.actual.raw) + "px")
-                .style("left", x(d.date) + margin.left + margin.right + "px")
-                .style(
-                    "color",
-                    d.actual.raw > d.estimate.raw ? colorBeats : colorMiss
-                )
-                .html(`<b>Actual EPS : ${d.actual.raw}</b>`);
-            tooltip.transition().duration(50).style("opacity", 1);
-        }
 
         function mouseout() {
             tooltip
@@ -276,10 +267,7 @@ export default function Earning({ symbol }) {
             .on("mouseover", function (event, d) {
                 tooltip
                     .style("top", y(d.estimate.raw) + "px")
-                    .style(
-                        "left",
-                        x(d.date) + margin.left + margin.right + "px"
-                    )
+                    .style("left", x(d.date) + margin.left + "px")
                     .html(`<b>Estimate EPS : ${d.estimate.raw}</b>`);
                 tooltip.transition().duration(50).style("opacity", 1);
                 tooltip.style("display", "block");
@@ -308,10 +296,7 @@ export default function Earning({ symbol }) {
             .on("mouseover", function (event, d) {
                 tooltip
                     .style("top", y(d.actual.raw) + "px")
-                    .style(
-                        "left",
-                        x(d.date) + margin.left + margin.right + "px"
-                    )
+                    .style("left", x(d.date) + margin.left + "px")
                     .style(
                         "color",
                         d.actual.raw > d.estimate.raw ? colorBeats : colorMiss

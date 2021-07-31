@@ -64,6 +64,7 @@
                     z-index: 30;
                     background: white;
                     border-bottom: 3px solid black;
+                    font-size: 1rem;
                 }
             }
 
@@ -127,9 +128,20 @@
     }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 770px) {
     .Contentpage {
         #OptionChainCard {
+            .OptionChainHeader {
+                .Title {
+                    font-size: 0.9rem;
+                }
+                span {
+                    font-size: 0.6rem;
+                    select {
+                        font-size: 0.7rem;
+                    }
+                }
+            }
             .OptionsGrid {
                 font-size: 0.75rem;
                 .CALLPUT {
@@ -139,6 +151,12 @@
                     }
                     &.ColSpan3 {
                         display: table-row;
+                    }
+                }
+                .ColName {
+                    th {
+                        font-size: calc(0.65rem + 0.2vw);
+                        top: calc(1.9rem);
                     }
                 }
                 .OpenInterest {

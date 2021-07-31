@@ -160,3 +160,66 @@
         margin: auto auto 0.2% auto;
     }
 }
+
+@media only screen and (max-height: 520px) {
+    .LoginPage {
+        .Snackbar {
+            &.Error {
+                &.Error::before {
+                    height: 12px;
+                    width: 12px;
+                    margin: 4px 6px 4px 0px;
+                    background-size: 12px 12px;
+                }
+            }
+            &.Success {
+                &.Success::before {
+                    height: 12px;
+                    width: 12px;
+                    margin: 4px 6px 4px 0px;
+                    background-size: 12px 12px;
+                }
+            }
+        }
+        .LogoName {
+            height: auto;
+            .Logo {
+                display: none;
+            }
+            .Name {
+                h1 {
+                    font-size: 2rem;
+                    height: auto;
+                    margin: 0 auto;
+                }
+                span {
+                    display: none;
+                }
+            }
+        }
+        .Login {
+            height: 270px;
+            .Form {
+                .Face {
+                    input {
+                        padding: 8px 16px;
+                        font-size: 1rem;
+                    }
+                    span {
+                        font-size: 0.75rem;
+                    }
+                    button {
+                        padding: 8px 16px;
+                    }
+                }
+            }
+        }
+    }
+}
+@media (-webkit-device-pixel-ratio: 2) {
+    .LoginPage {
+        .Login {
+            backdrop-filter: blur(1px) !important;
+        }
+    }
+}

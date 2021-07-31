@@ -84,9 +84,6 @@ exports.getNews = async (req, res) => {
                 const newsTable = $("main > .Nqt7U > .yY3Lee");
 
                 let news = [];
-
-                //console.log(newsTable);
-
                 newsTable.each(function () {
                     const newsSource = $(this).find(".sfyJob").text();
                     const sourceTime = $(this).find(".Adak").text();

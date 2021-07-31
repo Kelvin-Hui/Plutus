@@ -35,10 +35,10 @@ export default function MarketNews({ symbol }) {
         };
         const fetchData = async () => {
             const result = await axios.get(
-                `http://localhost:5000/api/marketNews?symbol=${symbol}`,
+                `https://www.plutusbackend.com/api/marketNews?symbol=${symbol}`,
                 axiosConfig
             );
-            if (result.data.status == "fail") {
+            if (result.data.status === "fail") {
                 toggleSnackbar("Error", result.data.message);
             } else {
                 setNews(result.data.data);

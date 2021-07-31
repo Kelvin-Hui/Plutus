@@ -17,7 +17,9 @@ export default function SearchInput(props) {
 
     async function check(symbol) {
         return axios
-            .get(`http://localhost:5000/api/checkSymbol?symbol=${symbol}`)
+            .get(
+                `https://www.plutusbackend.com/api/checkSymbol?symbol=${symbol}`
+            )
             .then((res) => {
                 return res.data.valid;
             });
@@ -34,7 +36,7 @@ export default function SearchInput(props) {
     }
 
     function enter(e) {
-        if (e.target.value.toUpperCase() != nav.symbol) {
+        if (e.target.value.toUpperCase() !== nav.symbol) {
             let valid = check(e.target.value.toUpperCase());
 
             if (props.setNews !== undefined) {

@@ -397,6 +397,7 @@
             justify-content: center;
             align-items: center;
             height: 60px;
+            max-height: 60px;
             &.Collapsed {
                 max-width: none;
             }

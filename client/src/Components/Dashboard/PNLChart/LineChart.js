@@ -77,7 +77,6 @@ export default function LineChart({ userInfo, transactions }) {
             .range([0, width]);
 
         const format = d3.timeFormat("%m/%d/%y %H:%M");
-        const hourFormat = d3.timeFormat("%H:%M");
         var xAxis = d3
             .axisBottom(x)
             .tickFormat(function (d) {
@@ -148,8 +147,7 @@ export default function LineChart({ userInfo, transactions }) {
                 return updateChart(event);
             });
 
-        var clip = svg
-            .append("defs")
+        svg.append("defs")
             .append("svg:clipPath")
             .attr("id", "clip")
             .append("svg:rect")

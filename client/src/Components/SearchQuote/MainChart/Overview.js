@@ -16,7 +16,7 @@ export default function Overview({ symbol }) {
     React.useEffect(() => {
         const fetchData = async () => {
             const response = await axios.get(
-                `http://localhost:5000/api/searchQuote/getData?symbol=${symbol}&type=overview`
+                `https://www.plutusbackend.com/api/searchQuote/getData?symbol=${symbol}&type=overview`
             );
             if (response.data.status !== "fail") {
                 setData(response.data.data);

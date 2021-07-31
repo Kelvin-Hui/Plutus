@@ -13,7 +13,7 @@ export default function TransactionHistory() {
     const { userInfo, nav } = React.useContext(UserContext);
 
     const filteredTransactions = userInfo.transaction.filter(
-        (data) => data.symbol == nav.symbol
+        (data) => data.symbol === nav.symbol
     );
 
     return (

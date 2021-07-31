@@ -23,7 +23,7 @@ export default function OrderPanel({ lastPrice }) {
 
     const sharesRef = React.useRef();
 
-    const url = "http://localhost:5000/api/order/";
+    const url = "https://www.plutusbackend.com/api/order/";
 
     //toggle snackbar
     function toggleSnackbar(status, msg) {
@@ -63,7 +63,7 @@ export default function OrderPanel({ lastPrice }) {
                 },
                 axiosConfig
             );
-            if (res.data.status == "fail") {
+            if (res.data.status === "fail") {
                 toggleSnackbar("Error", res.data.message);
             } else {
                 toggleSnackbar("Success", res.data.message);

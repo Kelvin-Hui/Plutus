@@ -83,14 +83,14 @@ export default function Financial({ symbol }) {
     React.useEffect(() => {
         const getData = async () => {
             const response = await axios.get(
-                `http://localhost:5000/api/searchQuote/getData?symbol=${symbol}&type=financial`
+                `https://www.plutusbackend.com/api/searchQuote/getData?symbol=${symbol}&type=financial`
             );
             if (response.data.status !== "fail") {
                 setData(response.data.data);
             }
         };
 
-        if (Object.keys(data).length == 0) {
+        if (Object.keys(data).length === 0) {
             getData();
         }
     }, [symbol]);
@@ -135,7 +135,7 @@ export default function Financial({ symbol }) {
                         ))}
                     </ul>
                     <div className="TableContainer">
-                        {Object.keys(data).length != 0 && (
+                        {Object.keys(data).length !== 0 && (
                             <table>
                                 <thead>
                                     <tr>

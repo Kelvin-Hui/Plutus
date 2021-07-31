@@ -46,8 +46,6 @@ export default function Portfolio({ portfolioData, portfolioValue }) {
                     <tbody>
                         {portfolioData.length !== 0 &&
                             portfolioData.map((data, idx) => {
-                                const todayReturnGain =
-                                    data.todayReturn.raw >= 0;
                                 const totalReturnGain =
                                     data.totalReturn.raw >= 0;
                                 return (

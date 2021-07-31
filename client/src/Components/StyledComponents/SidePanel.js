@@ -64,13 +64,13 @@ export default function SidePanel() {
         };
         const resetOrder = async () => {
             const res = await axios.post(
-                "http://localhost:5000/api/order/reset",
+                "https://www.plutusbackend.com/api/order/reset",
                 {
                     userID: userInfo.userID,
                 },
                 axiosConfig
             );
-            if (res.data.status == "fail") {
+            if (res.data.status === "fail") {
                 toggleSnackbar("Error", res.data.message);
             } else {
                 toggleSnackbar("Success", res.data.message);

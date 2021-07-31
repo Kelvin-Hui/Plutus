@@ -27,7 +27,7 @@ export default function SearchQuote({ symbol }) {
     React.useEffect(() => {
         const fetchData = async () => {
             const responseInfo = await axios.get(
-                `http://localhost:5000/api/searchQuote/getInfo?symbol=${symbol}`
+                `https://www.plutusbackend.com/api/searchQuote/getInfo?symbol=${symbol}`
             );
 
             if (responseInfo.data.status !== "fail") {

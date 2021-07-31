@@ -13,12 +13,10 @@ function calcPeriod1() {
     //get todays's day 0 - 6 (Sun-Sat);
     let d = new Date();
     let day = d.getDay();
-    console.log(d.toLocaleString());
-    console.log(day);
 
     //If today is normal weekday;
     if (day !== 0 && day !== 6) {
-        console.log("WeekDay");
+        //WeekDay
         //If Time now > Market Open Time
         //Return 930AM EST Today;
         if (d.valueOf() > market.valueOf()) {
@@ -38,14 +36,14 @@ function calcPeriod1() {
 
     //If today is normal weekend;
     else {
-        console.log("WeekEnd");
+        //WeekEnd
         if (day === 6) {
-            console.log("Sat");
+            //Sat
             //Get Friday's Time;
             return market.setDate(d.getDate() - 1).valueOf() / 1000;
         }
         if (day === 0) {
-            console.log("Sun");
+            //Sun
             //Get Friday's Time;
             return market.setDate(d.getDate() - 2).valueOf() / 1000;
         }

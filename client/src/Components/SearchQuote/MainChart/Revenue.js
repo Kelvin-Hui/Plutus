@@ -24,7 +24,7 @@ export default function Revenue({ symbol }) {
         var temp;
         const getRevenue = async () => {
             const response = await axios.get(
-                `http://localhost:5000/api/searchQuote/getData?symbol=${symbol}&type=revenue`
+                `https://www.plutusbackend.com/api/searchQuote/getData?symbol=${symbol}&type=revenue`
             );
             if (response.data.status !== "fail") {
                 setData(response.data.data);
@@ -146,7 +146,7 @@ export default function Revenue({ symbol }) {
         xAxis
             .selectAll(".tick text")
             .attr("fill", "gray")
-            .attr("font-size", "calc(0.6rem + 0.15vw)");
+            .attr("font-size", "calc(0.5rem + 0.15vw)");
 
         yAxis
             .selectAll(".tick text")
@@ -189,56 +189,58 @@ export default function Revenue({ symbol }) {
             .attr("class", "legend")
             .attr(
                 "transform",
-                `translate(${width - margin.left - margin.right}, ${
-                    -margin.top - margin.bottom * 2
+                `translate(${width - margin.right * 1.25}, ${
+                    0 - margin.top - margin.bottom * 3
                 })`
             );
         legend
             .append("rect")
-            .attr("x", 100)
+            .attr("x", 90)
             .attr("y", 100)
-            .attr("width", 20)
-            .attr("height", 20)
+            .attr("width", 10)
+            .attr("height", 10)
             .style("fill", colorRevenue);
 
         if (negativeAmount) {
             legend
                 .append("rect")
                 .attr("x", 85)
-                .attr("y", 125)
-                .attr("width", 20)
-                .attr("height", 20)
+                .attr("y", 115)
+                .attr("width", 10)
+                .attr("height", 10)
                 .style("fill", colorPositiveEarning);
             legend
                 .append("rect")
-                .attr("x", 115)
-                .attr("y", 125)
-                .attr("width", 20)
-                .attr("height", 20)
+                .attr("x", 95)
+                .attr("y", 115)
+                .attr("width", 10)
+                .attr("height", 10)
                 .style("fill", colorNegativeEarning);
         } else {
             legend
                 .append("rect")
-                .attr("x", 100)
-                .attr("y", 125)
-                .attr("width", 20)
-                .attr("height", 20)
+                .attr("x", 90)
+                .attr("y", 115)
+                .attr("width", 10)
+                .attr("height", 10)
                 .style("fill", colorPositiveEarning);
         }
 
         legend
             .append("text")
-            .attr("x", 150)
-            .attr("y", 110)
+            .attr("x", 110)
+            .attr("y", 105)
             .text("Revenue")
             .attr("text-anchor", "left")
+            .style("font-size", "0.65rem")
             .style("alignment-baseline", "middle");
         legend
             .append("text")
-            .attr("x", 150)
-            .attr("y", 135)
+            .attr("x", 110)
+            .attr("y", 120)
             .text("Earning")
             .attr("text-anchor", "left")
+            .style("font-size", "0.65rem")
             .style("alignment-baseline", "middle");
 
         //Creating Tooltips Trigger
