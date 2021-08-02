@@ -420,13 +420,16 @@
 
                 .NavItem {
                     padding: 2px 6px;
-                    &:not(:last-child):hover {
-                        .NavItemIcon {
-                            fill: gray;
-                        }
-                    }
+                    // &:not(:last-child):hover {
+                    //     .NavItemIcon {
+                    //         fill: gray;
+                    //     }
+                    // }
 
                     &.Selected {
+                        .NavItemIcon {
+                            fill: white;
+                        }
                         &::before {
                             content: "";
                             position: absolute;
@@ -434,10 +437,6 @@
                             height: 1px;
                             width: 100%;
                             background-color: white;
-                        }
-
-                        .NavItemIcon {
-                            fill: white;
                         }
                     }
                     .NavItemIcon {

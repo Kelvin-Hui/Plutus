@@ -308,7 +308,7 @@ export default function LineChart({ userInfo, transactions }) {
 
             realizedPNL.style(
                 "fill",
-                selectedData.currentBalance > 25000 ? "green" : "red"
+                selectedData.currentBalance >= 25000 ? "green" : "red"
             );
 
             verticalLine

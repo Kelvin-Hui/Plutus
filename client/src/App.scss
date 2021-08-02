@@ -8,10 +8,10 @@
     flex-direction: row;
     overflow-y: hidden;
     .Contentpage {
-        // width: fill-available;
         width: stretch;
         height: 100vh;
-        overflow-y: scroll;
+
+        overflow-y: auto;
         overflow-x: hidden;
         background-color: rgba($color: #000000, $alpha: 0.1);
     }
@@ -20,15 +20,9 @@
 @media only screen and (max-width: 900px) {
     .Homepage {
         .Contentpage {
-            height: calc(100vh - 60px) !important;
-        }
-    }
-}
-
-@media only screen and (-webkit-min-device-pixel-ratio: 3) {
-    .Homepage {
-        .Contentpage {
-            height: calc(100vh - 116px) !important;
+            height: -webkit-calc(100% - 60px);
+            height: -moz-calc(100% - 60px);
+            height: calc(100vh - 60px);
         }
     }
 }

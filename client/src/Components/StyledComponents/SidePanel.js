@@ -126,6 +126,10 @@ export default function SidePanel() {
                                 nav.currentPage !== item &&
                                 setNav({ ...nav, currentPage: item })
                             }
+                            onTouch={() =>
+                                nav.currentPage !== item &&
+                                setNav({ ...nav, currentPage: item })
+                            }
                         >
                             <div>{icons[idx]}</div>
                             <span className="NavItemText">{item}</span>

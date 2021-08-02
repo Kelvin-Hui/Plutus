@@ -16,8 +16,6 @@ import UserContext from "../Context/UserContext";
 export default function Homepage() {
     const { nav } = React.useContext(UserContext);
 
-    React.useEffect(() => {}, [nav.symbol]);
-
     return (
         <div className="Homepage">
             <SidePanel />

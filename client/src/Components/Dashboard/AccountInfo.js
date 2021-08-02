@@ -26,7 +26,11 @@ export default function AccountInfo({ userInfo, portfolioValue, todayPNL }) {
                     <span>Plutus </span>
                     for
                     <span>
-                        {new Date().getDate() - userInfo.joinDate.getDate()}
+                        {Math.round(
+                            (new Date().getTime() -
+                                userInfo.joinDate.getTime()) /
+                                (1000 * 60 * 60 * 24)
+                        )}
                     </span>
                     days 🥳🎉
                 </h3>

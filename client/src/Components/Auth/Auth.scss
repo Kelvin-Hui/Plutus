@@ -219,7 +219,7 @@
 @media (-webkit-device-pixel-ratio: 2) {
     .LoginPage {
         .Login {
-            backdrop-filter: blur(1px) !important;
+            backdrop-filter: blur(0.1px) !important;
         }
     }
 }
