@@ -4,6 +4,8 @@ A Stock Trading Simulator 📈 built using MERN stack!
 
 ## 👀Preview
 
+![Project Image](client/src/Assets/snapshot.png)
+
 ## ✨Features
 
 -   Buy & Sell Stock During The Market Hours
@@ -31,7 +33,13 @@ $ npm run start
 ### Build Mode
 
 ```sh
-$ npm run build
+$ cd client && npm run build
+```
+
+### Start Server
+
+```sh
+$ cd server && node server.js
 ```
 
 ## 🔨Built with
@@ -41,6 +49,7 @@ $ npm run build
 -   [React](https://reactjs.org/)
 -   [NodeJS](https://nodejs.org/en/)
 -   [D3.js](https://d3js.org/)
+-   [Redis](https://redis.io/)
 
 ## 📄License
 
