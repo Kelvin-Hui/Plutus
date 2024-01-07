@@ -1,19 +1,19 @@
 'use client';
-import React from 'react';
-import { Input } from '@/components/ui/input';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { useDebouncedCallback } from '@/app/lib/utils';
-import { autoComplete } from '@/app/lib/data';
+import { getAutoComplete } from '@/app/lib/data';
 import { AutoCompleteSymbols } from '@/app/lib/definitions';
-import { useRouter } from 'next/navigation';
+import { useDebouncedCallback } from '@/app/lib/utils';
+import { Command, CommandItem, CommandList } from '@/components/ui/command';
+import { Input } from '@/components/ui/input';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Command, CommandItem, CommandList } from '@/components/ui/command';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/navigation';
+import React from 'react';
 
-export default function SearchBar({ placeholder }: { placeholder: string }) {
+export function SearchBar({ placeholder }: { placeholder: string }) {
   const [symbols, setSymbols] = React.useState<AutoCompleteSymbols[]>([]);
   const [openMenu, setOpenMenu] = React.useState<boolean>(false);
 
@@ -21,7 +21,7 @@ export default function SearchBar({ placeholder }: { placeholder: string }) {
 
   const handleSearch = useDebouncedCallback(async (term: string) => {
     if (term !== '') {
-      const result = await autoComplete(term.toUpperCase());
+      const result = await getAutoComplete(term.toUpperCase());
       setSymbols(result);
       setOpenMenu(true);
     } else {
@@ -29,7 +29,6 @@ export default function SearchBar({ placeholder }: { placeholder: string }) {
       setOpenMenu(false);
     }
   }, 300);
-
 
   return (
     <>
