@@ -30,7 +30,7 @@ export async function RecommendationSymbols({ symbol }: { symbol: string }) {
               <Card>
                 <CardHeader>
                   <CardTitle>{symbol}</CardTitle>
-                  <CardDescription>{shortName}</CardDescription>
+                  <CardDescription className="text-ellipsis whitespace-nowrap">{shortName}</CardDescription>
                 </CardHeader>
 
                 <CardContent className="flex justify-between">

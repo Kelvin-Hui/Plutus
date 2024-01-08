@@ -10,7 +10,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 w-full bg-white dark:bg-black">
         <div className="container flex flex-row items-center justify-between pt-4">
           <div>
-            <Link key="home" href="/">
+            <Link key="home" href="/dashboard">
               <h2 className="text-3xl font-extrabold tracking-normal">
                 Plutus Logo/
               </h2>
