@@ -19,7 +19,7 @@ export async function getQuote(symbol: string) {
       'regularMarketChangePercent',
     ],
   };
-  const result = await yahooFinance.quote(symbol, queryOptions);
+  const result = await yahooFinance.quote(symbol);
   //symbol, regularMarketPrice, fullExchangeName, shortName,  regularMarketChangePercent;
   return result;
 }
@@ -44,7 +44,7 @@ export async function getChartData(symbol: string, interval: Interval) {
   const timestamp = result?.timestamp;
   const quote = result?.indicators?.quote[0];
 
-  const ohlcData = timestamp.map((time: number, idx: number) => ({
+  const ohlcData = timestamp?.map((time: number, idx: number) => ({
     date: new Date(time * 1000).toLocaleTimeString([], {
       hour: '2-digit',
       minute: '2-digit',
@@ -57,7 +57,7 @@ export async function getChartData(symbol: string, interval: Interval) {
     volume: quote.volume[idx],
   }));
 
-  const color = quote.close[0] > quote.close.slice(-1) ? 'red' : 'green';
+  const color = quote?.close?.[0] > quote?.close?.slice(-1) ? 'red' : 'green';
 
   return [ohlcData, color];
 }
@@ -80,6 +80,15 @@ export async function getQuoteNews(symbol: string) {
 export async function getRecommandationSymbols(symbol: string) {
   const request = await yahooFinance.recommendationsBySymbol(symbol);
   const promises = request.recommendedSymbols.map(async (obj) => {
+    return yahooFinance.quoteCombine(obj.symbol);
+  });
+  const result = await Promise.all(promises);
+  return result;
+}
+
+export async function getTrendingSymbols(){
+  const trending = await yahooFinance.trendingSymbols('US', {count:10, lang : 'en-us'});
+  const promises = trending.quotes.map(async (obj) =>{
     return yahooFinance.quoteCombine(obj.symbol);
   });
   const result = await Promise.all(promises);

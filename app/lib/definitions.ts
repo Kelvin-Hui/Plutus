@@ -23,5 +23,7 @@ export type Quote = {
   shortName?: string;
   regularMarketChangePercent?: number;
   regularMarketPrice?: number;
+  regularMarketVolume?: number;
+  averageDailyVolume10Day?: number;
   symbol: string;
 };

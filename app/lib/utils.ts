@@ -60,8 +60,9 @@ export function getStartingPeriod() {
   return marketOpen.valueOf() / 1000;
 }
 
-export function numberFormat(num: number) {
-  if (num >= 10000) {
+export function numberFormat(num: number|undefined) {
+  if(num === undefined) return num;
+  if (num >= 100000) {
     let formatter = Intl.NumberFormat('en', { notation: 'compact' });
     return formatter.format(num);
   }

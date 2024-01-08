@@ -1,3 +1,4 @@
+import { TrendingSymbols } from "@/components/TrendingSymbols"
 import { WatchList } from "@/components/WatchList"
 
 export default function Page() {
@@ -6,7 +7,7 @@ export default function Page() {
     <div>ProfolioGraph</div>
     <div>DonutChart</div>
     <WatchList/>
-    <div>TrendingSymbols</div>
+    <TrendingSymbols/>
     </div>
   )
 }
