@@ -1,4 +1,4 @@
-import { type ClassValue, clsx } from 'clsx';
+import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -58,4 +58,12 @@ export function getStartingPeriod() {
     }
   }
   return marketOpen.valueOf() / 1000;
+}
+
+export function numberFormat(num: number) {
+  if (num >= 10000) {
+    let formatter = Intl.NumberFormat('en', { notation: 'compact' });
+    return formatter.format(num);
+  }
+  return num;
 }

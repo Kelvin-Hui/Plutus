@@ -61,3 +61,27 @@ export async function getChartData(symbol: string, interval: Interval) {
 
   return [ohlcData, color];
 }
+
+export async function getSummaryDetail(symbol: string) {
+  const result = await yahooFinance.quoteSummary(symbol, {
+    modules: ['summaryDetail'],
+  });
+  return result.summaryDetail;
+}
+
+export async function getQuoteNews(symbol: string) {
+  const result = await yahooFinance.search(symbol, {
+    quotesCount: 0,
+    newsCount: 10,
+  });
+  return result?.news;
+}
+
+export async function getRecommandationSymbols(symbol: string) {
+  const request = await yahooFinance.recommendationsBySymbol(symbol);
+  const promises = request.recommendedSymbols.map(async (obj) => {
+    return yahooFinance.quoteCombine(obj.symbol);
+  });
+  const result = await Promise.all(promises);
+  return result;
+}

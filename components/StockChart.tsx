@@ -6,7 +6,7 @@ export async function StockChart({ symbol }: { symbol: string }) {
 
   return (
     <>
-      <Card className="relative">
+      <Card className="flex items-center">
         <AreaChart
           data={chartData}
           index="date"

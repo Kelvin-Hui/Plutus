@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen flex-col">
-      <header className="sticky top-0 w-full">
+      <header className="sticky top-0 w-full bg-white dark:bg-black">
         <div className="container flex flex-row items-center justify-between pt-4">
           <div>
             <Link key="home" href="/">

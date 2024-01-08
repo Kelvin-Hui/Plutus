@@ -17,3 +17,11 @@ export type Interval =
   | '1wk'
   | '1mo'
   | '3mo';
+
+export type Quote = {
+  [key: string]: any;
+  shortName?: string;
+  regularMarketChangePercent?: number;
+  regularMarketPrice?: number;
+  symbol: string;
+};
