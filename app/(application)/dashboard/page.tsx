@@ -1,7 +1,7 @@
-import { BalanceChart } from "@/components/BalanceChart"
-import { ProfolioInfo } from "@/components/ProfolioInfo"
-import { TrendingSymbols } from "@/components/TrendingSymbols"
-import { WatchList } from "@/components/WatchList"
+import { BalanceChart } from "@/app/(application)/dashboard/components/BalanceChart"
+import { ProfolioInfo } from "@/app/(application)/dashboard/components/ProfolioInfo"
+import { TrendingSymbols } from "@/app/(application)/dashboard/components/TrendingSymbols"
+import { WatchList } from "@/app/(application)/dashboard/components/WatchList"
 
 export default function Page() {
   return(

@@ -2,7 +2,7 @@ import { getQuoteNews } from '@/app/lib/data';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
-import { Badge } from './ui/badge';
+import { Badge } from '../../../../../components/ui/badge';
 
 export function NewsItem({
   title,
