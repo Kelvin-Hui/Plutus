@@ -86,9 +86,12 @@ export async function getRecommandationSymbols(symbol: string) {
   return result;
 }
 
-export async function getTrendingSymbols(){
-  const trending = await yahooFinance.trendingSymbols('US', {count:10, lang : 'en-us'});
-  const promises = trending.quotes.map(async (obj) =>{
+export async function getTrendingSymbols() {
+  const trending = await yahooFinance.trendingSymbols('US', {
+    count: 10,
+    lang: 'en-us',
+  });
+  const promises = trending.quotes.map(async (obj) => {
     return yahooFinance.quoteCombine(obj.symbol);
   });
   const result = await Promise.all(promises);

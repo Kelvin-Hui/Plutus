@@ -32,14 +32,17 @@ export function NewsItem({
           <Badge>{publisher}</Badge>
         </div>
       </header>
-      {(!imageURL)? <PhotoIcon width={140} height={140} className='w-auto h-auto'/> :
-      <Image
-        alt="thumbnail"
-        src={imageURL}
-        width={72}
-        height={72}
-        className="h-auto w-auto"
-      />}
+      {!imageURL ? (
+        <PhotoIcon width={140} height={140} className="h-auto w-auto" />
+      ) : (
+        <Image
+          alt="thumbnail"
+          src={imageURL}
+          width={72}
+          height={72}
+          className="h-auto w-auto"
+        />
+      )}
     </a>
   );
 }

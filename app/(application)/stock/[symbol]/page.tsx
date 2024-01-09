@@ -1,10 +1,10 @@
-import { KeyStats } from '@/app/(application)/stock/[symbol]/components/KeyStats';
-import { NewsTable } from '@/app/(application)/stock/[symbol]/components/NewsTable';
-import { OrderPanel } from '@/app/(application)/stock/[symbol]/components/OrderPanel';
-import { QuoteHeader } from '@/app/(application)/stock/[symbol]/components/QuoteHeader';
-import { RecommendationSymbols } from '@/app/(application)/stock/[symbol]/components/RecommandationSymbols';
-import { StockChart } from '@/app/(application)/stock/[symbol]/components/StockChart';
-import { TranscationHistory } from '@/components/TranscationHistory';
+import { KeyStats } from '@/app/(application)/stock/[symbol]/components/key-stats';
+import { NewsTable } from '@/app/(application)/stock/[symbol]/components/news-table';
+import { OrderPanel } from '@/app/(application)/stock/[symbol]/components/order-panel';
+import { QuoteHeader } from '@/app/(application)/stock/[symbol]/components/quote-header';
+import { RecommendationSymbols } from '@/app/(application)/stock/[symbol]/components/recommandation-symbols';
+import { StockChart } from '@/app/(application)/stock/[symbol]/components/stock-chart';
+import { TranscationHistory } from '@/app/(application)/stock/[symbol]/components/transcation-history';
 
 export default async function Page({ params }: { params: { symbol: string } }) {
   const symbol = params.symbol;

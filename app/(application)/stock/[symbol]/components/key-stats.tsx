@@ -27,7 +27,7 @@ export async function KeyStats({ symbol }: { symbol: string }) {
             return (
               <div key={idx} className="flex flex-col">
                 <h2 className="text-muted-foreground underline">{obj.key}</h2>
-                <span>{numberFormat(stats?.[obj.value]) ?? "Unavailable"}</span>
+                <span>{numberFormat(stats?.[obj.value]) ?? 'Unavailable'}</span>
               </div>
             );
           })}

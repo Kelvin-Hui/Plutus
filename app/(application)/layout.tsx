@@ -1,5 +1,5 @@
-import { ModeToggle } from '@/components/ModeToggle';
-import { SearchBar } from '@/components/SearchBar';
+import { ModeToggle } from '@/components/mode-toggle';
+import { SearchBar } from '@/components/search-bar';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
