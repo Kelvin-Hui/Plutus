@@ -1,7 +1,6 @@
 import { getChartData, getQuote } from "@/app/lib/data";
 import { cn } from "@/app/lib/utils";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import { AreaChart, BadgeDelta } from "@tremor/react";
 import Link from "next/link";
 
@@ -30,14 +29,12 @@ export async function WatchListItem({symbol} : {symbol : string}){
                 showXAxis={false}
                 showYAxis={false}
                 showTooltip={false}
-                className="h-10 w-36 justify-self-center"
+                className="h-10 w-20 self-center"
             />
             <div className="flex items-center justify-self-end">
                 <h1 className={cn("text-green-600",{"text-red-600" : !increasing})}>${regularMarketPrice}</h1>
                 <BadgeDelta deltaType={increasing? "moderateIncrease" : "moderateDecrease"}>{regularMarketChangePercent?.toFixed(2)}%</BadgeDelta>
-                <EllipsisHorizontalIcon className="h-6 w-6"/>
             </div>
-            
         </div>
     )
 
@@ -47,7 +44,7 @@ export function WatchList(){
     const symbolList = ["AAPL", "NFLX", "AMZN", "TQQQ", "SPY", "DIS"]
 
     return(
-        <Card className="w-1/2">
+        <Card className="w-full h-full overflow-auto flex-auto">
             <CardHeader>
                 <CardTitle>Your Watch List</CardTitle>
             </CardHeader>

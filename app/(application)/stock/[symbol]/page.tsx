@@ -4,7 +4,7 @@ import { OrderPanel } from '@/app/(application)/stock/[symbol]/components/OrderP
 import { QuoteHeader } from '@/app/(application)/stock/[symbol]/components/QuoteHeader';
 import { RecommendationSymbols } from '@/app/(application)/stock/[symbol]/components/RecommandationSymbols';
 import { StockChart } from '@/app/(application)/stock/[symbol]/components/StockChart';
-import { TranscationHistory } from '@/app/(application)/stock/[symbol]/components/TranscationHistory';
+import { TranscationHistory } from '@/components/TranscationHistory';
 
 export default async function Page({ params }: { params: { symbol: string } }) {
   const symbol = params.symbol;

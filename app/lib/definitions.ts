@@ -27,3 +27,21 @@ export type Quote = {
   averageDailyVolume10Day?: number;
   symbol: string;
 };
+
+
+export type PNLData = { 
+  symbol : string;
+  shares : number;
+  averageCost : number;
+  pnl : number;
+  diversity: number;
+}
+
+export type TranscationData = {
+  date? : Date;
+  symbol? : string;
+  shares : number;
+  cost : number;
+  totalCost? : number;
+  userId? : string;
+}
