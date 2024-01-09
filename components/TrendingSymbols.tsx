@@ -38,10 +38,7 @@ export function TrendingSymbolItem({quote} : {quote : Quote}){
 }
 
 export async function TrendingSymbols(){
-
     const trending = await getTrendingSymbols();
-    console.log(trending);
-
     return(
         <Card>
             <CardHeader>
