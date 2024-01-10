@@ -1,4 +1,5 @@
 'use server';
+
 import yahooFinance from 'yahoo-finance2';
 import { Interval } from './definitions';
 import { getStartingPeriod } from './utils';
