@@ -17,13 +17,14 @@ export async function RecommendationSymbols({ symbol }: { symbol: string }) {
     <>
       <div className="flex w-full items-center justify-between gap-4">
         {result.map((quote) => {
-          let {
+          const {
             symbol,
             shortName,
             regularMarketPrice,
             regularMarketChangePercent,
           } = quote;
-          regularMarketChangePercent = regularMarketChangePercent ?? 0;
+
+          const increasing = (regularMarketChangePercent ?? 0) >= 0;
 
           return (
             <Link key={symbol} href={`/stock/${symbol}`} className="w-full">
@@ -37,17 +38,15 @@ export async function RecommendationSymbols({ symbol }: { symbol: string }) {
 
                 <CardContent className="flex justify-between">
                   <h2
-                    className={cn('text-xl text-green-600', {
-                      'text-red-600': regularMarketChangePercent <= 0,
+                    className={cn('text-green-600', {
+                      'text-red-600': !increasing,
                     })}
                   >
                     ${regularMarketPrice}
                   </h2>
                   <BadgeDelta
                     deltaType={
-                      regularMarketChangePercent <= 0
-                        ? 'moderateDecrease'
-                        : 'moderateIncrease'
+                      increasing ? 'moderateIncrease' : 'moderateDecrease'
                     }
                   >
                     {regularMarketChangePercent?.toFixed(2)} %{' '}

@@ -35,6 +35,13 @@ export type PNLData = {
   pnl: number;
 };
 
+export type ProfolioData = {
+  symbol?: string;
+  quantity?: number;
+  cost?: number;
+  marketPrice?: number;
+};
+
 export type ProfolioItemData = {
   symbol: string;
   quantity: number;

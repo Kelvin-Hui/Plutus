@@ -22,6 +22,20 @@ export async function getCurrentUser() {
   return session?.user;
 }
 
+export async function getBuyingPower() {
+  const user = await getCurrentUser();
+  if (!user?.id) return 0;
+  const obj = await prisma.user.findUnique({
+    where: {
+      id: user?.id,
+    },
+    select: {
+      cash: true,
+    },
+  });
+  return Number(obj?.cash);
+}
+
 export async function getWatchListSymbols() {
   const user = await getCurrentUser();
   const symbolList = await prisma.watchListItem.findMany({
@@ -65,6 +79,7 @@ export async function getBalanceChartData() {
 
 export async function getTranscations(symbol?: string | undefined) {
   const user = await getCurrentUser();
+  if (!user?.id) return [];
   const transcations = await prisma.transcation.findMany({
     where: {
       userId: {
@@ -80,18 +95,24 @@ export async function getTranscations(symbol?: string | undefined) {
       cost: true,
       createdAt: true,
     },
+    orderBy: {
+      createdAt: 'desc',
+    },
   });
   return transcations?.map((row) => {
     return { ...row, cost: Number(row.cost) };
   });
 }
 
-export async function getProfolio() {
+export async function getProfolio(symbol?: string | undefined) {
   const user = await getCurrentUser();
   const profolio = await prisma.profolioItem.findMany({
     where: {
       userId: {
-        equals: user?.id,
+        equals: !user?.id ? '0' : user?.id,
+      },
+      symbol: {
+        equals: symbol,
       },
     },
     select: {
@@ -100,13 +121,24 @@ export async function getProfolio() {
       cost: true,
     },
   });
+  const symbolList = profolio?.map((item) => item.symbol);
+  if (profolio.length === 0) {
+    if (!!symbol) {
+      symbolList.push(symbol);
+    } else {
+      return [];
+    }
+  }
+  if (profolio.length === 0 && !!symbol) symbolList.push(symbol);
+  const marketPrices = await getQuote(symbolList);
 
-  const marketPrices = await getQuote(profolio?.map((item) => item.symbol));
-  return profolio?.map((row, idx) => {
+  const castedProfolio = profolio.map((row) => {
+    return { ...row, cost: Number(row.cost) };
+  });
+  return symbolList?.map((_, idx) => {
     return {
-      ...row,
-      cost: Number(row.cost),
       marketPrice: marketPrices[idx].regularMarketPrice,
+      ...castedProfolio[idx],
     };
   });
 }

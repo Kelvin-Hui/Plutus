@@ -30,6 +30,9 @@ export const SignOutButton = () => {
 
 export async function UserAvatar() {
   const session = await auth();
+  const isLoggedIn = !!session?.user;
+  if (!isLoggedIn) return null;
+
   const username = session?.user.username;
   return (
     <DropdownMenu>

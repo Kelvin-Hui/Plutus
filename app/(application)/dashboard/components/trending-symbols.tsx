@@ -32,15 +32,10 @@ export function TrendingSymbolItem({ quote }: { quote: Quote }) {
         <span className="text-sm text-muted-foreground">{shortName}</span>
       </div>
       <div className="flex justify-around">
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center text-sm">
           <h1 className="text-muted-foreground underline">Volume</h1>
           <h1>{numberFormat(regularMarketVolume)}</h1>
         </div>
-
-        {/* <div className="flex flex-col items-center">
-                    <h1 className="text-muted-foreground underline">Average Volume</h1>
-                    <h1>{numberFormat(averageDailyVolume10Day)}</h1>
-                </div> */}
       </div>
       <div className="flex items-center justify-self-end">
         <h1 className={cn('text-green-600', { 'text-red-600': !increasing })}>

@@ -1,15 +1,19 @@
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { getBuyingPower, getProfolio } from '@/data/user';
+import { BuyForm } from './buy-form';
+import { SellForm } from './sell-form';
 
-export function OrderPanel({ symbol }: { symbol: string }) {
+export async function OrderPanel({
+  symbol,
+  userId,
+}: {
+  symbol: string;
+  userId: string | undefined;
+}) {
+  const [buyingPower, profolioData] = await Promise.all([
+    getBuyingPower(),
+    getProfolio(symbol),
+  ]);
   return (
     <Tabs defaultValue="buy" className="w-1/2">
       <TabsList className="grid w-full grid-cols-2">
@@ -18,7 +22,13 @@ export function OrderPanel({ symbol }: { symbol: string }) {
       </TabsList>
 
       <TabsContent value="buy">
-        <Card>
+        <BuyForm
+          symbol={symbol}
+          userId={userId}
+          buyingPower={buyingPower}
+          profolioData={profolioData[0]}
+        />
+        {/* <Card>
           <CardHeader>
             <CardTitle>{symbol}</CardTitle>
             <CardDescription></CardDescription>
@@ -28,12 +38,19 @@ export function OrderPanel({ symbol }: { symbol: string }) {
           </CardContent>
           <CardFooter>
             <Button className="w-full bg-green-600">Buy</Button>
+            <Link href="/login" className='w-full'><Button className='w-full'>Sign In First</Button></Link>
           </CardFooter>
-        </Card>
+        </Card> */}
       </TabsContent>
 
       <TabsContent value="sell">
-        <Card>
+        <SellForm
+          symbol={symbol}
+          userId={userId}
+          buyingPower={buyingPower}
+          profolioData={profolioData[0]}
+        />
+        {/* <Card>
           <CardHeader>
             <CardTitle>{symbol}</CardTitle>
             <CardDescription></CardDescription>
@@ -44,7 +61,7 @@ export function OrderPanel({ symbol }: { symbol: string }) {
           <CardFooter>
             <Button className="w-full bg-red-600">Sell</Button>
           </CardFooter>
-        </Card>
+        </Card> */}
       </TabsContent>
     </Tabs>
   );

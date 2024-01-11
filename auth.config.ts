@@ -1,4 +1,4 @@
-import { DEFAULT_REDIRECT_URL, authRoutes } from '@/route';
+import { AUTH_URL, DEFAULT_REDIRECT_URL, authRoutes } from '@/route';
 import type { NextAuthConfig } from 'next-auth';
 
 export const authConfig = {
@@ -20,7 +20,7 @@ export const authConfig = {
         return true;
       } else {
         if (isOnDashboard) {
-          return Response.redirect(new URL(DEFAULT_REDIRECT_URL, nextUrl));
+          return Response.redirect(new URL(AUTH_URL, nextUrl));
         }
         return true;
       }

@@ -37,7 +37,6 @@ export async function TranscationsHistory({
 }: {
   data: TranscationData[];
 }) {
-  console.log(data);
   return <DataTable data={data} columns={transcationColumns} />;
 }
 

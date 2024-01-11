@@ -68,3 +68,12 @@ export function numberFormat(num: number | undefined) {
   }
   return num;
 }
+
+export function currencyFormat(num: number | undefined) {
+  if (num === undefined || isNaN(num)) return '$0';
+  let formatter = Intl.NumberFormat('en-us', {
+    style: 'currency',
+    currency: 'USD',
+  });
+  return formatter.format(num);
+}
