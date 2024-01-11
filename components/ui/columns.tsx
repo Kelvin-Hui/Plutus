@@ -1,6 +1,6 @@
 'use client';
 
-import { PNLData, TranscationData } from '@/app/lib/definitions';
+import { PNLData, TranscationData } from '@/types';
 import { ColumnDef } from '@tanstack/react-table';
 
 export const pnlColumns: ColumnDef<PNLData>[] = [
@@ -9,26 +9,22 @@ export const pnlColumns: ColumnDef<PNLData>[] = [
     header: 'Symbol',
   },
   {
-    accessorKey: 'shares',
-    header: 'Shares',
+    accessorKey: 'quantity',
+    header: 'Quantity',
   },
   {
-    accessorKey: 'averageCost',
+    accessorKey: 'cost',
     header: 'Average Cost',
   },
   {
     accessorKey: 'pnl',
     header: 'PNL',
   },
-  {
-    accessorKey: 'diversity',
-    header: 'Diversity',
-  },
 ];
 
 export const transcationColumns: ColumnDef<TranscationData>[] = [
   {
-    accessorKey: 'date',
+    accessorKey: 'createdAt',
     header: 'Date',
     cell: (row) => {
       const date = row.getValue<Date>();
@@ -40,8 +36,8 @@ export const transcationColumns: ColumnDef<TranscationData>[] = [
     header: 'Symbol',
   },
   {
-    accessorKey: 'shares',
-    header: 'Shares',
+    accessorKey: 'quantity',
+    header: 'Quantity',
   },
   {
     accessorKey: 'cost',
@@ -51,7 +47,8 @@ export const transcationColumns: ColumnDef<TranscationData>[] = [
     accessorKey: 'totalCost',
     header: 'Total Cost',
     cell: ({ row }) => {
-      return <div>{row.original.shares * row.original.cost}</div>;
+      const totalCost = (row.original.quantity * row.original.cost).toFixed(2);
+      return <div>{totalCost}</div>;
     },
   },
 ];

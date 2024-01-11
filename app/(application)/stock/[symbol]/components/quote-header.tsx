@@ -1,5 +1,5 @@
-import { getQuote } from '@/app/lib/data';
-import { cn } from '@/app/lib/utils';
+import { getQuote } from '@/data/stock';
+import { cn } from '@/lib/utils';
 import { BadgeDelta } from '@tremor/react';
 import { notFound } from 'next/navigation';
 

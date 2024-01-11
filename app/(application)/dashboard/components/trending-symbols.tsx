@@ -1,6 +1,3 @@
-import { getTrendingSymbols } from '@/app/lib/data';
-import { Quote } from '@/app/lib/definitions';
-import { cn, numberFormat } from '@/app/lib/utils';
 import {
   Card,
   CardContent,
@@ -8,6 +5,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components//ui/card';
+import { getTrendingSymbols } from '@/data/stock';
+import { cn, numberFormat } from '@/lib/utils';
+import { Quote } from '@/types';
 import { BadgeDelta } from '@tremor/react';
 import Link from 'next/link';
 
@@ -44,7 +44,7 @@ export function TrendingSymbolItem({ quote }: { quote: Quote }) {
       </div>
       <div className="flex items-center justify-self-end">
         <h1 className={cn('text-green-600', { 'text-red-600': !increasing })}>
-          ${regularMarketPrice}
+          ${regularMarketPrice?.toFixed(2)}
         </h1>
         <BadgeDelta
           deltaType={increasing ? 'moderateIncrease' : 'moderateDecrease'}

@@ -1,6 +1,6 @@
-import { getSummaryDetail } from '@/app/lib/data';
-import { numberFormat } from '@/app/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getSummaryDetail } from '@/data/stock';
+import { numberFormat } from '@/lib/utils';
 
 export async function KeyStats({ symbol }: { symbol: string }) {
   const stats = await getSummaryDetail(symbol);

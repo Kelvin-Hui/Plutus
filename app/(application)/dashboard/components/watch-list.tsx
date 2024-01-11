@@ -1,5 +1,3 @@
-import { getChartData, getQuote } from '@/app/lib/data';
-import { cn } from '@/app/lib/utils';
 import {
   Card,
   CardContent,
@@ -7,6 +5,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { getChartData, getQuote } from '@/data/stock';
+import { getWatchListSymbols } from '@/data/user';
+import { cn } from '@/lib/utils';
 import { AreaChart, BadgeDelta } from '@tremor/react';
 import Link from 'next/link';
 
@@ -44,7 +45,7 @@ export async function WatchListItem({ symbol }: { symbol: string }) {
       />
       <div className="flex items-center justify-self-end">
         <h1 className={cn('text-green-600', { 'text-red-600': !increasing })}>
-          ${regularMarketPrice}
+          ${regularMarketPrice?.toFixed(2)}
         </h1>
         <BadgeDelta
           deltaType={increasing ? 'moderateIncrease' : 'moderateDecrease'}
@@ -56,8 +57,9 @@ export async function WatchListItem({ symbol }: { symbol: string }) {
   );
 }
 
-export function WatchList() {
-  const symbolList = ['AAPL', 'NFLX', 'AMZN', 'TQQQ', 'SPY', 'DIS'];
+export async function WatchList() {
+  const symbolList = await getWatchListSymbols();
+  // const symbolList = watchList.map((obj) => obj.symbol);
 
   return (
     <Card className="h-full w-full flex-auto overflow-auto">
@@ -68,6 +70,9 @@ export function WatchList() {
         {symbolList.map((symbol) => {
           return <WatchListItem key={'WatchList_' + symbol} symbol={symbol} />;
         })}
+        {symbolList.length === 0 && (
+          <span className="self-center font-bold">Empty List</span>
+        )}
       </CardContent>
       <CardFooter>Last Update: {new Date().toLocaleString()}</CardFooter>
     </Card>

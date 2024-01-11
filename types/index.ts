@@ -30,16 +30,22 @@ export type Quote = {
 
 export type PNLData = {
   symbol: string;
-  shares: number;
-  averageCost: number;
+  quantity: number;
+  cost: number;
   pnl: number;
-  diversity: number;
 };
 
+export type ProfolioItemData = {
+  symbol: string;
+  quantity: number;
+  cost: number;
+  marketPrice: number;
+  marketValue?: number;
+};
 export type TranscationData = {
   date?: Date;
   symbol?: string;
-  shares: number;
+  quantity: number;
   cost: number;
   totalCost?: number;
   userId?: string;

@@ -1,4 +1,4 @@
-import { getChartData } from '@/app/lib/data';
+import { getChartData } from '@/data/stock';
 import { AreaChart, Card } from '@tremor/react';
 
 export async function StockChart({ symbol }: { symbol: string }) {

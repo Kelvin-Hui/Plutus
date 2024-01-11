@@ -1,7 +1,4 @@
 'use client';
-import { getAutoComplete } from '@/app/lib/data';
-import { AutoCompleteSymbols } from '@/app/lib/definitions';
-import { useDebouncedCallback } from '@/app/lib/utils';
 import { Command, CommandItem, CommandList } from '@/components/ui/command';
 import { Input } from '@/components/ui/input';
 import {
@@ -9,6 +6,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { getAutoComplete } from '@/data/stock';
+import { useDebouncedCallback } from '@/lib/utils';
+import { AutoCompleteSymbols } from '@/types';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import React from 'react';

@@ -1,8 +1,9 @@
 'use server';
 
+import { getStartingPeriod } from '@/lib/utils';
+import { Interval } from '@/types';
 import yahooFinance from 'yahoo-finance2';
-import { Interval } from './definitions';
-import { getStartingPeriod } from './utils';
+
 export async function getAutoComplete(term: string) {
   const result = await yahooFinance.search(term, { quotesCount: 5 });
   return result.quotes
@@ -10,7 +11,7 @@ export async function getAutoComplete(term: string) {
     .map((quote) => ({ symbol: quote.symbol, name: quote.shortname }));
 }
 
-export async function getQuote(symbol: string) {
+export async function getQuote(symbol: string | string[]) {
   const queryOptions = {
     fields: [
       'symbol',

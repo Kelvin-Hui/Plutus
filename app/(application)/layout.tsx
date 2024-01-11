@@ -2,7 +2,6 @@ import { ModeToggle } from '@/components/mode-toggle';
 import { SearchBar } from '@/components/search-bar';
 import { UserAvatar } from '@/components/user-avatar';
 
-
 import Link from 'next/link';
 
 export default function layout({ children }: { children: React.ReactNode }) {
@@ -21,7 +20,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
             <SearchBar placeholder="Search Stock Symbols" />
             <nav className="flex items-center gap-2">
               <ModeToggle />
-              <UserAvatar/>
+              <UserAvatar />
             </nav>
           </div>
         </div>

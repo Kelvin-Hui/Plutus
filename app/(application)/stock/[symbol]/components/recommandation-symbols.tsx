@@ -1,5 +1,3 @@
-import { getRecommandationSymbols } from '@/app/lib/data';
-import { cn } from '@/app/lib/utils';
 import {
   Card,
   CardContent,
@@ -7,6 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { getRecommandationSymbols } from '@/data/stock';
+import { cn } from '@/lib/utils';
 import { BadgeDelta } from '@tremor/react';
 import Link from 'next/link';
 
