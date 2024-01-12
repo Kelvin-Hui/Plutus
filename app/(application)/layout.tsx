@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen flex-col">
-      <header className="sticky top-0 w-full bg-[hsl(var(--background))]">
+      <header className="sticky top-0 z-50 w-full bg-[hsl(var(--background))]">
         <div className="container flex flex-row items-center justify-between pt-4">
           <div>
             <Link key="home" href="/dashboard">
@@ -17,7 +17,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
             </Link>
           </div>
           <div className="flex flex-1 items-center justify-end space-x-2">
-            <SearchBar placeholder="Search Stock Symbols" />
+            <SearchBar placeholder="Search Symbols" />
             <nav className="flex items-center gap-2">
               <ModeToggle />
               <UserAvatar />

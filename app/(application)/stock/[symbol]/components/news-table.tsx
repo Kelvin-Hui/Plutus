@@ -1,8 +1,8 @@
+import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getQuoteNews } from '@/data/stock';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
-import { Badge } from '../../../../../components/ui/badge';
 
 export function NewsItem({
   title,
@@ -21,7 +21,7 @@ export function NewsItem({
     <a
       href={link}
       target="_blank"
-      className="container mb-4 flex flex-row justify-between rounded-md border-2 border-solid p-4"
+      className="container mb-4 flex flex-row justify-between rounded-md border-2 border-solid p-4 hover:bg-muted/50"
     >
       <header>
         <h2 className="text-xl font-medium">{title}</h2>

@@ -7,6 +7,16 @@ import { StockChart } from '@/app/(application)/stock/[symbol]/components/stock-
 import { TranscationHistory } from '@/app/(application)/stock/[symbol]/components/transcation-history';
 import { auth } from '@/auth';
 
+export async function generateMetadata({
+  params,
+}: {
+  params: { symbol: string };
+}) {
+  return {
+    title: params.symbol,
+  };
+}
+
 export default async function Page({ params }: { params: { symbol: string } }) {
   const symbol = params.symbol;
   const session = await auth();

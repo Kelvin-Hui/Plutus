@@ -7,7 +7,10 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Plutus',
+  title: {
+    template: '%s | Plutus',
+    default: 'Plutus',
+  },
   description: 'Plutus',
 };
 
@@ -17,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html suppressHydrationWarning lang="en">
+    <html suppressHydrationWarning lang="en" className="scroll-smooth">
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"

@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getChartData, getQuote } from '@/data/stock';
 import { getWatchListSymbols } from '@/data/user';
 import { cn } from '@/lib/utils';
@@ -22,7 +16,7 @@ export async function WatchListItem({ symbol }: { symbol: string }) {
   const increasing = (regularMarketChangePercent ?? 0) >= 0;
 
   return (
-    <div className="grid grid-cols-3">
+    <div className="grid grid-cols-3  hover:bg-muted/50">
       <div className="flex flex-col">
         <Link href={`/stock/${symbol}`} className="font-semibold">
           {symbol}
@@ -66,7 +60,7 @@ export async function WatchList() {
       <CardHeader>
         <CardTitle>Your Watch List</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+      <CardContent className="flex flex-col gap-y-4">
         {symbolList.map((symbol) => {
           return <WatchListItem key={'WatchList_' + symbol} symbol={symbol} />;
         })}
@@ -74,7 +68,7 @@ export async function WatchList() {
           <span className="self-center font-bold">Empty List</span>
         )}
       </CardContent>
-      <CardFooter>Last Update: {new Date().toLocaleString()}</CardFooter>
+      {/* <CardFooter>Last Update: {new Date().toLocaleString()}</CardFooter> */}
     </Card>
   );
 }

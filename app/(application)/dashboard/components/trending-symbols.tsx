@@ -24,12 +24,14 @@ export function TrendingSymbolItem({ quote }: { quote: Quote }) {
   const increasing = (regularMarketChangePercent ?? 0) >= 0;
 
   return (
-    <div className="grid grid-cols-3">
+    <div className="grid grid-cols-3 hover:bg-muted/50">
       <div className="flex flex-col">
         <Link href={`/stock/${symbol}`} className="font-semibold">
           {symbol}
         </Link>
-        <span className="text-sm text-muted-foreground">{shortName}</span>
+        <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground">
+          {shortName}
+        </span>
       </div>
       <div className="flex justify-around">
         <div className="flex flex-col items-center text-sm">
@@ -56,10 +58,10 @@ export async function TrendingSymbols() {
   return (
     <Card className="h-full w-full flex-auto overflow-auto">
       <CardHeader>
-        <CardTitle>Trending Symbols</CardTitle>
+        <CardTitle>🇺🇸 Trending Symbols</CardTitle>
         <CardDescription>{new Date().toDateString()}</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col gap-3">
         {trending.map((quote) => {
           return (
             <TrendingSymbolItem

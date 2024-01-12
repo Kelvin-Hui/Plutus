@@ -33,6 +33,7 @@ export type PNLData = {
   quantity: number;
   cost: number;
   pnl: number;
+  roi: number;
 };
 
 export type ProfolioData = {
@@ -42,12 +43,13 @@ export type ProfolioData = {
   marketPrice?: number;
 };
 
-export type ProfolioItemData = {
+export type ProfolioOverviewData = {
   symbol: string;
   quantity: number;
   cost: number;
   marketPrice: number;
   marketValue?: number;
+  diversityPercentage?: number;
 };
 export type TranscationData = {
   date?: Date;

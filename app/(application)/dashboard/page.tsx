@@ -1,7 +1,12 @@
 import { BalanceChart } from '@/app/(application)/dashboard/components/balance-chart';
 import { WatchList } from '@/app/(application)/dashboard/components/watch-list';
+import { Metadata } from 'next/types';
 import { ProfolioInfo } from './components/profolio-info';
 import { TrendingSymbols } from './components/trending-symbols';
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+};
 
 export default function Page() {
   return (

@@ -17,17 +17,17 @@ export async function getUserByUsername(username: string) {
   });
 }
 
-export async function getCurrentUser() {
+export async function getCurrentUserId() {
   const session = await auth();
-  return session?.user;
+  return session?.user?.id;
 }
 
-export async function getBuyingPower() {
-  const user = await getCurrentUser();
-  if (!user?.id) return 0;
+export async function getBuyingPower(id?: string) {
+  const userId = id ?? (await getCurrentUserId());
+  if (!userId) return 0;
   const obj = await prisma.user.findUnique({
     where: {
-      id: user?.id,
+      id: userId,
     },
     select: {
       cash: true,
@@ -37,11 +37,11 @@ export async function getBuyingPower() {
 }
 
 export async function getWatchListSymbols() {
-  const user = await getCurrentUser();
+  const userId = await getCurrentUserId();
   const symbolList = await prisma.watchListItem.findMany({
     where: {
       userId: {
-        equals: user?.id,
+        equals: userId,
       },
     },
     select: {
@@ -52,11 +52,11 @@ export async function getWatchListSymbols() {
 }
 
 export async function getBalanceChartData() {
-  const user = await getCurrentUser();
+  const userId = await getCurrentUserId();
   const chartData = await prisma.profolioValue.findMany({
     where: {
       userId: {
-        equals: user?.id,
+        equals: userId,
       },
     },
     select: {
@@ -78,12 +78,12 @@ export async function getBalanceChartData() {
 }
 
 export async function getTranscations(symbol?: string | undefined) {
-  const user = await getCurrentUser();
-  if (!user?.id) return [];
+  const userId = await getCurrentUserId();
+  if (!userId) return [];
   const transcations = await prisma.transcation.findMany({
     where: {
       userId: {
-        equals: user?.id,
+        equals: userId,
       },
       symbol: {
         equals: symbol,
@@ -104,12 +104,12 @@ export async function getTranscations(symbol?: string | undefined) {
   });
 }
 
-export async function getProfolio(symbol?: string | undefined) {
-  const user = await getCurrentUser();
+export async function getProfolio(symbol?: string | undefined, id?: string) {
+  const userId = id ?? (await getCurrentUserId());
   const profolio = await prisma.profolioItem.findMany({
     where: {
       userId: {
-        equals: !user?.id ? '0' : user?.id,
+        equals: !userId ? '0' : userId,
       },
       symbol: {
         equals: symbol,
@@ -141,4 +141,20 @@ export async function getProfolio(symbol?: string | undefined) {
       ...castedProfolio[idx],
     };
   });
+}
+
+export async function getProfolioValue(id?: string) {
+  const profolio = await getProfolio(undefined, id);
+  return profolio.reduce(
+    (acc, curr) => acc + curr.marketPrice * curr.quantity,
+    0,
+  );
+}
+
+export async function computeTotalProfolioValue(userId: string) {
+  const [cash, profolioValue] = await Promise.all([
+    getBuyingPower(userId),
+    getProfolioValue(userId),
+  ]);
+  return cash + profolioValue;
 }

@@ -124,10 +124,10 @@ export function SellForm({
                   <FormLabel>Estimated Total Credit</FormLabel>
                   <FormControl>
                     <Input
-                      value={(form.watch('shares') * marketPrice).toFixed(2)}
-                      placeholder="0"
-                      type="number"
-                      min={0}
+                      value={
+                        '$ ' + (form.watch('shares') * marketPrice).toFixed(2)
+                      }
+                      type="text"
                       disabled
                     />
                   </FormControl>

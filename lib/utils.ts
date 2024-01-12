@@ -20,7 +20,7 @@ function stdTimezoneOffset() {
   return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
 }
 
-export function isDayLightSaving() {
+function isDayLightSaving() {
   return new Date().getTimezoneOffset() < stdTimezoneOffset();
 }
 
@@ -45,17 +45,17 @@ export function getMarketCloseTime() {
 export function getStartingPeriod() {
   const currTime = new Date();
   const marketOpen = getMarketOpenTime();
-  const day = currTime.getDay();
+
+  const day = marketOpen.getUTCDay();
+  const date = marketOpen.getUTCDate();
 
   if (day == 6) {
-    marketOpen.setDate(currTime.getDate() - 1);
+    marketOpen.setDate(date - 1);
   } else if (day == 0) {
-    marketOpen.setDate(currTime.getDate() - 2);
-  } else {
-    if (currTime < marketOpen) {
-      //Before Market Open
-      marketOpen.setDate(currTime.getDate() - (day == 1 ? 3 : 1));
-    }
+    marketOpen.setDate(date - 2);
+  } else if (currTime < marketOpen) {
+    //Before Market Open
+    marketOpen.setUTCDate(date - (day == 1 ? 3 : 1));
   }
   return marketOpen.valueOf() / 1000;
 }
@@ -76,4 +76,27 @@ export function currencyFormat(num: number | undefined) {
     currency: 'USD',
   });
   return formatter.format(num);
+}
+
+export function calculatePNL(
+  marketPrice: number,
+  cost: number,
+  quantity: number,
+) {
+  return (marketPrice - cost) * quantity;
+}
+export function calculateROI(
+  marketPrice: number,
+  cost: number,
+  quantity: number,
+) {
+  return (calculatePNL(marketPrice, cost, quantity) / (cost * quantity)) * 100;
+}
+
+export function calculateDiversity(
+  marketPrice: number,
+  quantity: number,
+  totalProfolioValue: number,
+) {
+  return ((marketPrice * quantity) / totalProfolioValue) * 100;
 }

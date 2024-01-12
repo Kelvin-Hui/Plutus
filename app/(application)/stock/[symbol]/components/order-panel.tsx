@@ -28,19 +28,6 @@ export async function OrderPanel({
           buyingPower={buyingPower}
           profolioData={profolioData[0]}
         />
-        {/* <Card>
-          <CardHeader>
-            <CardTitle>{symbol}</CardTitle>
-            <CardDescription></CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div> Form here</div>
-          </CardContent>
-          <CardFooter>
-            <Button className="w-full bg-green-600">Buy</Button>
-            <Link href="/login" className='w-full'><Button className='w-full'>Sign In First</Button></Link>
-          </CardFooter>
-        </Card> */}
       </TabsContent>
 
       <TabsContent value="sell">
@@ -50,18 +37,6 @@ export async function OrderPanel({
           buyingPower={buyingPower}
           profolioData={profolioData[0]}
         />
-        {/* <Card>
-          <CardHeader>
-            <CardTitle>{symbol}</CardTitle>
-            <CardDescription></CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div> Form here</div>
-          </CardContent>
-          <CardFooter>
-            <Button className="w-full bg-red-600">Sell</Button>
-          </CardFooter>
-        </Card> */}
       </TabsContent>
     </Tabs>
   );

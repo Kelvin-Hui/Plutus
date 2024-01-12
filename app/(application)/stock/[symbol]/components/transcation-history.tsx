@@ -11,7 +11,7 @@ export async function TranscationHistory({ symbol }: { symbol: string }) {
         <CardTitle>Transcation History</CardTitle>
       </CardHeader>
       <CardContent>
-        <DataTable data={data} columns={transcationColumns} />
+        <DataTable data={data} columns={transcationColumns} filter={false} />
       </CardContent>
     </Card>
   );

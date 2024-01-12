@@ -12,17 +12,7 @@ export async function getAutoComplete(term: string) {
 }
 
 export async function getQuote(symbol: string | string[]) {
-  const queryOptions = {
-    fields: [
-      'symbol',
-      'shortName',
-      'fullExchangeName',
-      'regularMarketPrice',
-      'regularMarketChangePercent',
-    ],
-  };
   const result = await yahooFinance.quote(symbol);
-  //symbol, regularMarketPrice, fullExchangeName, shortName,  regularMarketChangePercent;
   return result;
 }
 
@@ -80,11 +70,10 @@ export async function getQuoteNews(symbol: string) {
 }
 
 export async function getRecommandationSymbols(symbol: string) {
-  const request = await yahooFinance.recommendationsBySymbol(symbol);
-  const promises = request.recommendedSymbols.map(async (obj) => {
-    return yahooFinance.quoteCombine(obj.symbol);
-  });
-  const result = await Promise.all(promises);
+  const recommands = await yahooFinance.recommendationsBySymbol(symbol);
+  const result = await yahooFinance.quote(
+    recommands?.recommendedSymbols?.map((row) => row.symbol),
+  );
   return result;
 }
 
@@ -93,9 +82,8 @@ export async function getTrendingSymbols() {
     count: 10,
     lang: 'en-us',
   });
-  const promises = trending.quotes.map(async (obj) => {
-    return yahooFinance.quoteCombine(obj.symbol);
-  });
-  const result = await Promise.all(promises);
+  const result = await yahooFinance.quote(
+    trending?.quotes?.map((row) => row.symbol),
+  );
   return result;
 }

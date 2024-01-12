@@ -1,5 +1,12 @@
 'use client';
 import { Command, CommandItem, CommandList } from '@/components/ui/command';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
   Popover,
@@ -10,8 +17,11 @@ import { getAutoComplete } from '@/data/stock';
 import { useDebouncedCallback } from '@/lib/utils';
 import { AutoCompleteSymbols } from '@/types';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import React from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 export function SearchBar({ placeholder }: { placeholder: string }) {
   const [symbols, setSymbols] = React.useState<AutoCompleteSymbols[]>([]);
@@ -30,6 +40,17 @@ export function SearchBar({ placeholder }: { placeholder: string }) {
     }
   }, 300);
 
+  const SearchSchema = z.object({
+    searchValue: z.string(),
+  });
+
+  const form = useForm<z.infer<typeof SearchSchema>>({
+    resolver: zodResolver(SearchSchema),
+    defaultValues: {
+      searchValue: '',
+    },
+  });
+
   return (
     <>
       <Popover open={openMenu} onOpenChange={setOpenMenu}>
@@ -39,27 +60,55 @@ export function SearchBar({ placeholder }: { placeholder: string }) {
               className="w-full pl-8"
               placeholder={placeholder}
               onChange={(e) => handleSearch(e.target.value)}
-            /> */}
-            <Input
-              className="w-full pl-8"
-              placeholder={placeholder}
-              onChange={(e) => handleSearch(e.target.value)}
             />
-            <MagnifyingGlassIcon className="absolute left-2 h-4 w-4 text-muted-foreground" />
+            <MagnifyingGlassIcon className="absolute left-2 h-4 w-4 text-muted-foreground" /> */}
+            <Form {...form}>
+              <form onSubmit={(e) => e.preventDefault()} className="space-y-8">
+                <FormField
+                  control={form.control}
+                  name="searchValue"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl
+                        onChange={(e) =>
+                          handleSearch(form.getValues('searchValue'))
+                        }
+                      >
+                        <div className='items-center" relative flex'>
+                          <Input
+                            placeholder={placeholder}
+                            {...field}
+                            className="w-full pl-8"
+                          />
+                          <MagnifyingGlassIcon className="absolute left-2 h-4 w-4 self-center text-muted-foreground" />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </form>
+            </Form>
           </div>
         </PopoverTrigger>
 
         {symbols.length > 0 && (
-          <PopoverContent className="p-0" align="start">
+          <PopoverContent
+            className="p-0"
+            align="start"
+            onOpenAutoFocus={(e) => e.preventDefault()}
+          >
             <Command>
               <CommandList className="p-2">
                 {symbols.map(({ symbol, name }, index) => {
                   return (
                     <CommandItem
                       key={symbol + '_' + index}
-                      className="ml-2 mr-2"
+                      className="ml-2 mr-2 cursor-pointer"
                       onSelect={() => {
                         setOpenMenu(false);
+                        setSymbols([]);
+                        form.reset();
                         push(`/stock/${symbol}`);
                       }}
                     >

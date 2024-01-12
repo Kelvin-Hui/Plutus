@@ -1,16 +1,18 @@
 'use server';
 
-import { getCurrentUser, getProfolio } from '@/data/user';
+import { getCurrentUserId, getProfolio } from '@/data/user';
 import prisma from '@/lib/prisma';
 import { getMarketCloseTime, getMarketOpenTime } from '@/lib/utils';
 import { revalidatePath } from 'next/cache';
+
+const VALIDATE_MARKET_HOURS = false;
 
 export async function buyShares(shares: number, symbol: string) {
   const currentTime = new Date();
   const isMarketHours =
     currentTime >= getMarketOpenTime() && currentTime < getMarketCloseTime();
 
-  if (!isMarketHours) {
+  if (!isMarketHours && VALIDATE_MARKET_HOURS) {
     return { error: 'Market Closed! 🥱' };
   }
 
@@ -20,9 +22,9 @@ export async function buyShares(shares: number, symbol: string) {
   const currentMarketPrice = profolioData[0].marketPrice;
 
   const totalCost = currentMarketPrice * shares;
+  const prevTotalCost = prevCost * prevShares;
 
-  const user = await getCurrentUser();
-  const userId = user?.id ?? '';
+  const userId = (await getCurrentUserId()) ?? '';
 
   const [addTranscation, updateProfolio, updateCash] =
     await prisma.$transaction([
@@ -44,12 +46,12 @@ export async function buyShares(shares: number, symbol: string) {
         },
         update: {
           quantity: shares + prevShares,
-          cost: (totalCost + prevCost) / (shares + prevShares),
+          cost: (totalCost + prevTotalCost) / (shares + prevShares),
         },
         create: {
           userId: userId,
           quantity: shares + prevShares,
-          cost: (totalCost + prevCost) / (shares + prevShares),
+          cost: (totalCost + prevTotalCost) / (shares + prevShares),
           symbol: symbol,
         },
       }),
@@ -77,7 +79,7 @@ export async function sellShares(shares: number, symbol: string) {
   const isMarketHours =
     currentTime >= getMarketOpenTime() && currentTime < getMarketCloseTime();
 
-  if (!isMarketHours) {
+  if (!isMarketHours && VALIDATE_MARKET_HOURS) {
     return { error: 'Market Closed! 🥱' };
   }
 
@@ -92,8 +94,7 @@ export async function sellShares(shares: number, symbol: string) {
 
   const totalCredit = currentMarketPrice * shares;
 
-  const user = await getCurrentUser();
-  const userId = user?.id ?? '';
+  const userId = (await getCurrentUserId()) ?? '';
 
   const soldAll = shares == prevShares;
 
