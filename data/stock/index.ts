@@ -28,6 +28,11 @@ export async function getChartData(symbol: string, interval: Interval) {
       interval == '1m' ? 'period1=' + getStartingPeriod() : ''
     }&interval=${interval}&period2=${9999999999}&includePrePose=false`,
   );
+  // const request = await fetch(
+  //   `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}?${
+  //     interval == '1m' ? 'period1=' + getStartingPeriod() : ''
+  //   }&interval=${interval}&period2=${getStartingPeriod()}&includePrePose=false`,
+  // );
 
   const response = await request.json();
 
@@ -37,28 +42,19 @@ export async function getChartData(symbol: string, interval: Interval) {
   const quote = result?.indicators?.quote[0];
 
   const ohlcData = timestamp?.map((time: number, idx: number) => ({
-    date: new Date(time * 1000).toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-    }),
+    date: new Date(time * 1000).toLocaleString(),
     open: quote.open[idx],
     high: quote.high[idx],
     low: quote.low[idx],
     close: quote.close[idx],
     volume: quote.volume[idx],
   }));
-
-  const color = quote?.close?.[0] > quote?.close?.slice(-1) ? 'red' : 'green';
-
-  return [ohlcData, color];
+  return ohlcData;
 }
 
-export async function getSummaryDetail(symbol: string) {
-  const result = await yahooFinance.quoteSummary(symbol, {
-    modules: ['summaryDetail'],
-  });
-  return result.summaryDetail;
+export async function getSummaryDetail(symbol: string, modules: any[]) {
+  const result = await yahooFinance.quoteSummary(symbol, { modules: modules });
+  return result;
 }
 
 export async function getQuoteNews(symbol: string) {
@@ -79,11 +75,13 @@ export async function getRecommandationSymbols(symbol: string) {
 
 export async function getTrendingSymbols() {
   const trending = await yahooFinance.trendingSymbols('US', {
-    count: 10,
+    count: 20,
     lang: 'en-us',
   });
   const result = await yahooFinance.quote(
     trending?.quotes?.map((row) => row.symbol),
   );
-  return result;
+  return result
+    .filter((obj) => ['EQUITY', 'ETF'].includes(obj.quoteType))
+    .slice(0, 10);
 }

@@ -1,4 +1,9 @@
-import { AUTH_URL, DEFAULT_REDIRECT_URL, authRoutes } from '@/route';
+import {
+  AUTH_URL,
+  DEFAULT_REDIRECT_URL,
+  authRoutes,
+  privateRoutes,
+} from '@/route';
 import type { NextAuthConfig } from 'next-auth';
 
 export const authConfig = {
@@ -11,7 +16,7 @@ export const authConfig = {
       const pathname = nextUrl.pathname;
 
       const isAuthRoutes = authRoutes.includes(pathname);
-      const isOnDashboard = pathname.startsWith('/dashboard');
+      const isPrivateRoutes = privateRoutes.includes(pathname);
 
       if (isLoggedIn) {
         if (isAuthRoutes) {
@@ -19,7 +24,7 @@ export const authConfig = {
         }
         return true;
       } else {
-        if (isOnDashboard) {
+        if (isPrivateRoutes) {
           return Response.redirect(new URL(AUTH_URL, nextUrl));
         }
         return true;

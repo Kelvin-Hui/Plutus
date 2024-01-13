@@ -21,6 +21,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { currencyFormat } from '@/lib/utils';
 import { ProfolioData } from '@/types';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { redirect } from 'next/navigation';
 import { useTransition } from 'react';
@@ -142,6 +143,9 @@ export function BuyForm({
                 disabled={isPending}
               >
                 {isPending ? 'Sending Order📝 ... Please Wait' : 'Buy'}
+                {isPending && (
+                  <ArrowPathIcon className="h-4 w-4 animate-spin" />
+                )}
               </Button>
             ) : (
               <Button className="w-full" onClick={() => redirect('/login')}>

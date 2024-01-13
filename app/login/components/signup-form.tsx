@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form';
 import { login, signup } from '@/action/auth';
 import { FormError } from '@/components/ui/form-error';
 import { FormSuccess } from '@/components/ui/form-success';
-import { LoginSchema } from '@/schema';
+import { RegisterSchema } from '@/schema';
 import { useState, useTransition } from 'react';
 import * as z from 'zod';
 
@@ -26,15 +26,15 @@ export function SignupForm() {
   const [error, setError] = useState('');
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof RegisterSchema>>({
+    resolver: zodResolver(RegisterSchema),
     defaultValues: {
       username: '',
       password: '',
     },
   });
 
-  async function onSubmit(values: z.infer<typeof LoginSchema>) {
+  async function onSubmit(values: z.infer<typeof RegisterSchema>) {
     setError('');
     setSuccess('');
 

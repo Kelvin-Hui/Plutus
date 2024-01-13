@@ -1,23 +1,28 @@
+'use client';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   getBalanceChartData,
   getBuyingPower,
   getProfolioValue,
+  getUserCreateTime
 } from '@/data/user';
 import { cn, currencyFormat } from '@/lib/utils';
-import { AreaChart, BadgeDelta } from '@tremor/react';
+import { BalanceHeaderProps } from '@/types';
+import {
+  AreaChart,
+  BadgeDelta,
+  DateRangePicker,
+  DateRangePickerValue,
+} from '@tremor/react';
+import { useEffect, useState } from 'react';
 
-const START_BALANCE = 25000;
-
-export async function BalanceHeader() {
-  const [cash, profolioValue] = await Promise.all([
-    getBuyingPower(),
-    getProfolioValue(),
-  ]);
-  const totalBalance = cash + profolioValue;
-  const PNL = totalBalance - START_BALANCE;
-  const PNLpercentage = (PNL / START_BALANCE) * 100;
-  const increasing = PNL >= 0;
+export function BalanceHeader({
+  balanceInfo,
+}: {
+  balanceInfo: BalanceHeaderProps;
+}) {
+  const { totalBalance, PNL, PNLpercentage, isIncreasing } = balanceInfo;
   return (
     <div className="flex justify-around">
       <div className="flex flex-col items-center text-xl">
@@ -26,17 +31,19 @@ export async function BalanceHeader() {
       </div>
       <div className="flex flex-col items-center text-xl">
         <label className="mb-2 font-semibold underline">PNL</label>
-        <span className={cn('text-green-600', { 'text-red-600': !increasing })}>
+        <span
+          className={cn('text-green-600', { 'text-red-600': !isIncreasing })}
+        >
           {currencyFormat(PNL)}
         </span>
       </div>
       <div className="flex flex-col items-center text-xl">
         <label className="mb-2 font-semibold underline">ROI</label>
         <BadgeDelta
-          deltaType={increasing ? 'moderateIncrease' : 'moderateDecrease'}
+          deltaType={isIncreasing ? 'moderateIncrease' : 'moderateDecrease'}
           size={'xl'}
         >
-          {increasing && '+'}
+          {isIncreasing && '+'}
           {PNLpercentage.toFixed(2)}%
         </BadgeDelta>
       </div>
@@ -44,8 +51,44 @@ export async function BalanceHeader() {
   );
 }
 
-export async function BalanceChart() {
-  const chartData = await getBalanceChartData();
+export function BalanceChart() {
+  const [range, setRange] = useState<DateRangePickerValue>({
+    from: new Date(),
+    to: new Date(),
+  });
+  const [balanceInfo, setBalanceInfo] = useState<BalanceHeaderProps>({
+    totalBalance: 0,
+    PNL: 0,
+    PNLpercentage: 0,
+    isIncreasing: true,
+  });
+  const [chartData, setChartData] = useState<Object[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const [chartData, cash, profolioValue] = await Promise.all([
+        getBalanceChartData(range.from ?? new Date(), range.to ?? new Date()),
+        getBuyingPower(),
+        getProfolioValue(),
+      ]);
+
+      const isToday = range.from?.getDate() === range.to?.getDate();
+
+      const totalBalance = isToday
+        ? Number((cash + profolioValue).toFixed(2))
+        : chartData.slice(-1)[0]?.balance;
+      const startBalance = chartData[0].balance;
+
+      const PNL = totalBalance - startBalance;
+      const PNLpercentage = (PNL / startBalance) * 100;
+      const isIncreasing = PNL >= 0;
+
+      setBalanceInfo({ totalBalance, PNL, PNLpercentage, isIncreasing });
+      setChartData(chartData);
+    };
+
+    fetchData().catch(console.error);
+  }, [range]);
 
   return (
     <Card className="w-full">
@@ -53,15 +96,42 @@ export async function BalanceChart() {
         <CardTitle>Balance History</CardTitle>
       </CardHeader>
       <CardContent>
-        <BalanceHeader />
+        <BalanceHeader balanceInfo={balanceInfo} />
+        <div className="mt-2 flex items-center justify-center">
+          <DateRangePicker
+            enableYearNavigation={true}
+            enableClear={false}
+            value={range}
+            maxDate={new Date()}
+            onValueChange={(range) =>
+              setRange({ from: range?.from, to: range?.to })
+            }
+          />
+          <Button
+            variant="outline"
+            onClick={() => {
+              const fetchCreated = async () => {
+                const minRange = await getUserCreateTime();
+                setRange({ from: minRange, to: new Date() });
+              };
+              fetchCreated().catch(console.error);
+            }}
+          >
+            Entire Range
+          </Button>
+        </div>
+
         <AreaChart
           data={chartData}
           index="createdAt"
           categories={['balance']}
-          colors={['green']}
+          colors={[balanceInfo.isIncreasing ? 'green' : 'red']}
           autoMinValue={true}
           curveType="monotone"
           connectNulls={true}
+          showXAxis={false}
+          showAnimation
+          animationDuration={2000}
         />
       </CardContent>
     </Card>

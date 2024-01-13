@@ -27,7 +27,11 @@ export async function RecommendationSymbols({ symbol }: { symbol: string }) {
           const increasing = (regularMarketChangePercent ?? 0) >= 0;
 
           return (
-            <Link key={symbol} href={`/stock/${symbol}`} className="w-full">
+            <Link
+              key={symbol}
+              href={`/stock/${symbol}`}
+              className="w-full hover:animate-bounce"
+            >
               <Card>
                 <CardHeader>
                   <CardTitle>{symbol}</CardTitle>

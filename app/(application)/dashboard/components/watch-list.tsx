@@ -6,7 +6,7 @@ import { AreaChart, BadgeDelta } from '@tremor/react';
 import Link from 'next/link';
 
 export async function WatchListItem({ symbol }: { symbol: string }) {
-  const [quote, [chartData, _]] = await Promise.all([
+  const [quote, chartData] = await Promise.all([
     getQuote(symbol),
     getChartData(symbol, '1m'),
   ]);
@@ -16,7 +16,7 @@ export async function WatchListItem({ symbol }: { symbol: string }) {
   const increasing = (regularMarketChangePercent ?? 0) >= 0;
 
   return (
-    <div className="grid grid-cols-3  hover:bg-muted/50">
+    <div className="grid grid-cols-3  overflow-x-scroll hover:bg-muted/50">
       <div className="flex flex-col">
         <Link href={`/stock/${symbol}`} className="font-semibold">
           {symbol}
@@ -35,6 +35,7 @@ export async function WatchListItem({ symbol }: { symbol: string }) {
         showXAxis={false}
         showYAxis={false}
         showTooltip={false}
+        showAnimation
         className="h-10 w-20 self-center"
       />
       <div className="flex items-center justify-self-end">
@@ -65,10 +66,9 @@ export async function WatchList() {
           return <WatchListItem key={'WatchList_' + symbol} symbol={symbol} />;
         })}
         {symbolList.length === 0 && (
-          <span className="self-center font-bold">Empty List</span>
+          <span className="self-center text-muted-foreground">Empty List.</span>
         )}
       </CardContent>
-      {/* <CardFooter>Last Update: {new Date().toLocaleString()}</CardFooter> */}
     </Card>
   );
 }

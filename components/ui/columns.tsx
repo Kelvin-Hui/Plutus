@@ -33,6 +33,39 @@ export const pnlColumns: ColumnDef<PNLData>[] = [
     },
   },
   {
+    accessorKey: 'marketPrice',
+    header: 'Market Price',
+    cell: ({ row }) => {
+      const marketPrice = row.getValue<number>('marketPrice');
+      return <p>{currencyFormat(marketPrice)}</p>;
+    },
+  },
+  {
+    accessorKey: 'diversityPercentage',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          {' '}
+          Profolio Diversity <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const diversity = row.getValue<number>('diversityPercentage');
+
+      return (
+        <ProgressCircle
+          value={diversity}
+          size="xs"
+          tooltip={`${diversity.toFixed(2)}%`}
+        />
+      );
+    },
+  },
+  {
     accessorKey: 'pnl',
     header: ({ column }) => {
       return (
@@ -76,31 +109,6 @@ export const pnlColumns: ColumnDef<PNLData>[] = [
           {increasing && '+'}
           {ROI.toFixed(2)}%
         </BadgeDelta>
-      );
-    },
-  },
-  {
-    accessorKey: 'diversityPercentage',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          {' '}
-          Profolio Diversity <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const diversity = row.getValue<number>('diversityPercentage');
-
-      return (
-        <ProgressCircle
-          value={diversity}
-          size="xs"
-          tooltip={`${diversity.toFixed(2)}%`}
-        />
       );
     },
   },

@@ -34,7 +34,7 @@ export function TrendingSymbolItem({ quote }: { quote: Quote }) {
         </span>
       </div>
       <div className="flex justify-around">
-        <div className="flex flex-col items-center text-sm">
+        <div className="flex flex-col items-center justify-between text-sm">
           <h1 className="text-muted-foreground underline">Volume</h1>
           <h1>{numberFormat(regularMarketVolume)}</h1>
         </div>
@@ -61,7 +61,7 @@ export async function TrendingSymbols() {
         <CardTitle>🇺🇸 Trending Symbols</CardTitle>
         <CardDescription>{new Date().toDateString()}</CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col gap-3">
+      <CardContent className="flex flex-col space-y-4">
         {trending.map((quote) => {
           return (
             <TrendingSymbolItem

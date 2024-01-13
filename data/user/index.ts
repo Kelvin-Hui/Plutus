@@ -1,6 +1,8 @@
+'use server';
 import { auth } from '@/auth';
 import { getQuote } from '@/data/stock';
 import prisma from '@/lib/prisma';
+import { convertToISO, nextDay } from '@/lib/utils';
 
 export async function getUserById(userId: string | undefined) {
   return await prisma.user.findUnique({
@@ -20,6 +22,11 @@ export async function getUserByUsername(username: string) {
 export async function getCurrentUserId() {
   const session = await auth();
   return session?.user?.id;
+}
+
+export async function getUserCreateTime() {
+  const result = await getUserById(await getCurrentUserId());
+  return result?.createdAt;
 }
 
 export async function getBuyingPower(id?: string) {
@@ -51,12 +58,17 @@ export async function getWatchListSymbols() {
   return symbolList?.map((row) => row.symbol);
 }
 
-export async function getBalanceChartData() {
+export async function getBalanceChartData(from: Date, to: Date) {
   const userId = await getCurrentUserId();
+
   const chartData = await prisma.profolioValue.findMany({
     where: {
       userId: {
         equals: userId,
+      },
+      createdAt: {
+        gte: convertToISO(from),
+        lte: convertToISO(nextDay(to)),
       },
     },
     select: {
@@ -71,8 +83,8 @@ export async function getBalanceChartData() {
   });
   return chartData?.map((row) => {
     return {
-      balance: row.balance.toFixed(2),
-      createdAt: row.createdAt.toLocaleDateString(),
+      balance: Number(row.balance.toFixed(2)),
+      createdAt: row.createdAt.toLocaleString(),
     };
   });
 }
@@ -152,9 +164,10 @@ export async function getProfolioValue(id?: string) {
 }
 
 export async function computeTotalProfolioValue(userId: string) {
+  const id = userId ?? (await getCurrentUserId());
   const [cash, profolioValue] = await Promise.all([
     getBuyingPower(userId),
     getProfolioValue(userId),
   ]);
-  return cash + profolioValue;
+  return { userId: id, balance: Number((cash + profolioValue).toFixed(2)) };
 }

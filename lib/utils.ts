@@ -24,8 +24,8 @@ function isDayLightSaving() {
   return new Date().getTimezoneOffset() < stdTimezoneOffset();
 }
 
-export function getMarketOpenTime() {
-  let open = new Date();
+export function getMarketOpenTime(date = new Date()) {
+  let open = !date ? new Date() : new Date(date);
   open.setUTCHours(isDayLightSaving() ? 13 : 14);
   open.setUTCMinutes(30);
   open.setUTCSeconds(0);
@@ -33,8 +33,8 @@ export function getMarketOpenTime() {
   return open;
 }
 
-export function getMarketCloseTime() {
-  let close = new Date();
+export function getMarketCloseTime(date = new Date()) {
+  let close = !date ? new Date() : new Date(date);
   close.setUTCHours(isDayLightSaving() ? 20 : 21);
   close.setUTCMinutes(0);
   close.setUTCSeconds(0);
@@ -99,4 +99,36 @@ export function calculateDiversity(
   totalProfolioValue: number,
 ) {
   return ((marketPrice * quantity) / totalProfolioValue) * 100;
+}
+
+export function nextDay(prevDate: Date | undefined) {
+  let date = prevDate ? new Date(prevDate) : new Date();
+  date.setDate(date.getDate() + 1);
+  return date;
+}
+
+export function convertToISO(date: Date) {
+  const str = date?.toISOString().split('T')[0];
+  return new Date(str);
+}
+
+function addMinute(prevDate: Date) {
+  let date = new Date(prevDate.valueOf());
+  date.setMinutes(date.getMinutes() + 1);
+  return date;
+}
+
+export function padChartData(data: any) {
+  const startPeriod = new Date(getStartingPeriod() * 1000);
+  const endPeriod = getMarketCloseTime(startPeriod);
+  let currDate = new Date(data.splice(-1)[0].date ?? startPeriod);
+  if (currDate === endPeriod) return data;
+  const padData = [];
+  for (; currDate <= endPeriod; currDate = addMinute(currDate)) {
+    padData.push({
+      date: new Date(currDate.valueOf()).toLocaleString(),
+      close: null,
+    });
+  }
+  return [...data, ...padData];
 }

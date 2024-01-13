@@ -1,9 +1,17 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ReadMoreWrapper } from '@/components/read-more';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { getSummaryDetail } from '@/data/stock';
 import { numberFormat } from '@/lib/utils';
 
 export async function KeyStats({ symbol }: { symbol: string }) {
-  const stats = await getSummaryDetail(symbol);
+  const { summaryDetail: stats, assetProfile: company } =
+    await getSummaryDetail(symbol, ['summaryDetail', 'assetProfile']);
 
   const labels = [
     { key: 'Previous Close', value: 'previousClose' },
@@ -19,7 +27,10 @@ export async function KeyStats({ symbol }: { symbol: string }) {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Key Statistic</CardTitle>
+        <CardTitle>About - {symbol}</CardTitle>
+        <CardDescription>
+          <ReadMoreWrapper text={company?.longBusinessSummary} />
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-4 gap-4 text-center">

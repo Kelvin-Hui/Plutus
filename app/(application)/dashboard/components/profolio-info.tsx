@@ -5,47 +5,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getBuyingPower, getProfolio, getTranscations } from '@/data/user';
 import { calculateDiversity, calculatePNL, calculateROI } from '@/lib/utils';
 import { ProfolioOverviewData, TranscationData } from '@/types';
-import { DonutChart } from '@tremor/react';
+import { ProfolioDiversity } from './profolio-diversity';
 
-export async function ProfolioDiversity({
-  profolio,
-}: {
-  profolio: ProfolioOverviewData[];
-}) {
-  const data = profolio.map((row) => {
-    return { ...row, marketValue: row.quantity * row.marketPrice };
-  });
-  return (
-    <DonutChart
-      data={[...data, { symbol: '$CASH', marketValue: await getBuyingPower() }]}
-      category="marketValue"
-      index="symbol"
-      // showLabel={false}
-      className="h-[24rem] w-[24rem]"
-      colors={[
-        'red',
-        'orange',
-        'amber',
-        'yellow',
-        'lime',
-        'green',
-        'emerald',
-        'teal',
-        'cyan',
-        'sky',
-        'blue',
-        'indigo',
-        'violet',
-        'purple',
-        'fuchsia',
-        'pink',
-        'rose',
-      ]}
-    />
-  );
-}
-
-export async function ProfolioOverview({
+export function ProfolioOverview({
   profolio,
 }: {
   profolio: ProfolioOverviewData[];
@@ -70,18 +32,15 @@ export async function ProfolioOverview({
   return <DataTable data={data} columns={pnlColumns} />;
 }
 
-export async function TranscationsHistory({
-  data,
-}: {
-  data: TranscationData[];
-}) {
+export function TranscationsHistory({ data }: { data: TranscationData[] }) {
   return <DataTable data={data} columns={transcationColumns} />;
 }
 
 export async function ProfolioInfo() {
-  const [profolio, transcations] = await Promise.all([
+  const [profolio, transcations, buyingPower] = await Promise.all([
     getProfolio(),
     getTranscations(),
+    getBuyingPower(),
   ]);
 
   return (
@@ -97,7 +56,7 @@ export async function ProfolioInfo() {
             <CardTitle>Profolio Diversity</CardTitle>
           </CardHeader>
           <CardContent className="flex justify-center">
-            <ProfolioDiversity profolio={profolio} />
+            <ProfolioDiversity profolio={profolio} buyingPower={buyingPower} />
           </CardContent>
         </TabsContent>
         <TabsContent value="overview">

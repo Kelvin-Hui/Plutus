@@ -21,6 +21,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { currencyFormat } from '@/lib/utils';
 import { ProfolioData } from '@/types';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { redirect } from 'next/navigation';
 import { useTransition } from 'react';
@@ -41,7 +42,7 @@ export function SellForm({
 }) {
   const [isPending, startTransition] = useTransition();
 
-  const { marketPrice = 0, cost, quantity = 0 } = profolioData;
+  const { marketPrice = 0, cost = 0, quantity = 0 } = profolioData;
 
   const cash = Number(buyingPower) ?? 0;
   const maxShares = quantity;
@@ -143,6 +144,9 @@ export function SellForm({
                 disabled={isPending}
               >
                 {isPending ? 'Sending Order📝 ... Please Wait' : 'Sell'}
+                {isPending && (
+                  <ArrowPathIcon className="h-4 w-4 animate-spin" />
+                )}
               </Button>
             ) : (
               <Button className="w-full" onClick={() => redirect('/login')}>

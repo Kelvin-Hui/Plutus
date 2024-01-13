@@ -12,7 +12,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
           <div>
             <Link key="home" href="/dashboard">
               <h2 className="text-3xl font-extrabold tracking-normal">
-                Plutus Logo/
+                Plutus
               </h2>
             </Link>
           </div>

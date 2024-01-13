@@ -2,17 +2,18 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
-function craeteFakeChartData() {
+function craeteFakeBalanceData(days:number) {
   let chartData = [];
-  let baseDate = new Date('2023-11-11');
+  let baseDate = new Date('2023-01-01');
   let baseAmount = 25000;
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < days; i++) {
     chartData.push({ createdAt: baseDate, balance: baseAmount });
     let nextDate = new Date(baseDate);
     nextDate.setDate(nextDate.getDate() + 1);
     baseDate = nextDate;
     baseAmount += (Math.random() >= 0.5 ? 1 : -1) * (Math.random() * 2000);
   }
+  chartData.push({ createdAt: new Date(), balance: baseAmount })
   return chartData;
 }
 
@@ -95,7 +96,36 @@ async function main() {
     },
   });
 
+  const TestBalance1 = await prisma.user.upsert({
+    where: { username: 'Test1' },
+    update: {},
+    create: {
+      username: 'Test1',
+      password: await bcrypt.hash('admin1', 10),
+      cash: 25000.0,
+      createdAt: new Date("2022-12-31"),
+      wathchList: {
+        createMany: {
+          data: [
+            { symbol: 'META' },
+            { symbol: 'AMZN' },
+            { symbol: 'AAPL' },
+            { symbol: 'GOOG' },
+            { symbol: 'NFLX' },
+            { symbol: 'SPY' },
+          ],
+        },
+      },
+      values: {
+        createMany: {
+          data : craeteFakeBalanceData(30)
+        },
+      },
+    },
+  });
+
   console.log(admin1);
+  console.log(TestBalance1);
 }
 main()
   .then(async () => {

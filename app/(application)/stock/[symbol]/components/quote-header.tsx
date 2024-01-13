@@ -69,7 +69,9 @@ export async function QuoteHeader({
         <h2 className="text-5xl">
           {symbol} - {companyName}
         </h2>
-        <span className="text-muted-foreground">{exchangeName}</span>
+        <span className="text-muted-foreground">
+          {exchangeName}-{quote.quoteType}
+        </span>
       </div>
 
       <div className="flex flex-col items-end">
