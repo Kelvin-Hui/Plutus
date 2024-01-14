@@ -43,10 +43,10 @@ export async function signup(values: z.infer<typeof RegisterSchema>) {
   const { username, password } = parsedCredentials.data;
   const existingUser = await getUserByUsername(username);
   if (existingUser)
-    return { error: 'Username Already In Use! Please Pick A New One' };
+    return { error: 'Username Already In Use! Please Pick A New Name' };
 
   await createUser(username, password);
-  return { success: 'User Created 🎉 Redirecting You To Dashboard ...' };
+  return { success: 'User Created 🎉 Signing In Right Now ...' };
 }
 
 export async function createUser(username: string, password: string) {

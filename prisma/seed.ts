@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
-function craeteFakeBalanceData(days:number) {
+function craeteFakeBalanceData(days: number) {
   let chartData = [];
   let baseDate = new Date('2023-01-01');
   let baseAmount = 25000;
@@ -13,7 +13,7 @@ function craeteFakeBalanceData(days:number) {
     baseDate = nextDate;
     baseAmount += (Math.random() >= 0.5 ? 1 : -1) * (Math.random() * 2000);
   }
-  chartData.push({ createdAt: new Date(), balance: baseAmount })
+  chartData.push({ createdAt: new Date(), balance: baseAmount });
   return chartData;
 }
 
@@ -103,7 +103,7 @@ async function main() {
       username: 'Test1',
       password: await bcrypt.hash('admin1', 10),
       cash: 25000.0,
-      createdAt: new Date("2022-12-31"),
+      createdAt: new Date('2022-12-31'),
       wathchList: {
         createMany: {
           data: [
@@ -118,7 +118,7 @@ async function main() {
       },
       values: {
         createMany: {
-          data : craeteFakeBalanceData(30)
+          data: craeteFakeBalanceData(30),
         },
       },
     },

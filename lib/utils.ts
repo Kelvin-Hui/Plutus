@@ -1,3 +1,4 @@
+import { Interval, TimeInterval } from '@/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -42,24 +43,6 @@ export function getMarketCloseTime(date = new Date()) {
   return close;
 }
 
-export function getStartingPeriod() {
-  const currTime = new Date();
-  const marketOpen = getMarketOpenTime();
-
-  const day = marketOpen.getUTCDay();
-  const date = marketOpen.getUTCDate();
-
-  if (day == 6) {
-    marketOpen.setDate(date - 1);
-  } else if (day == 0) {
-    marketOpen.setDate(date - 2);
-  } else if (currTime < marketOpen) {
-    //Before Market Open
-    marketOpen.setUTCDate(date - (day == 1 ? 3 : 1));
-  }
-  return marketOpen.valueOf() / 1000;
-}
-
 export function numberFormat(num: number | undefined) {
   if (num === undefined) return num;
   if (num >= 100000) {
@@ -101,27 +84,98 @@ export function calculateDiversity(
   return ((marketPrice * quantity) / totalProfolioValue) * 100;
 }
 
+export function convertToISO(date: Date) {
+  const str = date?.toISOString().split('T')[0];
+  return new Date(str);
+}
+
+export function addMinute(prevDate: Date) {
+  let date = new Date(prevDate.valueOf());
+  date.setMinutes(date.getMinutes() + 1);
+  return date;
+}
 export function nextDay(prevDate: Date | undefined) {
   let date = prevDate ? new Date(prevDate) : new Date();
   date.setDate(date.getDate() + 1);
   return date;
 }
 
-export function convertToISO(date: Date) {
-  const str = date?.toISOString().split('T')[0];
-  return new Date(str);
+export function getStartingPeriod() {
+  const currTime = new Date();
+  const marketOpen = getMarketOpenTime();
+
+  const day = marketOpen.getUTCDay();
+  const date = marketOpen.getUTCDate();
+
+  if (day == 6) {
+    marketOpen.setDate(date - 1);
+  } else if (day == 0) {
+    marketOpen.setDate(date - 2);
+  } else if (currTime < marketOpen) {
+    //Before Market Open
+    marketOpen.setUTCDate(date - (day == 1 ? 3 : 1));
+  }
+
+  return marketOpen.valueOf() / 1000;
 }
 
-function addMinute(prevDate: Date) {
-  let date = new Date(prevDate.valueOf());
-  date.setMinutes(date.getMinutes() + 1);
-  return date;
+export function getEndingPeriod() {
+  return getMarketCloseTime(new Date(getStartingPeriod() * 1000));
+}
+
+export function getChartQueryOptions(timeInterval: TimeInterval): {
+  period1: Date;
+  interval: Interval;
+} {
+  let period1 = new Date();
+  let interval: Interval = '1d';
+  period1.setUTCHours(0, 0, 0, 0);
+  const date = period1.getDate();
+  const month = period1.getMonth();
+  const year = period1.getFullYear();
+  switch (timeInterval) {
+    case '5d':
+      period1.setDate(date - 5);
+      interval = '5m';
+      break;
+    case '1m':
+      period1.setMonth(month - 1);
+      interval = '30m';
+      break;
+    case '6m':
+      period1.setMonth(month - 6);
+      interval = '1d';
+      break;
+    case 'YTD':
+      period1 = new Date(`${year}-01-01`);
+      interval = '1d';
+      break;
+    case '1y':
+      period1.setFullYear(year - 1);
+      interval = '1d';
+      break;
+    case '5y':
+      period1.setFullYear(year - 5);
+      interval = '1wk';
+      break;
+    case 'Max':
+      interval = '1mo';
+      period1 = new Date(0);
+      break;
+  }
+  const day = period1.getDay();
+  if (day == 6) {
+    period1.setDate(period1.getDate() - 1);
+  } else if (day == 0) {
+    period1.setDate(period1.getDate() - 2);
+  }
+  return { period1, interval };
 }
 
 export function padChartData(data: any) {
   const startPeriod = new Date(getStartingPeriod() * 1000);
-  const endPeriod = getMarketCloseTime(startPeriod);
-  let currDate = new Date(data.splice(-1)[0].date ?? startPeriod);
+  const endPeriod = getEndingPeriod();
+  let currDate = new Date(data.slice(-1)[0].date ?? startPeriod);
   if (currDate === endPeriod) return data;
   const padData = [];
   for (; currDate <= endPeriod; currDate = addMinute(currDate)) {

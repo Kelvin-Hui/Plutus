@@ -55,17 +55,19 @@ export async function QuoteHeader({
   if (quote === undefined) {
     notFound();
   }
+  const {
+    shortName: companyName,
+    fullExchangeName: exchangeName,
+    regularMarketPrice: price,
+    regularMarketChangePercent: percentChange,
+    regularMarketChange: priceChange,
+  } = quote;
 
-  const companyName = quote.shortName;
-  const exchangeName = quote.fullExchangeName;
-  const price = quote.regularMarketPrice;
-  const percentChange = quote?.regularMarketChangePercent ?? 0;
-
-  const increasing = (quote?.regularMarketChangePercent ?? 0) >= 0;
+  const increasing = (percentChange ?? 0) >= 0;
 
   return (
     <div className="flex w-full items-center justify-between">
-      <div>
+      <div className="flex flex-col space-y-2">
         <h2 className="text-5xl">
           {symbol} - {companyName}
         </h2>
@@ -74,8 +76,8 @@ export async function QuoteHeader({
         </span>
       </div>
 
-      <div className="flex flex-col items-end">
-        <div className="flex flex-row items-center gap-2">
+      <div className="flex flex-col items-end space-y-2">
+        <div className="flex flex-row items-end gap-2">
           <h1
             className={cn('text-5xl text-green-600', {
               'text-red-600': !increasing,
@@ -84,10 +86,17 @@ export async function QuoteHeader({
             ${price}
           </h1>
           <BadgeDelta
+            deltaType={increasing ? 'increase' : 'decrease'}
+            size={'xl'}
+          >
+            {increasing && '+'}
+            {priceChange.toFixed(2)}
+          </BadgeDelta>
+          <BadgeDelta
             deltaType={increasing ? 'moderateIncrease' : 'moderateDecrease'}
             size={'xl'}
           >
-            {percentChange?.toFixed(2)} %{' '}
+            {percentChange?.toFixed(2)}%
           </BadgeDelta>
         </div>
         <WatchListButton symbol={symbol} userId={userId} />

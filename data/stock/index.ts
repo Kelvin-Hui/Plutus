@@ -1,7 +1,7 @@
 'use server';
 
-import { getStartingPeriod } from '@/lib/utils';
-import { Interval } from '@/types';
+import { getChartQueryOptions, getStartingPeriod } from '@/lib/utils';
+import { TimeInterval } from '@/types';
 import yahooFinance from 'yahoo-finance2';
 
 export async function getAutoComplete(term: string) {
@@ -14,42 +14,6 @@ export async function getAutoComplete(term: string) {
 export async function getQuote(symbol: string | string[]) {
   const result = await yahooFinance.quote(symbol);
   return result;
-}
-
-export async function getChartData(symbol: string, interval: Interval) {
-  //[Mon-Fri] Within Market Hours -> 930 - 400
-  //[Mon-Fri] Before Market Hours -> Previous 930 - 400
-  //[Mon-Fri] After Market Hours -> 930 - 400
-  //[Sat-Sun] Anytime -> [Fri] MarketHours
-  // const result = await yahooFinance._chart(symbol, {period1 : getStartingPeriod(), return : "object", includePrePost : false, interval : interval});
-
-  const request = await fetch(
-    `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}?${
-      interval == '1m' ? 'period1=' + getStartingPeriod() : ''
-    }&interval=${interval}&period2=${9999999999}&includePrePose=false`,
-  );
-  // const request = await fetch(
-  //   `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}?${
-  //     interval == '1m' ? 'period1=' + getStartingPeriod() : ''
-  //   }&interval=${interval}&period2=${getStartingPeriod()}&includePrePose=false`,
-  // );
-
-  const response = await request.json();
-
-  const result = response?.chart?.result[0];
-
-  const timestamp = result?.timestamp;
-  const quote = result?.indicators?.quote[0];
-
-  const ohlcData = timestamp?.map((time: number, idx: number) => ({
-    date: new Date(time * 1000).toLocaleString(),
-    open: quote.open[idx],
-    high: quote.high[idx],
-    low: quote.low[idx],
-    close: quote.close[idx],
-    volume: quote.volume[idx],
-  }));
-  return ohlcData;
 }
 
 export async function getSummaryDetail(symbol: string, modules: any[]) {
@@ -84,4 +48,50 @@ export async function getTrendingSymbols() {
   return result
     .filter((obj) => ['EQUITY', 'ETF'].includes(obj.quoteType))
     .slice(0, 10);
+}
+
+export async function get1minChartData(symbol: string) {
+  const request = await fetch(
+    `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}?period1=${getStartingPeriod()}&interval=1m&period2=${9999999999}&includePrePost=false`,
+  );
+  const response = await request.json();
+  const result = response?.chart?.result[0];
+
+  const timestamp = result?.timestamp;
+  const quote = result?.indicators?.quote[0];
+
+  const ohlcData = timestamp?.map((time: number, idx: number) => ({
+    date: new Date(time * 1000).toLocaleTimeString(),
+    open: quote.open[idx],
+    high: quote.high[idx],
+    low: quote.low[idx],
+    close: quote.close[idx],
+    volume: quote.volume[idx],
+  }));
+  return ohlcData;
+}
+
+export async function getChartData2(
+  symbol: string,
+  timeInterval: TimeInterval,
+) {
+  if (timeInterval == '1d') {
+    return await get1minChartData(symbol);
+  }
+
+  const { period1, interval } = getChartQueryOptions(timeInterval);
+  const result = await yahooFinance.chart(
+    symbol,
+    {
+      period1: period1,
+      period2: new Date().toISOString().slice(0, 10),
+      interval: interval,
+      events: '',
+      includePrePost: false,
+    },
+    { validateResult: false },
+  );
+  return result?.quotes.map((quote: any) => {
+    return { ...quote, date: quote.date.toLocaleString() };
+  });
 }

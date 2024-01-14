@@ -1,15 +1,31 @@
 'use client';
-import { CardFooter } from '@/components/ui/card';
-import { getChartData, getQuote } from '@/data/stock';
-import { cn, currencyFormat, padChartData } from '@/lib/utils';
-import { Interval } from '@/types';
-import { AreaChart, Card, Tab, TabGroup, TabList } from '@tremor/react';
+import { getChartData2, getQuote } from '@/data/stock';
+import { cn, currencyFormat, numberFormat, padChartData } from '@/lib/utils';
+import { TimeInterval } from '@/types';
+import {
+  AreaChart,
+  BarChart,
+  Card,
+  Tab,
+  TabGroup,
+  TabList,
+} from '@tremor/react';
 import { useEffect, useState } from 'react';
 
 export function StockChart({ symbol }: { symbol: string }) {
-  const Intervals: Interval[] = ['1m', '5m', '30m', '1h', '1d', '1wk', '1mo'];
+  const TimeInterval: TimeInterval[] = [
+    '1d',
+    '5d',
+    '1m',
+    '6m',
+    'YTD',
+    '1y',
+    '5y',
+    'Max',
+  ];
 
-  const [interval, setInterval] = useState<Interval>('1m');
+  const [maxVolume, setMaxVolume] = useState<number>(0);
+  const [timeInterval, setTimeInterval] = useState<TimeInterval>('1d');
   const [increasing, setIncreasing] = useState<boolean>(false);
   const [chartData, setChartData] = useState([]);
 
@@ -17,11 +33,18 @@ export function StockChart({ symbol }: { symbol: string }) {
     const fetchData = async () => {
       const [quote, chartData] = await Promise.all([
         getQuote(symbol),
-        getChartData(symbol, interval),
+        getChartData2(symbol, timeInterval),
       ]);
-      const isRegularMarket = quote.marketState === 'REGULAR';
+
+      const { marketState } = quote;
+
+      const isRegularMarket = marketState === 'REGULAR';
+
+      setMaxVolume(
+        Math.max(...chartData.map((data: any) => Number(data.volume))),
+      );
       setChartData(
-        isRegularMarket && interval == '1m'
+        isRegularMarket && timeInterval === '1d'
           ? padChartData(chartData)
           : chartData,
       );
@@ -29,7 +52,7 @@ export function StockChart({ symbol }: { symbol: string }) {
     };
 
     fetchData().catch(console.error);
-  }, [interval, symbol]);
+  }, [timeInterval, symbol]);
 
   const valueFormatter = (value: number) => {
     return currencyFormat(value);
@@ -42,12 +65,21 @@ export function StockChart({ symbol }: { symbol: string }) {
       <div className="w-56 rounded-tremor-default border border-tremor-border bg-tremor-background p-2 text-tremor-default shadow-tremor-dropdown dark:border-dark-tremor-border dark:bg-dark-tremor-background dark:shadow-dark-tremor-dropdown">
         {payload.map((category: any, idx: number) => {
           const color = category.color;
-          const { date } = category.payload;
-          const fields = ['open', 'high', 'low', 'close'];
+          const { date: dateStr } = category.payload;
+          const fields = ['open', 'high', 'low', 'close', 'volume'];
+
+          const date = new Date(dateStr);
+          const isMidNight = [4, 5].includes(date.getUTCHours());
 
           return (
             <div key={idx} className="flex flex-1 flex-col">
-              <p className="m-2">{category.payload['date']}</p>
+              <p className="m-2">
+                {timeInterval === '1d'
+                  ? dateStr
+                  : isMidNight
+                    ? date.toLocaleDateString()
+                    : date.toLocaleString()}
+              </p>
               <p className="h-[1px] w-full shrink bg-border"></p>
 
               {fields.map((field) => {
@@ -65,7 +97,11 @@ export function StockChart({ symbol }: { symbol: string }) {
                       ></span>
                       <label>{field}</label>
                     </div>
-                    <p>{valueFormatter(value)}</p>
+                    <p>
+                      {field === 'volume'
+                        ? numberFormat(value)
+                        : valueFormatter(value)}
+                    </p>
                   </div>
                 );
               })}
@@ -79,43 +115,64 @@ export function StockChart({ symbol }: { symbol: string }) {
   return (
     <>
       <Card className="flex flex-col items-center">
-        <AreaChart
-          data={chartData}
-          index="date"
-          categories={['close']}
-          colors={[increasing ? 'green' : 'red']}
-          connectNulls={true}
-          showLegend={false}
-          autoMinValue={true}
-          noDataText="Loading Data ... 🔄"
-          startEndOnly={true}
-          valueFormatter={valueFormatter}
-          customTooltip={customToolTip}
-          showAnimation
-          animationDuration={2000}
-          yAxisWidth={75}
-        />
-        <CardFooter className="w-full">
-          <TabGroup
-            className="mt-5 w-full"
-            onIndexChange={(idx) => setInterval(Intervals[idx])}
+        <TabGroup
+          className="mb-5 w-full"
+          onIndexChange={(idx) => setTimeInterval(TimeInterval[idx])}
+        >
+          <TabList
+            className="flex w-full justify-around"
+            variant="solid"
+            color="sky"
           >
-            <TabList
-              className="flex w-full justify-around"
-              variant="solid"
-              color="sky"
-            >
-              {Intervals.map((interval) => {
-                return (
-                  <Tab value={interval} key={interval}>
-                    {' '}
-                    {interval}
-                  </Tab>
-                );
-              })}
-            </TabList>
-          </TabGroup>
-        </CardFooter>
+            {TimeInterval.map((interval) => {
+              return (
+                <Tab
+                  value={interval}
+                  key={interval}
+                  className="aria-selected:font-bold"
+                >
+                  {interval}
+                </Tab>
+              );
+            })}
+          </TabList>
+        </TabGroup>
+
+        <div className="relative w-full">
+          <AreaChart
+            data={chartData}
+            index="date"
+            categories={['close']}
+            colors={[increasing ? 'green' : 'red']}
+            connectNulls={true}
+            showLegend={false}
+            autoMinValue={true}
+            noDataText="Loading Data ... 🔄"
+            valueFormatter={valueFormatter}
+            customTooltip={customToolTip}
+            showAnimation
+            animationDuration={500}
+            yAxisWidth={75}
+            className="absolute z-10"
+          />
+          <BarChart
+            data={chartData}
+            index="date"
+            categories={['volume']}
+            colors={[increasing ? 'green-300' : 'red-300']}
+            showLegend={false}
+            noDataText="Loading Data ... 🔄"
+            yAxisWidth={75}
+            showAnimation
+            animationDuration={500}
+            valueFormatter={() => ''}
+            rotateLabelX={{ angle: 0, verticalShift: 1000000 }}
+            showGridLines={false}
+            autoMinValue
+            maxValue={maxVolume * 4}
+            className="tremor-label absolute z-0"
+          />
+        </div>
       </Card>
     </>
   );

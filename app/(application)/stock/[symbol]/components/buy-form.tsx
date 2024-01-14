@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -85,17 +84,16 @@ export function BuyForm({
     <Card>
       <CardHeader>
         <CardTitle>{symbol}</CardTitle>
-        <CardDescription>
-          <span className="flex flex-col">
-            <span>
-              Position {quantity}@{currencyFormat(cost)}
-            </span>
-            <span>Market Price: ${marketPrice}</span>
-          </span>
-          <span>Available Buying Power: {currencyFormat(cash)}</span>
-        </CardDescription>
       </CardHeader>
       <CardContent>
+        <span className="mb-2 flex flex-col text-sm text-muted-foreground">
+          <p>
+            Position {quantity}@{currencyFormat(cost)}
+          </p>
+          <p>Market Price: ${marketPrice}</p>
+          <p>Available Buying Power: {currencyFormat(cash)}</p>
+        </span>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField

@@ -5,7 +5,7 @@ import {
   getBalanceChartData,
   getBuyingPower,
   getProfolioValue,
-  getUserCreateTime
+  getUserCreateTime,
 } from '@/data/user';
 import { cn, currencyFormat } from '@/lib/utils';
 import { BalanceHeaderProps } from '@/types';
@@ -51,10 +51,16 @@ export function BalanceHeader({
   );
 }
 
+function dateMidnight() {
+  const date = new Date();
+  date.setUTCHours(0, 0, 0, 0);
+  return date;
+}
+
 export function BalanceChart() {
   const [range, setRange] = useState<DateRangePickerValue>({
-    from: new Date(),
-    to: new Date(),
+    from: dateMidnight(),
+    to: dateMidnight(),
   });
   const [balanceInfo, setBalanceInfo] = useState<BalanceHeaderProps>({
     totalBalance: 0,
@@ -67,7 +73,10 @@ export function BalanceChart() {
   useEffect(() => {
     const fetchData = async () => {
       const [chartData, cash, profolioValue] = await Promise.all([
-        getBalanceChartData(range.from ?? new Date(), range.to ?? new Date()),
+        getBalanceChartData(
+          range.from ?? dateMidnight(),
+          range.to ?? dateMidnight(),
+        ),
         getBuyingPower(),
         getProfolioValue(),
       ]);
@@ -132,6 +141,9 @@ export function BalanceChart() {
           showXAxis={false}
           showAnimation
           animationDuration={2000}
+          valueFormatter={currencyFormat}
+          yAxisWidth={75}
+          noDataText="Loading Data ... 🔄"
         />
       </CardContent>
     </Card>

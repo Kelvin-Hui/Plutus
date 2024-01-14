@@ -56,12 +56,6 @@ export function SearchBar({ placeholder }: { placeholder: string }) {
       <Popover open={openMenu} onOpenChange={setOpenMenu}>
         <PopoverTrigger asChild>
           <div className="relative flex items-center">
-            {/* <Input
-              className="w-full pl-8"
-              placeholder={placeholder}
-              onChange={(e) => handleSearch(e.target.value)}
-            />
-            <MagnifyingGlassIcon className="absolute left-2 h-4 w-4 text-muted-foreground" /> */}
             <Form {...form}>
               <form onSubmit={(e) => e.preventDefault()} className="space-y-8">
                 <FormField
@@ -104,7 +98,7 @@ export function SearchBar({ placeholder }: { placeholder: string }) {
                   return (
                     <CommandItem
                       key={symbol + '_' + index}
-                      className="ml-2 mr-2 cursor-pointer"
+                      className="block w-full cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap p-2 text-sm"
                       onSelect={() => {
                         setOpenMenu(false);
                         setSymbols([]);

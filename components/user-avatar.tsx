@@ -6,6 +6,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/outline';
@@ -13,12 +14,13 @@ import { ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/outline';
 export const SignOutButton = () => {
   return (
     <form
+      className="display:none"
       action={async () => {
         'use server';
         await signOut();
       }}
     >
-      <button type="submit">
+      <button type="submit" className="w-full">
         <div className="flex text-red-600">
           Sign Out
           <ArrowRightEndOnRectangleIcon className="h-5 w-5" />
@@ -46,8 +48,9 @@ export async function UserAvatar() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Hi {username}</DropdownMenuLabel>
-        <DropdownMenuItem className="select-auto">
+        <DropdownMenuLabel>Welcome {username}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="select-auto" asChild>
           <SignOutButton />
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -15,7 +15,7 @@ export default function LoginPage() {
         <CardHeader>
           <CardTitle>
             <div className="flex flex-col items-center justify-center">
-              <ArrowTrendingUpIcon className="h-24 w-24 text-green-600 animate-pulse" />
+              <ArrowTrendingUpIcon className="h-24 w-24 animate-pulse text-green-600" />
               <h1 className="font-sanif text-8xl font-bold">Plutus</h1>
               <span className="text-lg text-muted-foreground">
                 Welcome! Sign In To Continue

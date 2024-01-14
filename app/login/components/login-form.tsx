@@ -16,6 +16,7 @@ import { useForm } from 'react-hook-form';
 import { login } from '@/action/auth';
 import { FormError } from '@/components/ui/form-error';
 import { LoginSchema } from '@/schema';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { useState, useTransition } from 'react';
 import * as z from 'zod';
 
@@ -79,7 +80,8 @@ export function LoginForm() {
         />
         <FormError message={error} />
         <Button type="submit" className="w-full" disabled={isPending}>
-          Login
+          {isPending ? 'Loading ... ' : 'Login'}
+          {isPending && <ArrowPathIcon className="h-4 w-4 animate-spin" />}
         </Button>
       </form>
     </Form>

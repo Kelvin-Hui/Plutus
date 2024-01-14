@@ -1,9 +1,9 @@
 'use client';
 
-import { currencyFormat } from '@/lib/utils';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn, currencyFormat } from '@/lib/utils';
 import { ProfolioOverviewData } from '@/types';
-import { DonutChart, Flex, Legend } from '@tremor/react';
-import { useRouter } from 'next/navigation';
+import { DonutChart } from '@tremor/react';
 import { useState } from 'react';
 
 const colors = [
@@ -25,6 +25,52 @@ const colors = [
   'rose',
 ];
 
+type SelectValueProps = {
+  symbol?: string;
+  marketValue?: number;
+  color?: string;
+  quantity?: number;
+  marketPrice?: number;
+  cost?: number;
+} | null;
+
+const LegendItem = ({ selectValue }: { selectValue: SelectValueProps }) => {
+  if (!selectValue) return null;
+  const { symbol, marketValue, color, quantity, marketPrice, cost } =
+    selectValue;
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          <label className="flex items-center space-x-2">
+            <span
+              className={cn(
+                'h-3 w-3 shrink-0 rounded-tremor-full border-2',
+                `bg-${color}-500`,
+                'border-tremor-background shadow-tremor-card',
+                'dark:border-dark-tremor-background dark:shadow-dark-tremor-card',
+              )}
+            ></span>
+            <a href={`/stock/${symbol}`}>{symbol}</a>
+          </label>
+        </CardTitle>
+        {marketPrice && (
+          <pre className="flex flex-col">
+            <span>
+              Positon {currencyFormat(cost)} @{quantity}
+            </span>
+            <span>Market Price {currencyFormat(marketPrice)}</span>
+          </pre>
+        )}
+      </CardHeader>
+      <CardContent className="text-2xl font-light">
+        {currencyFormat(marketValue)}
+      </CardContent>
+    </Card>
+  );
+};
+
 export function ProfolioDiversity({
   profolio,
   buyingPower,
@@ -32,34 +78,26 @@ export function ProfolioDiversity({
   profolio: ProfolioOverviewData[];
   buyingPower: number;
 }) {
-  const [value, setValue] = useState({});
-  const { push } = useRouter();
-
+  const [value, setValue] = useState<SelectValueProps>(null);
   const data = profolio.map((row) => {
     return { ...row, marketValue: row.quantity * row.marketPrice };
   });
 
   return (
-    <Flex alignItems="center">
+    <div className="flex items-center justify-around">
       <DonutChart
         data={[...data, { symbol: '$CASH', marketValue: buyingPower }]}
         category="marketValue"
         index="symbol"
-        // variant="pie"
-        // showLabel={false}
         className="h-[24rem] w-[24rem]"
         colors={colors}
-        onValueChange={(v) => setValue(v)}
+        onValueChange={(v) => {
+          setValue(v);
+        }}
         valueFormatter={currencyFormat}
       />
 
-      <Legend
-        categories={data.map((stock) => stock.symbol)}
-        colors={colors}
-        enableLegendSlider={true}
-        className="w-2/3"
-        onClickLegendItem={(symbol) => push(`/stock/${symbol}`)}
-      />
-    </Flex>
+      <LegendItem selectValue={value} />
+    </div>
   );
 }

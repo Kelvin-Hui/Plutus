@@ -55,7 +55,7 @@ export async function ProfolioInfo() {
           <CardHeader>
             <CardTitle>Profolio Diversity</CardTitle>
           </CardHeader>
-          <CardContent className="flex justify-center">
+          <CardContent>
             <ProfolioDiversity profolio={profolio} buyingPower={buyingPower} />
           </CardContent>
         </TabsContent>

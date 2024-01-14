@@ -46,7 +46,7 @@ export function SignupForm() {
         }
         if (result?.success) {
           setSuccess(result.success);
-          await new Promise((resolve) => setTimeout(resolve, 2000));
+          await new Promise((resolve) => setTimeout(resolve, 1000));
           login(values);
         }
       });
@@ -91,7 +91,7 @@ export function SignupForm() {
         <FormError message={error} />
         <FormSuccess message={success} />
         <Button type="submit" className="w-full" disabled={isPending}>
-          Login
+          Sign Up
         </Button>
       </form>
     </Form>

@@ -15,6 +15,9 @@ export async function RecommendationSymbols({ symbol }: { symbol: string }) {
 
   return (
     <>
+      <h3 className="self-start pl-6 text-2xl font-semibold leading-none tracking-tight">
+        Similar Stocks
+      </h3>
       <div className="flex w-full items-center justify-between gap-4">
         {result.map((quote) => {
           const {
@@ -27,11 +30,7 @@ export async function RecommendationSymbols({ symbol }: { symbol: string }) {
           const increasing = (regularMarketChangePercent ?? 0) >= 0;
 
           return (
-            <Link
-              key={symbol}
-              href={`/stock/${symbol}`}
-              className="w-full hover:animate-bounce"
-            >
+            <Link key={symbol} href={`/stock/${symbol}`} className="w-full">
               <Card>
                 <CardHeader>
                   <CardTitle>{symbol}</CardTitle>

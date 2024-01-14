@@ -18,7 +18,6 @@ export function TrendingSymbolItem({ quote }: { quote: Quote }) {
     regularMarketPrice,
     regularMarketChangePercent,
     regularMarketVolume,
-    averageDailyVolume10Day,
   } = quote;
 
   const increasing = (regularMarketChangePercent ?? 0) >= 0;
@@ -56,7 +55,7 @@ export function TrendingSymbolItem({ quote }: { quote: Quote }) {
 export async function TrendingSymbols() {
   const trending = await getTrendingSymbols();
   return (
-    <Card className="h-full w-full flex-auto overflow-auto">
+    <Card className="h-full w-full flex-shrink overflow-auto">
       <CardHeader>
         <CardTitle>🇺🇸 Trending Symbols</CardTitle>
         <CardDescription>{new Date().toDateString()}</CardDescription>

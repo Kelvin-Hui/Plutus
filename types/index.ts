@@ -3,6 +3,16 @@ export type AutoCompleteSymbols = {
   name: string;
 };
 
+export type TimeInterval =
+  | '1d'
+  | '5d'
+  | '1m'
+  | '6m'
+  | 'YTD'
+  | '1y'
+  | '5y'
+  | 'Max';
+
 export type Interval =
   | '1m'
   | '2m'

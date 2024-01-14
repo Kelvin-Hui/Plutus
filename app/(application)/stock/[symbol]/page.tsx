@@ -23,19 +23,19 @@ export default async function Page({ params }: { params: { symbol: string } }) {
   const userId = session?.user?.id;
 
   return (
-    <div className="container mt-20 flex flex-col items-center gap-10">
+    <div className="container mt-20 flex h-full flex-col items-center gap-10">
       <QuoteHeader symbol={symbol} userId={userId} />
 
-      <div className="flex w-full justify-between gap-4">
+      <div className="flex w-full flex-1 justify-between gap-4">
         <StockChart symbol={symbol} />
         <OrderPanel symbol={symbol} userId={userId} />
       </div>
       <KeyStats symbol={symbol} />
-      <div className="flex h-1/4 w-full justify-between gap-4">
+      <RecommendationSymbols symbol={symbol} />
+      <div className="flex h-1/2 w-full flex-initial justify-between gap-4 pb-4">
         <TranscationHistory symbol={symbol} />
         <NewsTable symbol={symbol} />
       </div>
-      <RecommendationSymbols symbol={symbol} />
     </div>
   );
 }

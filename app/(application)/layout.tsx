@@ -1,6 +1,7 @@
 import { ModeToggle } from '@/components/mode-toggle';
 import { SearchBar } from '@/components/search-bar';
 import { UserAvatar } from '@/components/user-avatar';
+import { ArrowTrendingUpIcon } from '@heroicons/react/24/outline';
 
 import Link from 'next/link';
 
@@ -11,7 +12,8 @@ export default function layout({ children }: { children: React.ReactNode }) {
         <div className="container flex flex-row items-center justify-between pt-4">
           <div>
             <Link key="home" href="/dashboard">
-              <h2 className="text-3xl font-extrabold tracking-normal">
+              <h2 className="flex items-center text-3xl font-extrabold tracking-normal">
+                <ArrowTrendingUpIcon className="h-8 w-8 text-green-300" />
                 Plutus
               </h2>
             </Link>
