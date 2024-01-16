@@ -39,20 +39,26 @@ export async function getRecommandationSymbols(symbol: string) {
 
 export async function getTrendingSymbols() {
   const trending = await yahooFinance.trendingSymbols('US', {
-    count: 20,
+    count: 30,
     lang: 'en-us',
+    region: 'US',
   });
   const result = await yahooFinance.quote(
     trending?.quotes?.map((row) => row.symbol),
+    {},
+    { validateResult: false },
   );
   return result
-    .filter((obj) => ['EQUITY', 'ETF'].includes(obj.quoteType))
-    .slice(0, 10);
+    .filter((obj: any) => ['EQUITY', 'ETF', 'INDEX'].includes(obj.quoteType))
+    .filter((obj: any) => obj.currency === 'USD')
+    .slice(0, 15);
 }
 
 export async function get1minChartData(symbol: string) {
   const request = await fetch(
-    `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}?period1=${getStartingPeriod()}&interval=1m&period2=${9999999999}&includePrePost=false`,
+    `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}?period1=${
+      getStartingPeriod().valueOf() / 1000
+    }&interval=1m&period2=${9999999999}&includePrePost=false`,
   );
   const response = await request.json();
   const result = response?.chart?.result[0];
@@ -71,10 +77,7 @@ export async function get1minChartData(symbol: string) {
   return ohlcData;
 }
 
-export async function getChartData2(
-  symbol: string,
-  timeInterval: TimeInterval,
-) {
+export async function getChartData(symbol: string, timeInterval: TimeInterval) {
   if (timeInterval == '1d') {
     return await get1minChartData(symbol);
   }

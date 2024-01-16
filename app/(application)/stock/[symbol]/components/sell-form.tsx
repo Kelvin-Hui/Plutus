@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { currencyFormat } from '@/lib/utils';
+import { cn, currencyFormat } from '@/lib/utils';
 import { ProfolioData } from '@/types';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -100,7 +100,13 @@ export function SellForm({
               name="shares"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Shares</FormLabel>
+                  <FormLabel
+                    className={cn({
+                      'text-red-600': form.control._formState.errors.shares,
+                    })}
+                  >
+                    Shares
+                  </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -110,7 +116,7 @@ export function SellForm({
                       disabled={isPending}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-600" />
                 </FormItem>
               )}
             />
@@ -136,7 +142,7 @@ export function SellForm({
 
             {userId ? (
               <Button
-                className="w-full bg-red-600"
+                className="w-full bg-red-500"
                 type="submit"
                 disabled={isPending}
               >

@@ -1,4 +1,4 @@
-import { Interval, TimeInterval } from '@/types';
+import { Interval, TimeInterval, TranscationData } from '@/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -84,6 +84,28 @@ export function calculateDiversity(
   return ((marketPrice * quantity) / totalProfolioValue) * 100;
 }
 
+export function calculateTodayReturn(
+  marketPrice: number,
+  marketChange: number,
+  quantity: number,
+  prevClose: number,
+  history: TranscationData[],
+) {
+  let todayReturn = 0;
+  let shareBoughtToday = 0;
+  history
+    .filter(
+      (transcation) =>
+        transcation.createdAt >= getStartingPeriod() ||
+        transcation.cost >= prevClose,
+    )
+    .forEach((transcation) => {
+      shareBoughtToday += transcation.quantity;
+      todayReturn += (marketPrice - transcation.cost) * transcation.quantity;
+    });
+  return (todayReturn += marketChange * (quantity - shareBoughtToday));
+}
+
 export function convertToISO(date: Date) {
   const str = date?.toISOString().split('T')[0];
   return new Date(str);
@@ -116,11 +138,11 @@ export function getStartingPeriod() {
     marketOpen.setUTCDate(date - (day == 1 ? 3 : 1));
   }
 
-  return marketOpen.valueOf() / 1000;
+  return new Date(marketOpen);
 }
 
 export function getEndingPeriod() {
-  return getMarketCloseTime(new Date(getStartingPeriod() * 1000));
+  return getMarketCloseTime(getStartingPeriod());
 }
 
 export function getChartQueryOptions(timeInterval: TimeInterval): {
@@ -173,7 +195,7 @@ export function getChartQueryOptions(timeInterval: TimeInterval): {
 }
 
 export function padChartData(data: any) {
-  const startPeriod = new Date(getStartingPeriod() * 1000);
+  const startPeriod = getStartingPeriod();
   const endPeriod = getEndingPeriod();
   let currDate = new Date(data.slice(-1)[0].date ?? startPeriod);
   if (currDate === endPeriod) return data;

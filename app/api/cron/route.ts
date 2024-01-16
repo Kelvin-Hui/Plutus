@@ -3,6 +3,8 @@ import prisma from '@/lib/prisma';
 import { NextRequest } from 'next/server';
 
 export async function GET(request: NextRequest) {
+  const startTime = new Date();
+
   const authHeader = request.headers.get('authorization');
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return new Response('Unauthroized', {
@@ -19,9 +21,13 @@ export async function GET(request: NextRequest) {
   const computedData = await Promise.all(
     allUserId.map(async (user) => await computeTotalProfolioValue(user.id)),
   );
+
   await prisma.profolioValue.createMany({
     data: computedData,
   });
 
-  return Response.json({ success: true });
+  return Response.json({
+    success: true,
+    runtimeinMS: new Date().valueOf() - startTime.valueOf(),
+  });
 }

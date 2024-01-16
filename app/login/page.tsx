@@ -10,7 +10,7 @@ import { SignupForm } from './components/signup-form';
 
 export default function LoginPage() {
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className="flex h-screen items-center justify-center bg-foreground/5">
       <Card>
         <CardHeader>
           <CardTitle>

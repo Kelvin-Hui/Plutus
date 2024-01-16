@@ -70,7 +70,7 @@ export async function buyShares(shares: number, symbol: string) {
 
   revalidatePath(`/stock/${symbol}`);
   return {
-    success: `Bought ${shares}@$${currentMarketPrice} shares of ${symbol}! 🎉 (${new Date().toLocaleString()})`,
+    success: `[Bought] $${currentMarketPrice} @ ${shares} shares of ${symbol}! 🎉 (${new Date().toLocaleString()})`,
   };
 }
 
@@ -145,6 +145,6 @@ export async function sellShares(shares: number, symbol: string) {
 
   revalidatePath(`/stock/${symbol}`);
   return {
-    success: `Sold ${shares}@$${currentMarketPrice} shares of ${symbol}! 🎉 (${new Date().toLocaleString()})`,
+    success: `[Sold] $${currentMarketPrice} @ ${shares} shares of ${symbol}! 🎉 (${new Date().toLocaleString()})`,
   };
 }

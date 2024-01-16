@@ -15,7 +15,7 @@ export async function OrderPanel({
     getProfolio(symbol),
   ]);
   return (
-    <Tabs defaultValue="buy" className="w-1/2">
+    <Tabs defaultValue="buy" className="w-full lg:w-1/2">
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="buy">Buy</TabsTrigger>
         <TabsTrigger value="sell">Sell</TabsTrigger>

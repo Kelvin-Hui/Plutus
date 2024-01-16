@@ -279,10 +279,18 @@ module.exports = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: 0 },
         },
+        'infinite-slide': {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(calc(-250px * 10 + -16px * 22))' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'infinite-loop': 'infinite-slide 40s linear infinite',
+      },
+      cursor: {
+        dollar: 'url(../public/money.png), pointer',
       },
     },
   },

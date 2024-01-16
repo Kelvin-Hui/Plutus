@@ -69,7 +69,8 @@ export async function QuoteHeader({
     <div className="flex w-full items-center justify-between">
       <div className="flex flex-col space-y-2">
         <h2 className="text-5xl">
-          {symbol} - {companyName}
+          {companyName} -{' '}
+          <span className="text-muted-foreground">{symbol}</span>
         </h2>
         <span className="text-muted-foreground">
           {exchangeName}-{quote.quoteType}
@@ -85,13 +86,14 @@ export async function QuoteHeader({
           >
             ${price}
           </h1>
-          <BadgeDelta
-            deltaType={increasing ? 'increase' : 'decrease'}
-            size={'xl'}
+          <span
+            className={cn('text-2xl text-green-600', {
+              'text-red-600': !increasing,
+            })}
           >
             {increasing && '+'}
             {priceChange.toFixed(2)}
-          </BadgeDelta>
+          </span>
           <BadgeDelta
             deltaType={increasing ? 'moderateIncrease' : 'moderateDecrease'}
             size={'xl'}

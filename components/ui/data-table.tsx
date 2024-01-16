@@ -3,6 +3,7 @@ import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
+  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -22,21 +23,24 @@ import {
 } from '@/components/ui/table';
 import { useState } from 'react';
 import { DataTablePagination } from './data-table-pagination';
+import { DataTableViewOptions } from './data-table-view-options';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filter?: boolean;
+  colHeaderMap?: { [key: string]: string };
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   filter = true,
+  colHeaderMap = {},
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const table = useReactTable({
     data,
     columns,
@@ -46,9 +50,11 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
       columnFilters,
+      columnVisibility,
     },
   });
 
@@ -66,6 +72,7 @@ export function DataTable<TData, TValue>({
             }
             className="max-w-sm"
           />
+          <DataTableViewOptions table={table} colHeaderMap={colHeaderMap} />
         </div>
       )}
 

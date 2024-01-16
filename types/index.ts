@@ -60,9 +60,11 @@ export type ProfolioOverviewData = {
   marketPrice: number;
   marketValue?: number;
   diversityPercentage?: number;
+  marketChange: number;
+  marketPreviousClose: number;
 };
 export type TranscationData = {
-  date?: Date;
+  createdAt: Date;
   symbol?: string;
   quantity: number;
   cost: number;

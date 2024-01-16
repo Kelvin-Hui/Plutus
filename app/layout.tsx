@@ -29,7 +29,13 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
-          <Toaster richColors position="top-right" expand closeButton />
+          <Toaster
+            richColors
+            position="top-right"
+            expand
+            closeButton
+            duration={5000}
+          />
         </ThemeProvider>
       </body>
     </html>

@@ -39,6 +39,8 @@ const LegendItem = ({ selectValue }: { selectValue: SelectValueProps }) => {
   const { symbol, marketValue, color, quantity, marketPrice, cost } =
     selectValue;
 
+  const isCash = symbol === '$CASH';
+
   return (
     <Card>
       <CardHeader>
@@ -52,7 +54,11 @@ const LegendItem = ({ selectValue }: { selectValue: SelectValueProps }) => {
                 'dark:border-dark-tremor-background dark:shadow-dark-tremor-card',
               )}
             ></span>
-            <a href={`/stock/${symbol}`}>{symbol}</a>
+            {isCash ? (
+              <p>{symbol}</p>
+            ) : (
+              <a href={`/stock/${symbol}`}>{symbol}</a>
+            )}
           </label>
         </CardTitle>
         {marketPrice && (

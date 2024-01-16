@@ -17,6 +17,7 @@ import { useForm } from 'react-hook-form';
 import { login, signup } from '@/action/auth';
 import { FormError } from '@/components/ui/form-error';
 import { FormSuccess } from '@/components/ui/form-success';
+import { cn } from '@/lib/utils';
 import { RegisterSchema } from '@/schema';
 import { useState, useTransition } from 'react';
 import * as z from 'zod';
@@ -61,12 +62,18 @@ export function SignupForm() {
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel
+                className={cn({
+                  'text-red-600': form.control._formState.errors.username,
+                })}
+              >
+                Username
+              </FormLabel>
               <FormControl>
                 <Input {...field} placeholder="Username" disabled={isPending} />
               </FormControl>
               <FormDescription>This will be your username!</FormDescription>
-              <FormMessage />
+              <FormMessage className="text-red-600" />
             </FormItem>
           )}
         />
@@ -75,7 +82,13 @@ export function SignupForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel
+                className={cn({
+                  'text-red-600': form.control._formState.errors.password,
+                })}
+              >
+                Password
+              </FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -84,7 +97,7 @@ export function SignupForm() {
                   disabled={isPending}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red-600" />
             </FormItem>
           )}
         />

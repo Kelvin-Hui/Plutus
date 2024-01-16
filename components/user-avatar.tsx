@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
 export const SignOutButton = () => {
   return (
@@ -30,10 +31,20 @@ export const SignOutButton = () => {
   );
 };
 
-export async function UserAvatar() {
+export async function UserAvatar({
+  showUserRelated,
+}: {
+  showUserRelated: boolean;
+}) {
   const session = await auth();
   const isLoggedIn = !!session?.user;
-  if (!isLoggedIn) return null;
+  if (!isLoggedIn || !showUserRelated) {
+    return (
+      <Link href="/login">
+        <Button variant="outline">Login / Signup</Button>
+      </Link>
+    );
+  }
 
   const username = session?.user.username;
   return (

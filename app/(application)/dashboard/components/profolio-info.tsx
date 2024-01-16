@@ -3,14 +3,21 @@ import { pnlColumns, transcationColumns } from '@/components/ui/columns';
 import { DataTable } from '@/components/ui/data-table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getBuyingPower, getProfolio, getTranscations } from '@/data/user';
-import { calculateDiversity, calculatePNL, calculateROI } from '@/lib/utils';
+import {
+  calculateDiversity,
+  calculatePNL,
+  calculateROI,
+  calculateTodayReturn,
+} from '@/lib/utils';
 import { ProfolioOverviewData, TranscationData } from '@/types';
 import { ProfolioDiversity } from './profolio-diversity';
 
 export function ProfolioOverview({
   profolio,
+  transcationData,
 }: {
   profolio: ProfolioOverviewData[];
+  transcationData: TranscationData[];
 }) {
   const totalProfolioValue = profolio.reduce(
     (acc, curr) => acc + curr.marketPrice * curr.quantity,
@@ -27,13 +34,38 @@ export function ProfolioOverview({
         row.quantity,
         totalProfolioValue,
       ),
+      todayReturn: calculateTodayReturn(
+        row.marketPrice,
+        row.marketChange,
+        row.quantity,
+        row.marketPreviousClose,
+        transcationData.filter((data) => data.symbol == row.symbol),
+      ),
     };
   });
-  return <DataTable data={data} columns={pnlColumns} />;
+  return (
+    <DataTable
+      data={data}
+      columns={pnlColumns}
+      colHeaderMap={{
+        quantity: 'Position',
+        cost: 'AverageCost',
+        pnl: 'PNL',
+        roi: 'ROI',
+        diversityPercentage: 'Diversity',
+      }}
+    />
+  );
 }
 
 export function TranscationsHistory({ data }: { data: TranscationData[] }) {
-  return <DataTable data={data} columns={transcationColumns} />;
+  return (
+    <DataTable
+      data={data}
+      columns={transcationColumns}
+      colHeaderMap={{ createdAt: 'Date' }}
+    />
+  );
 }
 
 export async function ProfolioInfo() {
@@ -64,7 +96,10 @@ export async function ProfolioInfo() {
             <CardTitle>Profolio Overview</CardTitle>
           </CardHeader>
           <CardContent>
-            <ProfolioOverview profolio={profolio} />
+            <ProfolioOverview
+              profolio={profolio}
+              transcationData={transcations}
+            />
           </CardContent>
         </TabsContent>
         <TabsContent value="history">

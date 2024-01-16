@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { getChartData2, getQuote } from '@/data/stock';
+import { getChartData, getQuote } from '@/data/stock';
 import { getWatchListSymbols } from '@/data/user';
 import { cn } from '@/lib/utils';
 import { AreaChart, BadgeDelta } from '@tremor/react';
@@ -8,7 +8,7 @@ import Link from 'next/link';
 export async function WatchListItem({ symbol }: { symbol: string }) {
   const [quote, chartData] = await Promise.all([
     getQuote(symbol),
-    getChartData2(symbol, '1d'),
+    getChartData(symbol, '1d'),
   ]);
 
   const { shortName, regularMarketPrice, regularMarketChangePercent } = quote;
@@ -16,7 +16,7 @@ export async function WatchListItem({ symbol }: { symbol: string }) {
   const increasing = (regularMarketChangePercent ?? 0) >= 0;
 
   return (
-    <div className="grid grid-cols-3 overflow-x-scroll hover:bg-muted/50">
+    <div className="grid grid-cols-3 hover:bg-muted/50">
       <div className="flex flex-col">
         <Link href={`/stock/${symbol}`} className="font-semibold">
           {symbol}
@@ -35,7 +35,7 @@ export async function WatchListItem({ symbol }: { symbol: string }) {
         showXAxis={false}
         showYAxis={false}
         showTooltip={false}
-        className="h-10 w-20 self-center"
+        className="w-30 h-10 self-center lg:w-20"
       />
       <div className="flex items-center justify-self-end">
         <h1 className={cn('text-green-600', { 'text-red-600': !increasing })}>
@@ -53,7 +53,6 @@ export async function WatchListItem({ symbol }: { symbol: string }) {
 
 export async function WatchList() {
   const symbolList = await getWatchListSymbols();
-  // const symbolList = watchList.map((obj) => obj.symbol);
 
   return (
     <Card className="h-full w-full overflow-auto">

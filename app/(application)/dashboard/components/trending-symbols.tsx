@@ -18,12 +18,13 @@ export function TrendingSymbolItem({ quote }: { quote: Quote }) {
     regularMarketPrice,
     regularMarketChangePercent,
     regularMarketVolume,
+    regularMarketChange,
   } = quote;
 
   const increasing = (regularMarketChangePercent ?? 0) >= 0;
 
   return (
-    <div className="grid grid-cols-3 hover:bg-muted/50">
+    <div className="grid grid-cols-5 hover:bg-muted/50">
       <div className="flex flex-col">
         <Link href={`/stock/${symbol}`} className="font-semibold">
           {symbol}
@@ -32,22 +33,31 @@ export function TrendingSymbolItem({ quote }: { quote: Quote }) {
           {shortName}
         </span>
       </div>
-      <div className="flex justify-around">
-        <div className="flex flex-col items-center justify-between text-sm">
-          <h1 className="text-muted-foreground underline">Volume</h1>
-          <h1>{numberFormat(regularMarketVolume)}</h1>
-        </div>
-      </div>
-      <div className="flex items-center justify-self-end">
-        <h1 className={cn('text-green-600', { 'text-red-600': !increasing })}>
-          ${regularMarketPrice?.toFixed(2)}
+      <div className="flex flex-col items-center text-sm">
+        <h1 className="text-muted-foreground underline decoration-dotted underline-offset-2">
+          Volume
         </h1>
-        <BadgeDelta
-          deltaType={increasing ? 'moderateIncrease' : 'moderateDecrease'}
-        >
-          {regularMarketChangePercent?.toFixed(2)}%
-        </BadgeDelta>
+        <span>{numberFormat(regularMarketVolume)}</span>
       </div>
+
+      <div
+        className={cn(
+          'col-span-2 space-x-2 self-center justify-self-end text-green-600',
+          { 'text-red-600': !increasing },
+        )}
+      >
+        <span>${regularMarketPrice?.toFixed(2)}</span>
+        <span className="text-sm">
+          {increasing && '+'}
+          {regularMarketChange?.toFixed(2)}
+        </span>
+      </div>
+      <BadgeDelta
+        deltaType={increasing ? 'moderateIncrease' : 'moderateDecrease'}
+        className="self-center justify-self-end"
+      >
+        {regularMarketChangePercent?.toFixed(2)}%
+      </BadgeDelta>
     </div>
   );
 }
@@ -55,10 +65,10 @@ export function TrendingSymbolItem({ quote }: { quote: Quote }) {
 export async function TrendingSymbols() {
   const trending = await getTrendingSymbols();
   return (
-    <Card className="h-full w-full flex-shrink overflow-auto">
+    <Card className="h-auto w-full self-center overflow-auto md:w-2/3 md:self-auto">
       <CardHeader>
         <CardTitle>🇺🇸 Trending Symbols</CardTitle>
-        <CardDescription>{new Date().toDateString()}</CardDescription>
+        <CardDescription>{new Date().toLocaleString()}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col space-y-4">
         {trending.map((quote) => {

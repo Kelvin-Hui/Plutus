@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form';
 
 import { login } from '@/action/auth';
 import { FormError } from '@/components/ui/form-error';
+import { cn } from '@/lib/utils';
 import { LoginSchema } from '@/schema';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { useState, useTransition } from 'react';
@@ -52,11 +53,17 @@ export function LoginForm() {
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel
+                className={cn({
+                  'text-red-600': form.control._formState.errors.username,
+                })}
+              >
+                Username
+              </FormLabel>
               <FormControl>
                 <Input {...field} placeholder="Username" disabled={isPending} />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red-600" />
             </FormItem>
           )}
         />
@@ -65,7 +72,13 @@ export function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel
+                className={cn({
+                  'text-red-600': form.control._formState.errors.password,
+                })}
+              >
+                Password
+              </FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -74,7 +87,7 @@ export function LoginForm() {
                   disabled={isPending}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red-600" />
             </FormItem>
           )}
         />

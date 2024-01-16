@@ -149,7 +149,11 @@ export async function getProfolio(symbol?: string | undefined, id?: string) {
   });
   return symbolList?.map((_, idx) => {
     return {
-      marketPrice: marketPrices[idx].regularMarketPrice,
+      marketPrice: marketPrices[idx]?.regularMarketPrice,
+      marketChange: marketPrices[idx]?.regularMarketChange,
+      marketPreviousClose: Number(
+        marketPrices[idx]?.regularMarketPreviousClose,
+      ),
       ...castedProfolio[idx],
     };
   });

@@ -1,5 +1,5 @@
 'use client';
-import { getChartData2, getQuote } from '@/data/stock';
+import { getChartData, getQuote } from '@/data/stock';
 import { cn, currencyFormat, numberFormat, padChartData } from '@/lib/utils';
 import { TimeInterval } from '@/types';
 import {
@@ -33,12 +33,13 @@ export function StockChart({ symbol }: { symbol: string }) {
     const fetchData = async () => {
       const [quote, chartData] = await Promise.all([
         getQuote(symbol),
-        getChartData2(symbol, timeInterval),
+        getChartData(symbol, timeInterval),
       ]);
 
       const { marketState } = quote;
 
       const isRegularMarket = marketState === 'REGULAR';
+      if (!chartData) return null;
 
       setMaxVolume(
         Math.max(...chartData.map((data: any) => Number(data.volume))),
@@ -138,7 +139,7 @@ export function StockChart({ symbol }: { symbol: string }) {
           </TabList>
         </TabGroup>
 
-        <div className="relative w-full">
+        <div className="relative h-[20rem] w-full">
           <AreaChart
             data={chartData}
             index="date"
@@ -147,7 +148,7 @@ export function StockChart({ symbol }: { symbol: string }) {
             connectNulls={true}
             showLegend={false}
             autoMinValue={true}
-            noDataText="Loading Data ... 🔄"
+            // noDataText="Loading Data ... 🔄"
             valueFormatter={valueFormatter}
             customTooltip={customToolTip}
             showAnimation
@@ -161,7 +162,7 @@ export function StockChart({ symbol }: { symbol: string }) {
             categories={['volume']}
             colors={[increasing ? 'green-300' : 'red-300']}
             showLegend={false}
-            noDataText="Loading Data ... 🔄"
+            // noDataText="Loading Data ... 🔄"
             yAxisWidth={75}
             showAnimation
             animationDuration={500}

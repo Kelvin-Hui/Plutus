@@ -41,27 +41,28 @@ export const pnlColumns: ColumnDef<PNLData>[] = [
     },
   },
   {
-    accessorKey: 'diversityPercentage',
+    accessorKey: 'todayReturn',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          {' '}
-          Profolio Diversity <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
+          Today's Return <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const diversity = row.getValue<number>('diversityPercentage');
-
+      const todayReturn = row.getValue<number>('todayReturn');
+      const increasing = todayReturn >= 0;
       return (
-        <ProgressCircle
-          value={diversity}
-          size="xs"
-          tooltip={`${diversity.toFixed(2)}%`}
-        />
+        <p
+          className={cn('text-center text-green-600', {
+            'text-red-600': !increasing,
+          })}
+        >
+          {currencyFormat(todayReturn)}
+        </p>
       );
     },
   },
@@ -87,6 +88,7 @@ export const pnlColumns: ColumnDef<PNLData>[] = [
       );
     },
   },
+
   {
     accessorKey: 'roi',
     header: ({ column }) => {
@@ -109,6 +111,31 @@ export const pnlColumns: ColumnDef<PNLData>[] = [
           {increasing && '+'}
           {ROI.toFixed(2)}%
         </BadgeDelta>
+      );
+    },
+  },
+  {
+    accessorKey: 'diversityPercentage',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="w-full"
+        >
+          Profolio Diversity <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const diversity = row.getValue<number>('diversityPercentage');
+
+      return (
+        <ProgressCircle
+          value={diversity}
+          size="xs"
+          tooltip={`${diversity.toFixed(2)}%`}
+        />
       );
     },
   },
