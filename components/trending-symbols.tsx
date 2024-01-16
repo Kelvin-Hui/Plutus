@@ -65,13 +65,13 @@ export function TrendingSymbolItem({ quote }: { quote: Quote }) {
 export async function TrendingSymbols() {
   const trending = await getTrendingSymbols();
   return (
-    <Card className="h-auto w-full self-center overflow-auto md:w-2/3 md:self-auto">
-      <CardHeader>
+    <Card className="h-full w-full self-center overflow-auto shadow-xl md:w-2/3 md:self-auto">
+      <CardHeader className="sticky top-0">
         <CardTitle>🇺🇸 Trending Symbols</CardTitle>
         <CardDescription>{new Date().toLocaleString()}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col space-y-4">
-        {trending.map((quote) => {
+        {trending.map((quote: any) => {
           return (
             <TrendingSymbolItem
               key={'TrendingSymbol_' + quote.symbol}

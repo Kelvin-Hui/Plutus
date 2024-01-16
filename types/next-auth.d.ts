@@ -1,9 +1,9 @@
 import { DefaultSession } from 'next-auth';
 
 export type ExtendedUser = DefaultSession['user'] & {
-  username: string;
   id: string;
-  cash: number;
+  username?: string;
+  cash?: number;
 };
 
 declare module 'next-auth' {
@@ -11,3 +11,16 @@ declare module 'next-auth' {
     user: ExtendedUser;
   }
 }
+
+declare module '@auth/core/jwt' {
+  interface JWT extends DefaultJWT {
+    user: ExtendedUser;
+  }
+}
+
+// declare module '@auth/core/' {
+//   interface User extends User {
+//     username:string;
+//     cash :number;
+//   }
+// }

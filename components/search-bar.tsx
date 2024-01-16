@@ -94,7 +94,7 @@ export function SearchBar({ placeholder }: { placeholder: string }) {
           >
             <Command>
               <CommandList className="p-2">
-                {symbols.map(({ symbol, name }, index) => {
+                {symbols.map(({ symbol, name, exchange }, index) => {
                   return (
                     <CommandItem
                       key={symbol + '_' + index}
@@ -106,7 +106,10 @@ export function SearchBar({ placeholder }: { placeholder: string }) {
                         push(`/stock/${symbol}`);
                       }}
                     >
-                      {symbol} - {name}
+                      {name} -{' '}
+                      <span className="text-xs text-muted-foreground">
+                        {symbol} - {exchange}
+                      </span>
                     </CommandItem>
                   );
                 })}

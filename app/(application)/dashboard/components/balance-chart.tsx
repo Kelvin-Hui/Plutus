@@ -143,6 +143,7 @@ export function BalanceChart() {
           animationDuration={2000}
           valueFormatter={currencyFormat}
           yAxisWidth={75}
+          className="min-h-[20rem]"
           noDataText="Loading Data ... 🔄"
         />
       </CardContent>

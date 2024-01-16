@@ -53,7 +53,7 @@ export async function UserAvatar({
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar>
             <AvatarFallback>
-              {session?.user.username.charAt(0).toUpperCase()}
+              {session.user.username?.charAt(0).toUpperCase() ?? 'U'}
             </AvatarFallback>
           </Avatar>
         </Button>

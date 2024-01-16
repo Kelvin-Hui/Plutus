@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { cn, currencyFormat } from '@/lib/utils';
-import { PNLData, TranscationData } from '@/types';
+import { PNLData, TransactionData } from '@/types';
 import { ArrowsUpDownIcon } from '@heroicons/react/24/outline';
 import { ColumnDef } from '@tanstack/react-table';
 import { BadgeDelta, ProgressCircle } from '@tremor/react';
@@ -48,7 +48,7 @@ export const pnlColumns: ColumnDef<PNLData>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Today's Return <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
+          Today&apos;s Return <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
         </Button>
       );
     },
@@ -141,7 +141,7 @@ export const pnlColumns: ColumnDef<PNLData>[] = [
   },
 ];
 
-export const transcationColumns: ColumnDef<TranscationData>[] = [
+export const transactionColumns: ColumnDef<TransactionData>[] = [
   {
     accessorKey: 'createdAt',
     header: ({ column }) => {

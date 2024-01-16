@@ -1,6 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getQuoteNews } from '@/data/stock';
+import { cn } from '@/lib/utils';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 
@@ -52,7 +53,7 @@ export async function NewsTable({ symbol }: { symbol: string }) {
 
   return (
     <Card className="h-full w-full overflow-auto">
-      <CardHeader>
+      <CardHeader className={cn('sticky top-0')}>
         <CardTitle>Recent News</CardTitle>
       </CardHeader>
       <CardContent>

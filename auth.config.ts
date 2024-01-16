@@ -7,6 +7,7 @@ import {
 import type { NextAuthConfig } from 'next-auth';
 
 export const authConfig = {
+  trustHost: true,
   pages: {
     signIn: '/login',
   },
@@ -29,20 +30,10 @@ export const authConfig = {
         }
         return true;
       }
-
-      // const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
-      // if (isOnDashboard) {
-      //   if (isLoggedIn) return true;
-      //   return false; // Redirect unauthenticated users to login page
-      // } else if (isLoggedIn) {
-      //   return Response.redirect(new URL(DEFAULT_REDIRECT_URL, nextUrl));
-      // }
-      // return true;
     },
     async session({ session, token }) {
       session.user.username = token.user.username;
       session.user.id = token.user.id;
-      session.user.cash = token.user.cash;
       return session;
     },
     async jwt({ token, user }) {

@@ -11,7 +11,7 @@ import { getQuote } from '@/data/stock';
 import { cn } from '@/lib/utils';
 import { BanknotesIcon, UserIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { TrendingSymbols } from './(application)/dashboard/components/trending-symbols';
+import { TrendingSymbols } from '../components/trending-symbols';
 
 async function SymbolCarousel() {
   const symbols = [
@@ -79,22 +79,22 @@ function HomeHeader() {
   return (
     <section className="mx-auto space-y-10">
       <h6 className="text-5xl font-semibold leading-tight tracking-tight">
-        Learn How To{' '}
-        <span className="decroation-green-300 animate-pulse text-7xl text-green-500 underline decoration-dotted  decoration-2 underline-offset-4 hover:cursor-dollar">
+        Learn How To &nbsp;
+        <span className="decroation-green-300 animate-pulse text-8xl text-green-500 underline decoration-dotted  decoration-2 underline-offset-4 hover:cursor-dollar">
           Invest
-        </span>{' '}
-        Without The Risk
+        </span>
+        &nbsp; Without The Risk
       </h6>
       <span className="text-4xl text-muted-foreground">
         Experience the thrill of stock trading
         <span className="block text-3xl text-muted-foreground">
-          It won't cost you a penny 1¢
+          It won&apos;t cost you a penny 1¢
         </span>
       </span>
 
       <div className="flex items-center justify-start">
         <Link href="/dashboard">
-          <Button variant="outline">Let's Get Started🎉</Button>
+          <Button variant="default">Let&apos;s Get Started🎉</Button>
         </Link>
       </div>
     </section>
@@ -157,7 +157,7 @@ function Features() {
 
 function CopyrightFooter() {
   return (
-    <footer className="mx-auto mt-auto text-sm">{`Plutus@${new Date().getFullYear()}`}</footer>
+    <footer className="mx-auto mt-auto pt-2 text-sm">{`Plutus@${new Date().getFullYear()}`}</footer>
   );
 }
 
@@ -166,15 +166,13 @@ export default function Home() {
     <div className="container flex h-screen flex-col">
       <NavBar showUserRelated={false} />
       <SymbolCarousel />
-      <div className="flex h-2/3 flex-grow-0 flex-col  items-center gap-2 lg:flex-row">
+      <div className="mb-2 flex h-full flex-grow-0 flex-col items-center gap-2 lg:h-3/5 lg:flex-row">
         <div>
           <HomeHeader />
           <Features />
         </div>
         <TrendingSymbols />
       </div>
-
-      <CopyrightFooter />
     </div>
   );
 }

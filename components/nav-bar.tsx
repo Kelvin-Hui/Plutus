@@ -10,19 +10,19 @@ export function NavBar({
   showUserRelated?: boolean;
 }) {
   return (
-    <header className="sticky top-0 z-50 w-full pb-2">
+    <header className="sticky top-0 z-50 w-full bg-background pb-2">
       <nav className="container flex flex-row items-center justify-between pt-4">
         <ul className="flex items-center space-x-4">
           <Link key="home" href="/">
-            <div className="hidden items-center text-3xl font-extrabold tracking-normal hover:text-foreground/75 sm:flex">
+            <div className="items-center text-2xl font-extrabold tracking-normal hover:text-foreground/75 sm:flex">
               <ArrowTrendingUpIcon className="h-8 w-8 text-green-300" />
-              Plutus
+              <span className="hidden sm:flex">Plutus</span>
             </div>
           </Link>
           {showUserRelated && (
             <Link
               href="/dashboard"
-              className="text-sm text-muted-foreground hover:text-primary"
+              className="text-md text-muted-foreground hover:text-primary"
             >
               Dashboard
             </Link>

@@ -16,7 +16,7 @@ model User{
   password String
   createdAt DateTime @default(now())
   cash Decimal
-  transcations Transcation[]
+  transactions Transaction[]
   wathchList WatchListItem[]
   values ProfolioValue[]
   profolio ProfolioItem[]
@@ -29,7 +29,7 @@ model WatchListItem{
   @@unique([userId, symbol])
 }
 
-model Transcation{
+model Transaction{
   createdAt DateTime @default(now())
   user User @relation(fields:[userId], references:[id])
   userId String

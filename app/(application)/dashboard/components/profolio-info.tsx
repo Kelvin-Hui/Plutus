@@ -1,23 +1,23 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { pnlColumns, transcationColumns } from '@/components/ui/columns';
+import { pnlColumns, transactionColumns } from '@/components/ui/columns';
 import { DataTable } from '@/components/ui/data-table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { getBuyingPower, getProfolio, getTranscations } from '@/data/user';
+import { getBuyingPower, getProfolio, getTransactions } from '@/data/user';
 import {
   calculateDiversity,
   calculatePNL,
   calculateROI,
   calculateTodayReturn,
 } from '@/lib/utils';
-import { ProfolioOverviewData, TranscationData } from '@/types';
+import { ProfolioOverviewData, TransactionData } from '@/types';
 import { ProfolioDiversity } from './profolio-diversity';
 
 export function ProfolioOverview({
   profolio,
-  transcationData,
+  transactionData,
 }: {
   profolio: ProfolioOverviewData[];
-  transcationData: TranscationData[];
+  transactionData: TransactionData[];
 }) {
   const totalProfolioValue = profolio.reduce(
     (acc, curr) => acc + curr.marketPrice * curr.quantity,
@@ -39,7 +39,7 @@ export function ProfolioOverview({
         row.marketChange,
         row.quantity,
         row.marketPreviousClose,
-        transcationData.filter((data) => data.symbol == row.symbol),
+        transactionData.filter((data) => data.symbol == row.symbol),
       ),
     };
   });
@@ -58,20 +58,20 @@ export function ProfolioOverview({
   );
 }
 
-export function TranscationsHistory({ data }: { data: TranscationData[] }) {
+export function TransactionsHistory({ data }: { data: TransactionData[] }) {
   return (
     <DataTable
       data={data}
-      columns={transcationColumns}
+      columns={transactionColumns}
       colHeaderMap={{ createdAt: 'Date' }}
     />
   );
 }
 
 export async function ProfolioInfo() {
-  const [profolio, transcations, buyingPower] = await Promise.all([
+  const [profolio, transactions, buyingPower] = await Promise.all([
     getProfolio(),
-    getTranscations(),
+    getTransactions(),
     getBuyingPower(),
   ]);
 
@@ -80,9 +80,9 @@ export async function ProfolioInfo() {
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="chart">Profolio Diversity</TabsTrigger>
         <TabsTrigger value="overview">Profolio Overview</TabsTrigger>
-        <TabsTrigger value="history">Recent Transcations</TabsTrigger>
+        <TabsTrigger value="history">Recent Transactions</TabsTrigger>
       </TabsList>
-      <Card>
+      <Card className="h-full">
         <TabsContent value="chart">
           <CardHeader>
             <CardTitle>Profolio Diversity</CardTitle>
@@ -98,16 +98,16 @@ export async function ProfolioInfo() {
           <CardContent>
             <ProfolioOverview
               profolio={profolio}
-              transcationData={transcations}
+              transactionData={transactions}
             />
           </CardContent>
         </TabsContent>
         <TabsContent value="history">
           <CardHeader>
-            <CardTitle>Recent Transcation</CardTitle>
+            <CardTitle>Recent Transaction</CardTitle>
           </CardHeader>
           <CardContent>
-            <TranscationsHistory data={transcations} />
+            <TransactionsHistory data={transactions} />
           </CardContent>
         </TabsContent>
       </Card>

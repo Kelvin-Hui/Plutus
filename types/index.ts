@@ -1,6 +1,7 @@
 export type AutoCompleteSymbols = {
   symbol: string;
   name: string;
+  exchange?: string;
 };
 
 export type TimeInterval =
@@ -63,7 +64,7 @@ export type ProfolioOverviewData = {
   marketChange: number;
   marketPreviousClose: number;
 };
-export type TranscationData = {
+export type TransactionData = {
   createdAt: Date;
   symbol?: string;
   quantity: number;

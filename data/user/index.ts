@@ -89,10 +89,10 @@ export async function getBalanceChartData(from: Date, to: Date) {
   });
 }
 
-export async function getTranscations(symbol?: string | undefined) {
+export async function getTransactions(symbol?: string | undefined) {
   const userId = await getCurrentUserId();
   if (!userId) return [];
-  const transcations = await prisma.transcation.findMany({
+  const transactions = await prisma.transaction.findMany({
     where: {
       userId: {
         equals: userId,
@@ -111,7 +111,7 @@ export async function getTranscations(symbol?: string | undefined) {
       createdAt: 'desc',
     },
   });
-  return transcations?.map((row) => {
+  return transactions?.map((row) => {
     return { ...row, cost: Number(row.cost) };
   });
 }

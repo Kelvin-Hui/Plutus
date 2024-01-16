@@ -55,11 +55,11 @@ export async function WatchList() {
   const symbolList = await getWatchListSymbols();
 
   return (
-    <Card className="h-full w-full overflow-auto">
-      <CardHeader>
+    <Card className="h-auto w-full overflow-auto lg:w-1/2">
+      <CardHeader className={cn('sticky top-0')}>
         <CardTitle>Your Watch List</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-initial flex-col gap-y-4">
+      <CardContent className="flex flex-col gap-y-4">
         {symbolList.map((symbol) => {
           return <WatchListItem key={'WatchList_' + symbol} symbol={symbol} />;
         })}

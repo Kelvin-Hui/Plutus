@@ -4,11 +4,18 @@ import { getChartQueryOptions, getStartingPeriod } from '@/lib/utils';
 import { TimeInterval } from '@/types';
 import yahooFinance from 'yahoo-finance2';
 
+const SUPPORTED_QUOTETYPE = ['EQUITY', 'ETF', 'INDEX'];
+
 export async function getAutoComplete(term: string) {
   const result = await yahooFinance.search(term, { quotesCount: 5 });
   return result.quotes
     .filter((each) => each.isYahooFinance)
-    .map((quote) => ({ symbol: quote.symbol, name: quote.shortname }));
+    .filter((each) => SUPPORTED_QUOTETYPE.includes(each.quoteType))
+    .map((quote) => ({
+      symbol: quote.symbol,
+      name: quote.shortname,
+      exchange: quote.exchDisp,
+    }));
 }
 
 export async function getQuote(symbol: string | string[]) {
@@ -49,9 +56,9 @@ export async function getTrendingSymbols() {
     { validateResult: false },
   );
   return result
-    .filter((obj: any) => ['EQUITY', 'ETF', 'INDEX'].includes(obj.quoteType))
+    .filter((obj: any) => SUPPORTED_QUOTETYPE.includes(obj.quoteType))
     .filter((obj: any) => obj.currency === 'USD')
-    .slice(0, 15);
+    .slice(0, 10);
 }
 
 export async function get1minChartData(symbol: string) {

@@ -1,4 +1,4 @@
-import { Interval, TimeInterval, TranscationData } from '@/types';
+import { Interval, TimeInterval, TransactionData } from '@/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -89,19 +89,19 @@ export function calculateTodayReturn(
   marketChange: number,
   quantity: number,
   prevClose: number,
-  history: TranscationData[],
+  history: TransactionData[],
 ) {
   let todayReturn = 0;
   let shareBoughtToday = 0;
   history
     .filter(
-      (transcation) =>
-        transcation.createdAt >= getStartingPeriod() ||
-        transcation.cost >= prevClose,
+      (transaction) =>
+        transaction.createdAt >= getStartingPeriod() ||
+        transaction.cost >= prevClose,
     )
-    .forEach((transcation) => {
-      shareBoughtToday += transcation.quantity;
-      todayReturn += (marketPrice - transcation.cost) * transcation.quantity;
+    .forEach((transaction) => {
+      shareBoughtToday += transaction.quantity;
+      todayReturn += (marketPrice - transaction.cost) * transaction.quantity;
     });
   return (todayReturn += marketChange * (quantity - shareBoughtToday));
 }

@@ -37,7 +37,7 @@ async function main() {
           ],
         },
       },
-      transcations: {
+      transactions: {
         createMany: {
           data: [
             {

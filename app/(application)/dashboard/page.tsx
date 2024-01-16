@@ -1,5 +1,6 @@
 import { BalanceChart } from '@/app/(application)/dashboard/components/balance-chart';
 import { WatchList } from '@/app/(application)/dashboard/components/watch-list';
+import { cn } from '@/lib/utils';
 import { Metadata } from 'next/types';
 import { ProfolioInfo } from './components/profolio-info';
 
@@ -9,16 +10,17 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className="container mt-10 flex h-full flex-col gap-4 xl:grid xl:grid-cols-3">
-      <div className="col-span-2 flex flex-grow-0">
+    <div className="container mt-10 flex h-full flex-col gap-10">
+      <div
+        className={cn(
+          'space-y-2',
+          'lg:flex lg:h-[35rem] lg:flex-initial lg:space-x-2 lg:space-y-0',
+        )}
+      >
         <BalanceChart />
-      </div>
-      <div className="col-span-1 flex flex-grow-0">
         <WatchList />
       </div>
-      <div className="col-span-3 pb-4">
-        <ProfolioInfo />
-      </div>
+      <ProfolioInfo />
     </div>
   );
 }

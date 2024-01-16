@@ -26,9 +26,12 @@ export async function buyShares(shares: number, symbol: string) {
 
   const userId = (await getCurrentUserId()) ?? '';
 
-  const [addTranscation, updateProfolio, updateCash] =
+  if (!userId || !currentMarketPrice)
+    return { error: 'Something went wrong❌. Please try again.' };
+
+  const [addTransaction, updateProfolio, updateCash] =
     await prisma.$transaction([
-      prisma.transcation.create({
+      prisma.transaction.create({
         data: {
           userId: userId,
           symbol: symbol,
@@ -98,9 +101,12 @@ export async function sellShares(shares: number, symbol: string) {
 
   const soldAll = shares == prevShares;
 
-  const [addTranscation, updateOrDeleteProfolio, updateCash] =
+  if (!userId || !currentMarketPrice)
+    return { error: 'Something went wrong❌. Please try again.' };
+
+  const [addTransaction, updateOrDeleteProfolio, updateCash] =
     await prisma.$transaction([
-      prisma.transcation.create({
+      prisma.transaction.create({
         data: {
           userId: userId,
           symbol: symbol,
