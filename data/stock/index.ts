@@ -76,7 +76,7 @@ export async function get1minChartData(symbol: string) {
   const quote = result?.indicators?.quote[0];
 
   const ohlcData = timestamp?.map((time: number, idx: number) => ({
-    date: new Date(time * 1000).toLocaleTimeString(),
+    date: new Date(time * 1000),
     open: quote.open[idx],
     high: quote.high[idx],
     low: quote.low[idx],
@@ -105,6 +105,6 @@ export async function getChartData(symbol: string, timeInterval: TimeInterval) {
     { validateResult: false },
   );
   return result?.quotes.map((quote: any) => {
-    return { ...quote, date: quote.date.toLocaleString() };
+    return { ...quote, date: quote.date };
   });
 }

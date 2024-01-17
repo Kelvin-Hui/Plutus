@@ -17,7 +17,7 @@ export default function Page() {
           'lg:flex lg:h-[35rem] lg:flex-initial lg:space-x-2 lg:space-y-0',
         )}
       >
-        <BalanceChart /> 
+        <BalanceChart />
         <WatchList />
       </div>
       <ProfolioInfo />
