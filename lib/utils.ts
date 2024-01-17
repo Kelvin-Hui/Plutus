@@ -130,9 +130,9 @@ export function getStartingPeriod() {
   const date = marketOpen.getUTCDate();
 
   if (day == 6) {
-    marketOpen.setDate(date - 1);
+    marketOpen.setUTCDate(date - 1);
   } else if (day == 0) {
-    marketOpen.setDate(date - 2);
+    marketOpen.setUTCDate(date - 2);
   } else if (currTime < marketOpen) {
     //Before Market Open
     marketOpen.setUTCDate(date - (day == 1 ? 3 : 1));
@@ -143,6 +143,14 @@ export function getStartingPeriod() {
 
 export function getEndingPeriod() {
   return getMarketCloseTime(getStartingPeriod());
+}
+
+export function isMarketHours(){
+  const date = new Date()
+  if(date.getUTCDay() == 6 || date.getUTCDay() == 0) return false;
+  const start = getStartingPeriod();
+  const end = getEndingPeriod();
+  return start <= date && date <= end;
 }
 
 export function getChartQueryOptions(timeInterval: TimeInterval): {
@@ -197,7 +205,11 @@ export function getChartQueryOptions(timeInterval: TimeInterval): {
 export function padChartData(data: any) {
   const startPeriod = getStartingPeriod();
   const endPeriod = getEndingPeriod();
-  let currDate = new Date(data.slice(-1)[0].date ?? startPeriod);
+  let currDate = new Date(
+    new Date().toISOString().split('T')[0] + ' ' + data.slice(-1)[0].date ??
+      startPeriod,
+  );
+
   if (currDate === endPeriod) return data;
   const padData = [];
   for (; currDate <= endPeriod; currDate = addMinute(currDate)) {

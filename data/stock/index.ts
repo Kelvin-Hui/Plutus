@@ -2,6 +2,7 @@
 
 import { getChartQueryOptions, getStartingPeriod } from '@/lib/utils';
 import { TimeInterval } from '@/types';
+import { unstable_noStore } from 'next/cache';
 import yahooFinance from 'yahoo-finance2';
 
 const SUPPORTED_QUOTETYPE = ['EQUITY', 'ETF', 'INDEX'];
@@ -45,6 +46,7 @@ export async function getRecommandationSymbols(symbol: string) {
 }
 
 export async function getTrendingSymbols() {
+  unstable_noStore();
   const trending = await yahooFinance.trendingSymbols('US', {
     count: 30,
     lang: 'en-us',
@@ -85,6 +87,7 @@ export async function get1minChartData(symbol: string) {
 }
 
 export async function getChartData(symbol: string, timeInterval: TimeInterval) {
+  unstable_noStore();
   if (timeInterval == '1d') {
     return await get1minChartData(symbol);
   }

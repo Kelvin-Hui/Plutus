@@ -2,18 +2,31 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
-function craeteFakeBalanceData(days: number) {
+function craeteFakeBalanceData(days : number) {
   let chartData = [];
-  let baseDate = new Date('2023-01-01');
+  let baseDate = new Date('2023-01-01T09:30:00');
+  let endDate = new Date('2023-01-01T16:00:00');
   let baseAmount = 25000;
   for (let i = 0; i < days; i++) {
-    chartData.push({ createdAt: baseDate, balance: baseAmount });
+    
+    const day = baseDate.getDay();
+  
+    if(day != 0 && day != 6){
+      let startTime = new Date(baseDate);
+      while(startTime <= endDate){
+        chartData.push({ createdAt: new Date(startTime), balance: baseAmount });
+        baseAmount += (Math.random() >= 0.5 ? 1 : -1) * (Math.random() * 2000);
+        startTime.setMinutes(startTime.getMinutes() + 10);
+      } 
+    }
+
     let nextDate = new Date(baseDate);
+    let nextEndDate = new Date(endDate);
     nextDate.setDate(nextDate.getDate() + 1);
+    nextEndDate.setDate(nextEndDate.getDate()+1);
     baseDate = nextDate;
-    baseAmount += (Math.random() >= 0.5 ? 1 : -1) * (Math.random() * 2000);
+    endDate = nextEndDate;
   }
-  chartData.push({ createdAt: new Date(), balance: baseAmount });
   return chartData;
 }
 
@@ -89,43 +102,13 @@ async function main() {
         },
       },
       values: {
-        create: {
-          balance: 25000,
+        createMany: {
+          data: craeteFakeBalanceData(365),
         },
       },
     },
   });
-
-  const TestBalance1 = await prisma.user.upsert({
-    where: { username: 'Test1' },
-    update: {},
-    create: {
-      username: 'Test1',
-      password: await bcrypt.hash('admin1', 10),
-      cash: 25000.0,
-      createdAt: new Date('2022-12-31'),
-      wathchList: {
-        createMany: {
-          data: [
-            { symbol: 'META' },
-            { symbol: 'AMZN' },
-            { symbol: 'AAPL' },
-            { symbol: 'GOOG' },
-            { symbol: 'NFLX' },
-            { symbol: 'SPY' },
-          ],
-        },
-      },
-      values: {
-        createMany: {
-          data: craeteFakeBalanceData(30),
-        },
-      },
-    },
-  });
-
   console.log(admin1);
-  console.log(TestBalance1);
 }
 main()
   .then(async () => {

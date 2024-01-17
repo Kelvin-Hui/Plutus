@@ -56,7 +56,7 @@ export async function WatchList() {
 
   return (
     <Card className="h-auto w-full overflow-auto lg:w-1/2">
-      <CardHeader className={cn('sticky top-0')}>
+      <CardHeader className={cn('sticky top-0 z-10')}>
         <CardTitle>Your Watch List</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-y-4">

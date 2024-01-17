@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { getQuote } from '@/data/stock';
 import prisma from '@/lib/prisma';
 import { convertToISO, nextDay } from '@/lib/utils';
+import { ProfolioValue } from '@prisma/client';
 
 export async function getUserById(userId: string | undefined) {
   return await prisma.user.findUnique({
@@ -60,6 +61,23 @@ export async function getWatchListSymbols() {
 
 export async function getBalanceChartData(from: Date, to: Date) {
   const userId = await getCurrentUserId();
+  const MONTH_IN_SECOND = (30*24*60*60);
+
+  if((to.valueOf() - from.valueOf())/ 1000  > MONTH_IN_SECOND){
+    const data = await prisma.$queryRaw<ProfolioValue[]>`
+    SELECT DISTINCT ON (date_trunc('day', "createdAt"))
+          "createdAt", "balance"
+    FROM "ProfolioValue" 
+    WHERE "userId" = ${userId}
+    `
+    return data?.map((row) => {
+      return {
+        balance: Number(row.balance.toFixed(2)),
+        createdAt: row.createdAt.toLocaleString(),
+      };
+    });
+    
+  }
 
   const chartData = await prisma.profolioValue.findMany({
     where: {

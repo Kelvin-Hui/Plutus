@@ -3,12 +3,12 @@ const nextConfig = {
   images: {
     domains: ['s.yimg.com'],
   },
-  // logging: {
-  //   fetches: {
-  //     fullUrl: true,
-  //   },
-  // },
-  // reactStrictMode: false
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
+  reactStrictMode: false,
 };
 
 module.exports = nextConfig;

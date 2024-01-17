@@ -53,7 +53,7 @@ export function BalanceHeader({
 
 function dateMidnight() {
   const date = new Date();
-  date.setUTCHours(0, 0, 0, 0);
+  date.setHours(0, 0, 0, 0);
   return date;
 }
 
@@ -83,6 +83,8 @@ export function BalanceChart() {
 
       const isToday = range.from?.getDate() === range.to?.getDate();
 
+      chartData.push({createdAt : new Date().toLocaleString(), balance : Number((cash + profolioValue).toFixed(2))})
+
       const totalBalance = isToday
         ? Number((cash + profolioValue).toFixed(2))
         : chartData.slice(-1)[0]?.balance;
@@ -93,7 +95,7 @@ export function BalanceChart() {
       const isIncreasing = PNL >= 0;
 
       setBalanceInfo({ totalBalance, PNL, PNLpercentage, isIncreasing });
-      setChartData(chartData);
+      setChartData(chartData)
     };
 
     fetchData().catch(console.error);
@@ -129,7 +131,6 @@ export function BalanceChart() {
             Entire Range
           </Button>
         </div>
-
         <AreaChart
           data={chartData}
           index="createdAt"
