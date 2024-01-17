@@ -61,22 +61,21 @@ export async function getWatchListSymbols() {
 
 export async function getBalanceChartData(from: Date, to: Date) {
   const userId = await getCurrentUserId();
-  const MONTH_IN_SECOND = (30*24*60*60);
+  const MONTH_IN_SECOND = 30 * 24 * 60 * 60;
 
-  if((to.valueOf() - from.valueOf())/ 1000  > MONTH_IN_SECOND){
+  if ((to.valueOf() - from.valueOf()) / 1000 > MONTH_IN_SECOND) {
     const data = await prisma.$queryRaw<ProfolioValue[]>`
     SELECT DISTINCT ON (date_trunc('day', "createdAt"))
           "createdAt", "balance"
     FROM "ProfolioValue" 
     WHERE "userId" = ${userId}
-    `
+    `;
     return data?.map((row) => {
       return {
         balance: Number(row.balance.toFixed(2)),
-        createdAt: row.createdAt.toLocaleString(),
+        createdAt: row.createdAt,
       };
     });
-    
   }
 
   const chartData = await prisma.profolioValue.findMany({
@@ -102,7 +101,7 @@ export async function getBalanceChartData(from: Date, to: Date) {
   return chartData?.map((row) => {
     return {
       balance: Number(row.balance.toFixed(2)),
-      createdAt: row.createdAt.toLocaleString(),
+      createdAt: row.createdAt,
     };
   });
 }

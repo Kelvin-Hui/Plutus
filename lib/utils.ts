@@ -145,9 +145,9 @@ export function getEndingPeriod() {
   return getMarketCloseTime(getStartingPeriod());
 }
 
-export function isMarketHours(){
-  const date = new Date()
-  if(date.getUTCDay() == 6 || date.getUTCDay() == 0) return false;
+export function isMarketHours() {
+  const date = new Date();
+  if (date.getUTCDay() == 6 || date.getUTCDay() == 0) return false;
   const start = getStartingPeriod();
   const end = getEndingPeriod();
   return start <= date && date <= end;
@@ -205,16 +205,19 @@ export function getChartQueryOptions(timeInterval: TimeInterval): {
 export function padChartData(data: any) {
   const startPeriod = getStartingPeriod();
   const endPeriod = getEndingPeriod();
-  let currDate = new Date(
-    new Date().toISOString().split('T')[0] + ' ' + data.slice(-1)[0].date ??
-      startPeriod,
-  );
+  // let currDate = new Date(
+  //   new Date().toISOString().split('T')[0] + ' ' + data.slice(-1)[0].date ??
+  //     startPeriod,
+  // );
+
+  // console.log(data.slice(-1)[0].date);
+  let currDate = new Date(data.slice(-1)[0].date ?? startPeriod);
 
   if (currDate === endPeriod) return data;
   const padData = [];
   for (; currDate <= endPeriod; currDate = addMinute(currDate)) {
     padData.push({
-      date: new Date(currDate.valueOf()).toLocaleString(),
+      date: new Date(currDate.valueOf()),
       close: null,
     });
   }

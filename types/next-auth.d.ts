@@ -17,10 +17,3 @@ declare module '@auth/core/jwt' {
     user: ExtendedUser;
   }
 }
-
-// declare module '@auth/core/' {
-//   interface User extends User {
-//     username:string;
-//     cash :number;
-//   }
-// }

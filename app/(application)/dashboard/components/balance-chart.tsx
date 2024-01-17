@@ -83,7 +83,10 @@ export function BalanceChart() {
 
       const isToday = range.from?.getDate() === range.to?.getDate();
 
-      chartData.push({createdAt : new Date().toLocaleString(), balance : Number((cash + profolioValue).toFixed(2))})
+      chartData.push({
+        createdAt: new Date(),
+        balance: Number((cash + profolioValue).toFixed(2)),
+      });
 
       const totalBalance = isToday
         ? Number((cash + profolioValue).toFixed(2))
@@ -95,7 +98,21 @@ export function BalanceChart() {
       const isIncreasing = PNL >= 0;
 
       setBalanceInfo({ totalBalance, PNL, PNLpercentage, isIncreasing });
-      setChartData(chartData)
+      setChartData(
+        chartData.map((entry) => {
+          return {
+            ...entry,
+            createdAt: entry.createdAt.toLocaleString('en-US', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true,
+            }),
+          };
+        }),
+      );
     };
 
     fetchData().catch(console.error);

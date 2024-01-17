@@ -2,28 +2,27 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
-function craeteFakeBalanceData(days : number) {
+function craeteFakeBalanceData(days: number) {
   let chartData = [];
   let baseDate = new Date('2023-01-01T09:30:00');
   let endDate = new Date('2023-01-01T16:00:00');
   let baseAmount = 25000;
   for (let i = 0; i < days; i++) {
-    
     const day = baseDate.getDay();
-  
-    if(day != 0 && day != 6){
+
+    if (day != 0 && day != 6) {
       let startTime = new Date(baseDate);
-      while(startTime <= endDate){
+      while (startTime <= endDate) {
         chartData.push({ createdAt: new Date(startTime), balance: baseAmount });
         baseAmount += (Math.random() >= 0.5 ? 1 : -1) * (Math.random() * 2000);
         startTime.setMinutes(startTime.getMinutes() + 10);
-      } 
+      }
     }
 
     let nextDate = new Date(baseDate);
     let nextEndDate = new Date(endDate);
     nextDate.setDate(nextDate.getDate() + 1);
-    nextEndDate.setDate(nextEndDate.getDate()+1);
+    nextEndDate.setDate(nextEndDate.getDate() + 1);
     baseDate = nextDate;
     endDate = nextEndDate;
   }

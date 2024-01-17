@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  if(!isMarketHours()) return new Response('Market Closed', {status : 202})
+  if (!isMarketHours()) return new Response('Market Closed', { status: 202 });
 
   const allUserId = await prisma.user.findMany({
     select: {

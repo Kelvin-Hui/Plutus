@@ -31,7 +31,7 @@ export function StockChart({ symbol }: { symbol: string }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const [quote, chartData] = await Promise.all([
+      let [quote, chartData] = await Promise.all([
         getQuote(symbol),
         getChartData(symbol, timeInterval),
       ]);
@@ -39,16 +39,27 @@ export function StockChart({ symbol }: { symbol: string }) {
       const { marketState } = quote;
 
       const isRegularMarket = marketState === 'REGULAR';
+      const is1dInterval = timeInterval === '1d';
       if (!chartData) return null;
+
+      if (isRegularMarket && is1dInterval) {
+        chartData = padChartData(chartData);
+      }
+      chartData = chartData.map((entry: any) => {
+        return {
+          ...entry,
+          date: is1dInterval
+            ? entry.date.toLocaleTimeString()
+            : entry.date.toLocaleString(),
+        };
+      });
+
+      // const localeChartData = chartData.map((data:any) => {return {...data, date : is1dInterval? data.date.toLocaleTimeString() :  data.date.toLocaleString()}})
 
       setMaxVolume(
         Math.max(...chartData.map((data: any) => Number(data.volume))),
       );
-      setChartData(
-        isRegularMarket && timeInterval === '1d'
-          ? padChartData(chartData)
-          : chartData,
-      );
+      setChartData(chartData);
       setIncreasing((quote?.regularMarketChangePercent ?? 0) >= 0);
     };
 
@@ -132,7 +143,7 @@ export function StockChart({ symbol }: { symbol: string }) {
                   key={interval}
                   className="aria-selected:font-bold"
                 >
-                  {interval}
+                  {interval.toUpperCase()}
                 </Tab>
               );
             })}
@@ -148,7 +159,7 @@ export function StockChart({ symbol }: { symbol: string }) {
             connectNulls={true}
             showLegend={false}
             autoMinValue={true}
-            // noDataText="Loading Data ... 🔄"
+            noDataText="Loading Data ... 🔄"
             valueFormatter={valueFormatter}
             customTooltip={customToolTip}
             showAnimation
@@ -162,7 +173,7 @@ export function StockChart({ symbol }: { symbol: string }) {
             categories={['volume']}
             colors={[increasing ? 'green-300' : 'red-300']}
             showLegend={false}
-            // noDataText="Loading Data ... 🔄"
+            noDataText="Loading Data ... 🔄"
             yAxisWidth={75}
             showAnimation
             animationDuration={500}

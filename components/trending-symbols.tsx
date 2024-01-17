@@ -1,10 +1,9 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
-  CardTitle,
-} from '@/components//ui/card';
+  CardTitle
+} from '@/components/ui/card';
 import { getTrendingSymbols } from '@/data/stock';
 import { cn, numberFormat } from '@/lib/utils';
 import { Quote } from '@/types';
@@ -68,7 +67,7 @@ export async function TrendingSymbols() {
     <Card className="h-full w-full self-center overflow-auto shadow-xl md:w-2/3 md:self-auto">
       <CardHeader className="sticky top-0">
         <CardTitle>🇺🇸 Trending Symbols</CardTitle>
-        <CardDescription>{new Date().toLocaleString()}</CardDescription>
+        {/* <CardDescription>{new Date().toString()}</CardDescription> */}
       </CardHeader>
       <CardContent className="flex flex-col space-y-4">
         {trending.map((quote: any) => {
