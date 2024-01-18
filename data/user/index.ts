@@ -22,7 +22,7 @@ export async function getUserByUsername(username: string) {
 
 export async function getCurrentUserId() {
   const session = await auth();
-  return session?.user?.id;
+  return session?.user.id;
 }
 
 export async function getUserCreateTime() {
@@ -44,19 +44,45 @@ export async function getBuyingPower(id?: string) {
   return Number(obj?.cash);
 }
 
-export async function getWatchListSymbols() {
+export async function getWatchListSymbols(cursor?:{userId: string, symbol : string}|undefined, limit?:number){
   const userId = await getCurrentUserId();
-  const symbolList = await prisma.watchListItem.findMany({
+  const whereFilter = {
+    userId : {
+      equals : userId,
+    }
+  }
+
+  const [count, data] = await Promise.all([
+    await prisma.watchListItem.count({
+      where : whereFilter
+    }),
+    await prisma.watchListItem.findMany({
+      where : whereFilter,
+      cursor: cursor? {userId_symbol:cursor} : undefined,
+      orderBy:{
+        createdAt: 'asc'
+      },
+      take : limit ?? 0,
+      skip : cursor ? 1 : 0
+    })
+  ])
+  
+  return {count, data};
+}
+
+
+export async function checkIfWatchItemExists(symbol:string) {
+  const userId = await getCurrentUserId();
+  if(!userId) throw Error("User Doesn't Exist!") 
+  const symbolList = await prisma.watchListItem.findUnique({
     where: {
-      userId: {
-        equals: userId,
+      userId_symbol: {
+        userId: userId,
+        symbol: symbol
       },
     },
-    select: {
-      symbol: true,
-    },
   });
-  return symbolList?.map((row) => row.symbol);
+  return !symbolList
 }
 
 export async function getBalanceChartData(from: Date, to: Date) {
