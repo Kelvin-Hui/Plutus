@@ -82,7 +82,7 @@ export async function checkIfWatchItemExists(symbol:string) {
       },
     },
   });
-  return !symbolList
+  return !!symbolList
 }
 
 export async function getBalanceChartData(from: Date, to: Date) {
