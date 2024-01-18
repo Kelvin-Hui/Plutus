@@ -3,13 +3,16 @@
 import { getChartQueryOptions, getStartingPeriod } from '@/lib/utils';
 import yfClient from '@/lib/yahooFinanceClient';
 import { TimeInterval } from '@/types';
-import { unstable_noStore } from 'next/cache';
+import { intlFormatDistance } from 'date-fns';
+import { unstable_cache as cache, unstable_noStore } from 'next/cache';
+
 
 const SUPPORTED_QUOTETYPE = ['EQUITY', 'ETF', 'INDEX'];
 
-export async function getAutoComplete(term: string) {
-  const result = await yfClient.search(term, { quotesCount: 5 });
-  return result.quotes
+export const getAutoComplete = cache(
+  async (term : string) => {
+    const result = await yfClient.search(term, { quotesCount: 5 });
+    return result.quotes
     .filter((each) => each.isYahooFinance)
     .filter((each) => SUPPORTED_QUOTETYPE.includes(each.quoteType))
     .map((quote) => ({
@@ -17,56 +20,105 @@ export async function getAutoComplete(term: string) {
       name: quote.shortname,
       exchange: quote.exchDisp,
     }));
-}
+  },
+  ['auto_complete'],
+  {
+    revalidate : 86400
+  }
+)
 
-export async function getQuote(symbol: string | string[]) {
-  const result = await yfClient.quote(symbol);
-  return result;
-}
 
-export async function getSummaryDetail(symbol: string, modules: any[]) {
-  const result = await yfClient.quoteSummary(symbol, { modules: modules });
-  return result;
-}
+export const getQuotes = cache(
+  async (symbol : string|string[]) => {
+    const result = await yfClient.quote(symbol);
+    return result;
+  },
+  ['get_quotes'],
+  {revalidate : 5}
+)
 
-export async function getQuoteNews(symbol: string) {
-  const result = await yfClient.search(symbol, {
-    quotesCount: 0,
-    newsCount: 10,
-  });
-  return result?.news;
-}
+export const getSummaryDetail = cache(
+  async (symbol : string, modules : any[]) => {
+    const result = await yfClient.quoteSummary(symbol, { modules: modules });
+    return result;
+  },
+  ['summary_detail'],
+  {revalidate : 60}
+)
 
-export async function getRecommandationSymbols(symbol: string) {
-  const recommands = await yfClient.recommendationsBySymbol(symbol);
-  const result = await yfClient.quote(
-    recommands?.recommendedSymbols?.map((row) => row.symbol),
-  );
-  return result;
-}
+export const getQuoteNews = cache(
+  async (symbol : string) => {
+    const result = await yfClient.search(symbol, {
+      quotesCount: 0,
+      newsCount: 15,
+    });
+    const news = result.news.sort((a, b) => b.providerPublishTime.valueOf() - a.providerPublishTime.valueOf());
+    return news.map((entry) => {return{...entry, providerPublishTime : intlFormatDistance(entry.providerPublishTime, new Date())}})
+  },
+  ['quote_news'],
+  {
+    revalidate : 3600
+  }
+)
 
-export async function getTrendingSymbols() {
-  unstable_noStore();
-  const trending = await yfClient.trendingSymbols('US', {
-    count: 20,
-    lang: 'en-us',
-    region: 'US',
-  });
-  const result = await yfClient.quote(
-    trending?.quotes?.map((row) => row.symbol),
-    {fields : ['symbol',
-      'shortName',
-      'regularMarketPrice',
-      'regularMarketChangePercent',
-      'regularMarketVolume',
-      'regularMarketChange','quoteType','currency']},
-    { validateResult: false },
-  );
-  return result
-    .filter((obj: any) => SUPPORTED_QUOTETYPE.includes(obj.quoteType))
-    .filter((obj: any) => obj.currency === 'USD')
-    .slice(0, 10);
-}
+
+export const getRecommandationSymbols = cache(
+  async (symbol : string) => {
+    const recommands = await yfClient.recommendationsBySymbol(symbol);
+    return recommands?.recommendedSymbols?.map((entry) => entry.symbol);
+  },
+  ['recommanded_symbols'],
+  {revalidate : 86400}
+)
+
+export const getRecommandationQuotes = cache(
+  async (symbol : string) => {
+    const recommandsSymbols = await getRecommandationSymbols(symbol)
+    const result = await yfClient.quote(recommandsSymbols);
+    return result;
+  },
+  ["recommanded_quotes"],
+  {
+    revalidate: 60
+  }
+)
+
+export const getTrendingSymbols = cache(
+  async () => {
+    const trending = await yfClient.trendingSymbols('US', {
+      count: 20,
+      lang: 'en-us',
+      region: 'US',
+    });
+    return trending?.quotes?.map((entry) => entry.symbol)
+  },
+  ["trending_symbols"],
+  {
+    revalidate : 300
+  }
+)
+
+export const getTrendingQuotes = cache(
+  async () => {
+    const trendingSymbols = await getTrendingSymbols()
+    const result = await yfClient.quote(
+      trendingSymbols,
+      {fields : ['symbol',
+        'shortName',
+        'regularMarketPrice',
+        'regularMarketChangePercent',
+        'regularMarketVolume',
+        'regularMarketChange','quoteType','currency']},
+      { validateResult: false },
+    );
+    return result
+      .filter((obj: any) => SUPPORTED_QUOTETYPE.includes(obj.quoteType))
+      .filter((obj: any) => obj.currency === 'USD')
+      .slice(0, 10);
+  },
+  ['trending_quotes'],
+  {revalidate:60}
+)
 
 export async function get1minChartData(symbol: string) {
   const request = await fetch(

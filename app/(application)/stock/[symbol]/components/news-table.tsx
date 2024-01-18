@@ -15,7 +15,7 @@ export function NewsItem({
   title: string;
   link: string;
   publisher: string;
-  publishTime: Date;
+  publishTime: string;
   imageURL: any;
 }) {
   return (
@@ -28,7 +28,7 @@ export function NewsItem({
         <h2 className="text-xl font-medium">{title}</h2>
         <div className="flex">
           <span className="mr-4 text-muted-foreground">
-            {publishTime.toLocaleString()}
+            {publishTime}
           </span>
           <Badge>{publisher}</Badge>
         </div>

@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/outline';
+import { revalidateTag } from 'next/cache';
 import Link from 'next/link';
 
 export const SignOutButton = () => {
@@ -18,6 +19,7 @@ export const SignOutButton = () => {
       className="display:none"
       action={async () => {
         'use server';
+        revalidateTag('auth')
         await signOut();
       }}
     >

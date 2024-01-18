@@ -1,6 +1,6 @@
 import { createWatchListItem, deleteWatchListItem } from '@/action/watchList';
 import { Button } from '@/components/ui/button';
-import { getQuote } from '@/data/stock';
+import { getQuotes } from '@/data/stock';
 import { checkIfWatchItemExists } from '@/data/user';
 import { cn } from '@/lib/utils';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
@@ -49,7 +49,7 @@ export async function QuoteHeader({
   symbol: string;
   userId: string | undefined;
 }) {
-  const quote = await getQuote(symbol);
+  const quote = await getQuotes(symbol);
 
   if (quote === undefined) {
     notFound();

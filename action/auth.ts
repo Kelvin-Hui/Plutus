@@ -6,6 +6,7 @@ import prisma from '@/lib/prisma';
 import { LoginSchema, RegisterSchema } from '@/schema';
 import bcrypt from 'bcryptjs';
 import { AuthError } from 'next-auth';
+import { revalidateTag } from 'next/cache';
 import { z } from 'zod';
 
 export async function login(values: z.infer<typeof LoginSchema>) {
@@ -31,6 +32,8 @@ export async function login(values: z.infer<typeof LoginSchema>) {
       }
     }
     throw error;
+  } finally{
+    revalidateTag('auth')
   }
 }
 
@@ -81,5 +84,7 @@ export async function createUser(username: string, password: string) {
   } catch (error) {
     console.log(error);
     throw error;
+  } finally{
+    revalidateTag('auth')
   }
 }

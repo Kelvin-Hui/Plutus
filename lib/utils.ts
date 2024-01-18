@@ -107,7 +107,7 @@ export function calculateTodayReturn(
 }
 
 export function convertToISO(date: Date) {
-  const str = date?.toISOString().split('T')[0];
+  const str = date.toISOString().split('T')[0];
   return new Date(str);
 }
 
@@ -205,12 +205,6 @@ export function getChartQueryOptions(timeInterval: TimeInterval): {
 export function padChartData(data: any) {
   const startPeriod = getStartingPeriod();
   const endPeriod = getEndingPeriod();
-  // let currDate = new Date(
-  //   new Date().toISOString().split('T')[0] + ' ' + data.slice(-1)[0].date ??
-  //     startPeriod,
-  // );
-
-  // console.log(data.slice(-1)[0].date);
   let currDate = new Date(data.slice(-1)[0].date ?? startPeriod);
 
   if (currDate === endPeriod) return data;

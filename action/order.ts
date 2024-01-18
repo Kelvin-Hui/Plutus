@@ -3,7 +3,7 @@
 import { getCurrentUserId, getProfolio } from '@/data/user';
 import prisma from '@/lib/prisma';
 import { getMarketCloseTime, getMarketOpenTime } from '@/lib/utils';
-import { revalidatePath } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 
 const VALIDATE_MARKET_HOURS = false;
 
@@ -71,7 +71,7 @@ export async function buyShares(shares: number, symbol: string) {
       }),
     ]);
 
-  revalidatePath(`/stock/${symbol}`);
+  revalidateTag('transactions')
   return {
     success: `[Bought] $${currentMarketPrice} @ ${shares} shares of ${symbol}! 🎉 (${new Date().toLocaleString()})`,
   };
@@ -149,7 +149,7 @@ export async function sellShares(shares: number, symbol: string) {
       }),
     ]);
 
-  revalidatePath(`/stock/${symbol}`);
+  revalidateTag('transactions')
   return {
     success: `[Sold] $${currentMarketPrice} @ ${shares} shares of ${symbol}! 🎉 (${new Date().toLocaleString()})`,
   };
