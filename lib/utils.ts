@@ -149,7 +149,7 @@ export function isMarketHours() {
   const date = new Date();
   if (date.getUTCDay() == 6 || date.getUTCDay() == 0) return false;
   const start = getStartingPeriod();
-  const end = getEndingPeriod();
+  const end = addMinute(getEndingPeriod());
   return start <= date && date <= end;
 }
 
