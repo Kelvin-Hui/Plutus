@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getTrendingSymbols } from '@/data/stock';
 import { cn, numberFormat } from '@/lib/utils';
 import { Quote } from '@/types';

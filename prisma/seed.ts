@@ -37,18 +37,18 @@ async function main() {
       username: 'admin1',
       password: await bcrypt.hash('admin1', 10),
       cash: 25000.0,
-      wathchList: {
-        createMany: {
-          data: [
-            { symbol: 'META' },
-            { symbol: 'AMZN' },
-            { symbol: 'AAPL' },
-            { symbol: 'GOOG' },
-            { symbol: 'NFLX' },
-            { symbol: 'SPY' },
-          ],
-        },
-      },
+      // wathchList: {
+      //   createMany: {
+      //     data: [
+      //       { symbol: 'META', id:1},
+      //       { symbol: 'AMZN', id:2},
+      //       { symbol: 'AAPL', id:3},
+      //       { symbol: 'GOOG', id:4},
+      //       { symbol: 'NFLX', id:5},
+      //       { symbol: 'SPY', id:6},
+      //     ],
+      //   },
+      // },
       transactions: {
         createMany: {
           data: [

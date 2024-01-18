@@ -281,13 +281,13 @@ module.exports = {
         },
         'infinite-slide': {
           from: { transform: 'translateX(0)' },
-          to: { transform: 'translateX(calc(-250px * 10 + -16px * 22))' },
+          to: { transform: 'translateX(calc(-250px * 5 + -16px * 3.5))' },
         },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'infinite-loop': 'infinite-slide 40s linear infinite',
+        'infinite-loop': 'infinite-slide 10s linear infinite',
       },
       cursor: {
         dollar: 'url(../public/money.png), pointer',
