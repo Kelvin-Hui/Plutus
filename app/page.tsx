@@ -20,12 +20,6 @@ async function SymbolCarousel() {
     '^IXIC',
     '^RUT',
     '^VIX',
-    'META',
-    'AMZN',
-    'NFLX',
-    'GOOG',
-    'MSFT',
-    'AAPL',
   ];
   const marketData = await getQuote(symbols);
 

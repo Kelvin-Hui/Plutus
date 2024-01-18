@@ -1,14 +1,14 @@
 'use server';
 
 import { getChartQueryOptions, getStartingPeriod } from '@/lib/utils';
+import yfClient from '@/lib/yahooFinanceClient';
 import { TimeInterval } from '@/types';
 import { unstable_noStore } from 'next/cache';
-import yahooFinance from 'yahoo-finance2';
 
 const SUPPORTED_QUOTETYPE = ['EQUITY', 'ETF', 'INDEX'];
 
 export async function getAutoComplete(term: string) {
-  const result = await yahooFinance.search(term, { quotesCount: 5 });
+  const result = await yfClient.search(term, { quotesCount: 5 });
   return result.quotes
     .filter((each) => each.isYahooFinance)
     .filter((each) => SUPPORTED_QUOTETYPE.includes(each.quoteType))
@@ -20,17 +20,17 @@ export async function getAutoComplete(term: string) {
 }
 
 export async function getQuote(symbol: string | string[]) {
-  const result = await yahooFinance.quote(symbol);
+  const result = await yfClient.quote(symbol);
   return result;
 }
 
 export async function getSummaryDetail(symbol: string, modules: any[]) {
-  const result = await yahooFinance.quoteSummary(symbol, { modules: modules });
+  const result = await yfClient.quoteSummary(symbol, { modules: modules });
   return result;
 }
 
 export async function getQuoteNews(symbol: string) {
-  const result = await yahooFinance.search(symbol, {
+  const result = await yfClient.search(symbol, {
     quotesCount: 0,
     newsCount: 10,
   });
@@ -38,8 +38,8 @@ export async function getQuoteNews(symbol: string) {
 }
 
 export async function getRecommandationSymbols(symbol: string) {
-  const recommands = await yahooFinance.recommendationsBySymbol(symbol);
-  const result = await yahooFinance.quote(
+  const recommands = await yfClient.recommendationsBySymbol(symbol);
+  const result = await yfClient.quote(
     recommands?.recommendedSymbols?.map((row) => row.symbol),
   );
   return result;
@@ -47,14 +47,19 @@ export async function getRecommandationSymbols(symbol: string) {
 
 export async function getTrendingSymbols() {
   unstable_noStore();
-  const trending = await yahooFinance.trendingSymbols('US', {
-    count: 30,
+  const trending = await yfClient.trendingSymbols('US', {
+    count: 20,
     lang: 'en-us',
     region: 'US',
   });
-  const result = await yahooFinance.quote(
+  const result = await yfClient.quote(
     trending?.quotes?.map((row) => row.symbol),
-    {},
+    {fields : ['symbol',
+      'shortName',
+      'regularMarketPrice',
+      'regularMarketChangePercent',
+      'regularMarketVolume',
+      'regularMarketChange','quoteType','currency']},
     { validateResult: false },
   );
   return result
@@ -93,7 +98,7 @@ export async function getChartData(symbol: string, timeInterval: TimeInterval) {
   }
 
   const { period1, interval } = getChartQueryOptions(timeInterval);
-  const result = await yahooFinance.chart(
+  const result = await yfClient.chart(
     symbol,
     {
       period1: period1,

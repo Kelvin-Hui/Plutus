@@ -1,7 +1,7 @@
 import { createWatchListItem, deleteWatchListItem } from '@/action/watchList';
 import { Button } from '@/components/ui/button';
 import { getQuote } from '@/data/stock';
-import { getWatchListSymbols } from '@/data/user';
+import { checkIfWatchItemExists } from '@/data/user';
 import { cn } from '@/lib/utils';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { BadgeDelta } from '@tremor/react';
@@ -17,8 +17,7 @@ export async function WatchListButton({
 }) {
   if (!userId) return;
 
-  const watchList = await getWatchListSymbols();
-  const alreadyWatching = watchList.includes(symbol);
+  const alreadyWatching = await checkIfWatchItemExists(symbol)
 
   return (
     <form
