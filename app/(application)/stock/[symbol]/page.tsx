@@ -3,7 +3,7 @@ import { auth } from '@/auth';
 import { KeyStats } from './components/key-stats';
 import { NewsTable } from './components/news-table';
 import { OrderPanel } from './components/order-panel';
-import { RecommendationSymbols } from './components/recommandation-symbols';
+import { RecommendationSymbols } from './components/recommendation-symbols';
 import { StockChart } from './components/stock-chart';
 import { TransactionHistory } from './components/transaction-history';
 

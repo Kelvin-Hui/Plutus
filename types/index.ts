@@ -47,14 +47,14 @@ export type PNLData = {
   roi: number;
 };
 
-export type ProfolioData = {
+export type PortfolioData = {
   symbol?: string;
   quantity?: number;
   cost?: number;
   marketPrice?: number;
 };
 
-export type ProfolioOverviewData = {
+export type PortfolioOverviewData = {
   symbol: string;
   quantity: number;
   cost: number;

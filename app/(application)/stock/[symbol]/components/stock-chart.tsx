@@ -1,5 +1,5 @@
 'use client';
-import { getChartData, getQuote } from '@/data/stock';
+import { getChartData, getQuotes } from '@/data/stock';
 import { cn, currencyFormat, numberFormat, padChartData } from '@/lib/utils';
 import { TimeInterval } from '@/types';
 import {
@@ -32,7 +32,7 @@ export function StockChart({ symbol }: { symbol: string }) {
   useEffect(() => {
     const fetchData = async () => {
       let [quote, chartData] = await Promise.all([
-        getQuote(symbol),
+        getQuotes(symbol),
         getChartData(symbol, timeInterval),
       ]);
 
@@ -45,12 +45,13 @@ export function StockChart({ symbol }: { symbol: string }) {
       if (isRegularMarket && is1dInterval) {
         chartData = padChartData(chartData);
       }
+
       chartData = chartData.map((entry: any) => {
         return {
           ...entry,
           date: is1dInterval
-            ? entry.date.toLocaleTimeString()
-            : entry.date.toLocaleString(),
+            ? new Date(entry.date).toLocaleTimeString()
+            : new Date(entry.date).toLocaleString(),
         };
       });
 
@@ -163,7 +164,7 @@ export function StockChart({ symbol }: { symbol: string }) {
             valueFormatter={valueFormatter}
             customTooltip={customToolTip}
             showAnimation
-            animationDuration={500}
+            animationDuration={2000}
             yAxisWidth={75}
             className="absolute z-10"
           />
@@ -176,7 +177,7 @@ export function StockChart({ symbol }: { symbol: string }) {
             noDataText="Loading Data ... 🔄"
             yAxisWidth={75}
             showAnimation
-            animationDuration={500}
+            animationDuration={2000}
             valueFormatter={() => ''}
             rotateLabelX={{ angle: 0, verticalShift: 1000000 }}
             showGridLines={false}

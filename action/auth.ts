@@ -6,6 +6,7 @@ import prisma from '@/lib/prisma';
 import { LoginSchema, RegisterSchema } from '@/schema';
 import bcrypt from 'bcryptjs';
 import { AuthError } from 'next-auth';
+import { revalidateTag } from 'next/cache';
 import { z } from 'zod';
 
 export async function login(values: z.infer<typeof LoginSchema>) {
@@ -14,13 +15,13 @@ export async function login(values: z.infer<typeof LoginSchema>) {
     return { error: 'Invalid Credentials' };
   }
 
-  const creadentials = parsedCredentials.data;
+  const credentials = parsedCredentials.data;
 
-  const existingUser = await getUserByUsername(creadentials.username);
+  const existingUser = await getUserByUsername(credentials.username);
   if (!existingUser) return { error: 'User Does Not Exist!' };
 
   try {
-    await signIn('credentials', creadentials);
+    await signIn('credentials', credentials);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -31,6 +32,8 @@ export async function login(values: z.infer<typeof LoginSchema>) {
       }
     }
     throw error;
+  } finally{
+    revalidateTag('auth')
   }
 }
 
@@ -56,7 +59,7 @@ export async function createUser(username: string, password: string) {
         username: username,
         password: await bcrypt.hash(password, 10),
         cash: 25000.0,
-        wathchList: {
+        watchList: {
           createMany: {
             data: [
               { symbol: 'META' },
@@ -81,5 +84,7 @@ export async function createUser(username: string, password: string) {
   } catch (error) {
     console.log(error);
     throw error;
+  } finally{
+    revalidateTag('auth')
   }
 }

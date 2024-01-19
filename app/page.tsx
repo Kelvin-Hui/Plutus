@@ -2,12 +2,12 @@ import { NavBar } from '@/components/nav-bar';
 import { SymbolCard } from '@/components/symbol-card';
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from '@/components/ui/card';
-import { getQuote } from '@/data/stock';
+import { getQuotes } from '@/data/stock';
 import { cn } from '@/lib/utils';
 import { BanknotesIcon, UserIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
@@ -21,7 +21,7 @@ async function SymbolCarousel() {
     '^RUT',
     '^VIX',
   ];
-  const marketData = await getQuote(symbols);
+  const marketData = await getQuotes(symbols);
 
   return (
     <section className="relative mt-10 min-h-[200px] overflow-hidden">
@@ -154,6 +154,8 @@ function CopyrightFooter() {
     <footer className="mx-auto mt-auto pt-2 text-sm">{`Plutus@${new Date().getFullYear()}`}</footer>
   );
 }
+
+export const revalidate = 60;
 
 export default function Home() {
   return (

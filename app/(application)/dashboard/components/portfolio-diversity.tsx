@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn, currencyFormat } from '@/lib/utils';
-import { ProfolioOverviewData } from '@/types';
+import { PortfolioOverviewData } from '@/types';
 import { DonutChart } from '@tremor/react';
 import { useState } from 'react';
 
@@ -77,15 +77,15 @@ const LegendItem = ({ selectValue }: { selectValue: SelectValueProps }) => {
   );
 };
 
-export function ProfolioDiversity({
-  profolio,
+export function PortfolioDiversity({
+  portfolio,
   buyingPower,
 }: {
-  profolio: ProfolioOverviewData[];
+  portfolio: PortfolioOverviewData[];
   buyingPower: number;
 }) {
   const [value, setValue] = useState<SelectValueProps>(null);
-  const data = profolio.map((row) => {
+  const data = portfolio.map((row) => {
     return { ...row, marketValue: row.quantity * row.marketPrice };
   });
 

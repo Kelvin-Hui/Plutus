@@ -3,23 +3,23 @@
 import { sellShares } from '@/action/order';
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+    CardTitle,
 } from '@/components/ui/card';
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { cn, currencyFormat } from '@/lib/utils';
-import { ProfolioData } from '@/types';
+import { PortfolioData } from '@/types';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { redirect } from 'next/navigation';
@@ -32,16 +32,16 @@ export function SellForm({
   symbol,
   userId,
   buyingPower,
-  profolioData,
+  portfolioData,
 }: {
   symbol: string;
   userId: string | undefined;
   buyingPower: number | undefined;
-  profolioData: ProfolioData;
+  portfolioData: PortfolioData;
 }) {
   const [isPending, startTransition] = useTransition();
 
-  const { marketPrice = 0, cost = 0, quantity = 0 } = profolioData;
+  const { marketPrice = 0, cost = 0, quantity = 0 } = portfolioData;
 
   const cash = Number(buyingPower) ?? 0;
   const maxShares = quantity;

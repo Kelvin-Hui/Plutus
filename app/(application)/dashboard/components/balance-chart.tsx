@@ -2,18 +2,18 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  getBalanceChartData,
-  getBuyingPower,
-  getProfolioValue,
-  getUserCreateTime,
+    getBalanceChartData,
+    getBuyingPower,
+    getPortfolioValue,
+    getUserCreateTime,
 } from '@/data/user';
 import { cn, currencyFormat } from '@/lib/utils';
 import { BalanceHeaderProps } from '@/types';
 import {
-  AreaChart,
-  BadgeDelta,
-  DateRangePicker,
-  DateRangePickerValue,
+    AreaChart,
+    BadgeDelta,
+    DateRangePicker,
+    DateRangePickerValue,
 } from '@tremor/react';
 import { useEffect, useState } from 'react';
 
@@ -26,7 +26,7 @@ export function BalanceHeader({
   return (
     <div className="flex justify-around">
       <div className="flex flex-col items-center text-xl">
-        <label className="mb-2 font-semibold underline">Profolio Value</label>
+        <label className="mb-2 font-semibold underline">Portfolio Value</label>
         <span>{currencyFormat(totalBalance)}</span>
       </div>
       <div className="flex flex-col items-center text-xl">
@@ -72,24 +72,27 @@ export function BalanceChart() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const [chartData, cash, profolioValue] = await Promise.all([
+      const [chartData, cash, portfolioValue] = await Promise.all([
         getBalanceChartData(
           range.from ?? dateMidnight(),
           range.to ?? dateMidnight(),
         ),
         getBuyingPower(),
-        getProfolioValue(),
+        getPortfolioValue(),
       ]);
 
       const isToday = range.from?.getDate() === range.to?.getDate();
 
-      chartData.push({
-        createdAt: new Date(),
-        balance: Number((cash + profolioValue).toFixed(2)),
-      });
+      if(isToday){
+        chartData.push({
+          createdAt: new Date(),
+          balance: Number((cash + portfolioValue).toFixed(2)),
+        });
+      }
+      
 
       const totalBalance = isToday
-        ? Number((cash + profolioValue).toFixed(2))
+        ? Number((cash + portfolioValue).toFixed(2))
         : chartData.slice(-1)[0]?.balance;
       const startBalance = chartData[0].balance;
 
@@ -140,7 +143,8 @@ export function BalanceChart() {
             onClick={() => {
               const fetchCreated = async () => {
                 const minRange = await getUserCreateTime();
-                setRange({ from: minRange, to: new Date() });
+                
+                setRange({ from: new Date(minRange), to: new Date() });
               };
               fetchCreated().catch(console.error);
             }}

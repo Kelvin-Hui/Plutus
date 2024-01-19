@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/lib/prisma';
+import { revalidateTag } from 'next/cache';
 
 export async function createWatchListItem(symbol: string, userId: string) {
   const createdWatchListItem = await prisma.watchListItem.create({
@@ -9,6 +10,7 @@ export async function createWatchListItem(symbol: string, userId: string) {
       userId: userId,
     },
   });
+  revalidateTag('watch_list')
 }
 
 export async function deleteWatchListItem(symbol: string, userId: string) {
@@ -20,4 +22,5 @@ export async function deleteWatchListItem(symbol: string, userId: string) {
       },
     },
   });
+  revalidateTag('watch_list')
 }

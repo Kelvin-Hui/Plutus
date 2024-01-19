@@ -79,9 +79,9 @@ export function calculateROI(
 export function calculateDiversity(
   marketPrice: number,
   quantity: number,
-  totalProfolioValue: number,
+  totalPortfolioValue: number,
 ) {
-  return ((marketPrice * quantity) / totalProfolioValue) * 100;
+  return ((marketPrice * quantity) / totalPortfolioValue) * 100;
 }
 
 export function calculateTodayReturn(
@@ -104,11 +104,6 @@ export function calculateTodayReturn(
       todayReturn += (marketPrice - transaction.cost) * transaction.quantity;
     });
   return (todayReturn += marketChange * (quantity - shareBoughtToday));
-}
-
-export function convertToISO(date: Date) {
-  const str = date?.toISOString().split('T')[0];
-  return new Date(str);
 }
 
 export function addMinute(prevDate: Date) {
@@ -205,12 +200,6 @@ export function getChartQueryOptions(timeInterval: TimeInterval): {
 export function padChartData(data: any) {
   const startPeriod = getStartingPeriod();
   const endPeriod = getEndingPeriod();
-  // let currDate = new Date(
-  //   new Date().toISOString().split('T')[0] + ' ' + data.slice(-1)[0].date ??
-  //     startPeriod,
-  // );
-
-  // console.log(data.slice(-1)[0].date);
   let currDate = new Date(data.slice(-1)[0].date ?? startPeriod);
 
   if (currDate === endPeriod) return data;

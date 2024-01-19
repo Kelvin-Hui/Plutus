@@ -1,4 +1,4 @@
-import { getChartData, getQuote } from "@/data/stock";
+import { getChartData, getQuotes } from "@/data/stock";
 import { cn, padChartData } from "@/lib/utils";
 import { AreaChart, BadgeDelta } from "@tremor/react";
 import { useRouter } from "next/navigation";
@@ -15,7 +15,7 @@ export function WatchListItem({ symbol}: { symbol: string }) {
     useEffect(()=>{
        const fetchData = async () => {
             const [quote, chartData] = await Promise.all([
-                getQuote(symbol),
+                getQuotes(symbol),
                 getChartData(symbol, '1d'),
             ]);
             setQoute(quote);

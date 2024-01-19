@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { getTrendingSymbols } from '@/data/stock';
+import { getTrendingQuotes } from '@/data/stock';
 import { cn, numberFormat } from '@/lib/utils';
 import { Quote } from '@/types';
 import { BadgeDelta } from '@tremor/react';
@@ -57,7 +57,7 @@ export function TrendingSymbolItem({ quote }: { quote: Quote }) {
 }
 
 export async function TrendingSymbols() {
-  const trending = await getTrendingSymbols();
+  const trending = await getTrendingQuotes();
   return (
     <Card className="h-full w-full self-center overflow-auto shadow-xl md:w-2/3 md:self-auto">
       <CardHeader className="sticky top-0">

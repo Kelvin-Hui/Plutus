@@ -1,4 +1,4 @@
-import { computeTotalProfolioValue } from '@/data/user';
+import { computeTotalPortfolioValue } from '@/data/user';
 import prisma from '@/lib/prisma';
 import { isMarketHours } from '@/lib/utils';
 import { NextRequest } from 'next/server';
@@ -20,10 +20,10 @@ export async function GET(request: NextRequest) {
   });
 
   const computedData = await Promise.all(
-    allUserId.map(async (user) => await computeTotalProfolioValue(user.id)),
+    allUserId.map(async (user) => await computeTotalPortfolioValue(user.id)),
   );
 
-  await prisma.profolioValue.createMany({
+  await prisma.portfolioValue.createMany({
     data: computedData,
   });
 

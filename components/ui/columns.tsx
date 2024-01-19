@@ -123,7 +123,7 @@ export const pnlColumns: ColumnDef<PNLData>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           className="w-full"
         >
-          Profolio Diversity <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
+          Portfolio Diversity <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
         </Button>
       );
     },
@@ -156,7 +156,7 @@ export const transactionColumns: ColumnDef<TransactionData>[] = [
     },
     cell: ({ row }) => {
       const date = row.getValue<Date>('createdAt');
-      return <div>{date.toLocaleString()}</div>;
+      return <div>{new Date(date).toLocaleString()}</div>;
     },
   },
   {

@@ -1,17 +1,17 @@
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from '@/components/ui/card';
-import { getRecommandationSymbols } from '@/data/stock';
+import { getRecommendationQuotes } from '@/data/stock';
 import { cn } from '@/lib/utils';
 import { BadgeDelta } from '@tremor/react';
 import Link from 'next/link';
 
 export async function RecommendationSymbols({ symbol }: { symbol: string }) {
-  const result = await getRecommandationSymbols(symbol);
+  const result = await getRecommendationQuotes(symbol);
 
   return (
     <>

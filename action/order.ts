@@ -1,9 +1,9 @@
 'use server';
 
-import { getCurrentUserId, getProfolio } from '@/data/user';
+import { getCurrentUserId, getPortfolio } from '@/data/user';
 import prisma from '@/lib/prisma';
 import { getMarketCloseTime, getMarketOpenTime } from '@/lib/utils';
-import { revalidatePath } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 
 const VALIDATE_MARKET_HOURS = false;
 
@@ -16,10 +16,10 @@ export async function buyShares(shares: number, symbol: string) {
     return { error: 'Market Closed! 🥱' };
   }
 
-  const profolioData = await getProfolio(symbol);
-  const prevCost = profolioData[0].cost ?? 0;
-  const prevShares = profolioData[0].quantity ?? 0;
-  const currentMarketPrice = profolioData[0].marketPrice;
+  const portfolioData = await getPortfolio(symbol);
+  const prevCost = portfolioData[0].cost ?? 0;
+  const prevShares = portfolioData[0].quantity ?? 0;
+  const currentMarketPrice = portfolioData[0].marketPrice;
 
   const totalCost = currentMarketPrice * shares;
   const prevTotalCost = prevCost * prevShares;
@@ -29,7 +29,7 @@ export async function buyShares(shares: number, symbol: string) {
   if (!userId || !currentMarketPrice)
     return { error: 'Something went wrong❌. Please try again.' };
 
-  const [addTransaction, updateProfolio, updateCash] =
+  const [addTransaction, updatePortfolio, updateCash] =
     await prisma.$transaction([
       prisma.transaction.create({
         data: {
@@ -40,7 +40,7 @@ export async function buyShares(shares: number, symbol: string) {
         },
       }),
 
-      prisma.profolioItem.upsert({
+      prisma.portfolioItem.upsert({
         where: {
           userId_symbol: {
             userId: userId,
@@ -71,7 +71,7 @@ export async function buyShares(shares: number, symbol: string) {
       }),
     ]);
 
-  revalidatePath(`/stock/${symbol}`);
+  revalidateTag('transactions')
   return {
     success: `[Bought] $${currentMarketPrice} @ ${shares} shares of ${symbol}! 🎉 (${new Date().toLocaleString()})`,
   };
@@ -86,10 +86,10 @@ export async function sellShares(shares: number, symbol: string) {
     return { error: 'Market Closed! 🥱' };
   }
 
-  const profolioData = await getProfolio(symbol);
-  const prevCost = profolioData[0].cost ?? 0;
-  const prevShares = profolioData[0].quantity ?? 0;
-  const currentMarketPrice = profolioData[0].marketPrice;
+  const portfolioData = await getPortfolio(symbol);
+  const prevCost = portfolioData[0].cost ?? 0;
+  const prevShares = portfolioData[0].quantity ?? 0;
+  const currentMarketPrice = portfolioData[0].marketPrice;
 
   if (shares > prevShares) {
     return { erorr: "Can't Sell More Than You Own ❌" };
@@ -104,7 +104,7 @@ export async function sellShares(shares: number, symbol: string) {
   if (!userId || !currentMarketPrice)
     return { error: 'Something went wrong❌. Please try again.' };
 
-  const [addTransaction, updateOrDeleteProfolio, updateCash] =
+  const [addTransaction, updateOrDeletePortfolio, updateCash] =
     await prisma.$transaction([
       prisma.transaction.create({
         data: {
@@ -116,7 +116,7 @@ export async function sellShares(shares: number, symbol: string) {
       }),
 
       soldAll
-        ? prisma.profolioItem.delete({
+        ? prisma.portfolioItem.delete({
             where: {
               userId_symbol: {
                 userId: userId,
@@ -124,7 +124,7 @@ export async function sellShares(shares: number, symbol: string) {
               },
             },
           })
-        : prisma.profolioItem.update({
+        : prisma.portfolioItem.update({
             where: {
               userId_symbol: {
                 userId: userId,
@@ -149,7 +149,7 @@ export async function sellShares(shares: number, symbol: string) {
       }),
     ]);
 
-  revalidatePath(`/stock/${symbol}`);
+  revalidateTag('transactions')
   return {
     success: `[Sold] $${currentMarketPrice} @ ${shares} shares of ${symbol}! 🎉 (${new Date().toLocaleString()})`,
   };
