@@ -1,29 +1,9 @@
-import { getChartData, getQuotes } from "@/data/stock";
 import { cn, padChartData } from "@/lib/utils";
+import { Quote } from "@/types";
 import { AreaChart, BadgeDelta } from "@tremor/react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import Link from "next/link";
 
-
-export function WatchListItem({ symbol}: { symbol: string }) {
-
-    const [quote, setQoute] = useState<any>({});
-    const [chartData, setChartData] = useState<any[]>([]);
-    const router = useRouter();
-
-
-    useEffect(()=>{
-       const fetchData = async () => {
-            const [quote, chartData] = await Promise.all([
-                getQuotes(symbol),
-                getChartData(symbol, '1d'),
-            ]);
-            setQoute(quote);
-            setChartData(chartData);
-       }
-       fetchData().catch(console.error)
-    },[])
-    
+export function WatchListItem({symbol, quote, chartData}: { symbol: string, quote : Quote, chartData : any[] }) {
     if(chartData.length === 0) return null;
 
     const { shortName, regularMarketPrice, regularMarketChangePercent } = quote;
@@ -32,10 +12,10 @@ export function WatchListItem({ symbol}: { symbol: string }) {
   
     return (
       <div className="grid grid-cols-3 hover:bg-muted/50">
-        <div className="flex flex-col hover:cursor-pointer"  onClick={() => router.push(`/stock/${symbol}`)} >
-          {/* <Link href={`/stock/${symbol}`} className="font-semibold"> */}
+        <div className="flex flex-col hover:cursor-pointer" >
+          <Link href={`/stock/${symbol}`} className="font-semibold">
             {symbol}
-          {/* </Link> */}
+          </Link>
           <span className="text-sm text-muted-foreground">{shortName}</span>
         </div>
   

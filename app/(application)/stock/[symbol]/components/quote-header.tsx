@@ -1,46 +1,9 @@
-import { createWatchListItem, deleteWatchListItem } from '@/action/watchList';
-import { Button } from '@/components/ui/button';
 import { getQuotes } from '@/data/stock';
 import { checkIfWatchItemExists } from '@/data/user';
 import { cn } from '@/lib/utils';
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { BadgeDelta } from '@tremor/react';
-import { revalidatePath } from 'next/cache';
 import { notFound } from 'next/navigation';
-
-export async function WatchListButton({
-  symbol,
-  userId,
-}: {
-  symbol: string;
-  userId: string | undefined;
-}) {
-  if (!userId) return;
-
-  const alreadyWatching = await checkIfWatchItemExists(symbol)
-
-  return (
-    <form
-      action={async () => {
-        'use server';
-        alreadyWatching
-          ? deleteWatchListItem(symbol, userId)
-          : createWatchListItem(symbol, userId);
-        revalidatePath(`/stock/${symbol}`);
-      }}
-    >
-      {alreadyWatching ? (
-        <Button variant="outline" type="submit">
-          Remove From Watch List <EyeSlashIcon className="ml-1 h-6 w-6" />
-        </Button>
-      ) : (
-        <Button variant="outline" type="submit">
-          Add To Watch List <EyeIcon className="ml-1 h-6 w-6" />
-        </Button>
-      )}
-    </form>
-  );
-}
+import { WatchListButton } from './watch-list-button';
 
 export async function QuoteHeader({
   symbol,
@@ -49,7 +12,9 @@ export async function QuoteHeader({
   symbol: string;
   userId: string | undefined;
 }) {
-  const quote = await getQuotes(symbol);
+  const [quote, alreadyWatching] = await Promise.all([getQuotes(symbol), checkIfWatchItemExists(symbol)]) 
+  // const quote = await getQuotes(symbol);
+  // const alreadyWatching = await checkIfWatchItemExists(symbol)
 
   if (quote === undefined) {
     notFound();
@@ -100,7 +65,7 @@ export async function QuoteHeader({
             {percentChange?.toFixed(2)}%
           </BadgeDelta>
         </div>
-        <WatchListButton symbol={symbol} userId={userId} />
+        <WatchListButton symbol={symbol} userId={userId} alreadyWatching={alreadyWatching}/>
       </div>
     </div>
   );

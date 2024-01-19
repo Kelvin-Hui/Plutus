@@ -96,8 +96,8 @@ export function calculateTodayReturn(
   history
     .filter(
       (transaction) =>
-        transaction.createdAt >= getStartingPeriod() ||
-        transaction.cost >= prevClose,
+        (transaction.createdAt >= getStartingPeriod() ||
+        transaction.cost >= prevClose) && transaction.quantity > 0
     )
     .forEach((transaction) => {
       shareBoughtToday += transaction.quantity;

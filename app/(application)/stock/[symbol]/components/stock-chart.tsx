@@ -1,5 +1,5 @@
 'use client';
-import { getChartData, getQuotes } from '@/data/stock';
+import { get1minChartData, getChartData, getQuotes } from '@/data/stock';
 import { cn, currencyFormat, numberFormat, padChartData } from '@/lib/utils';
 import { TimeInterval } from '@/types';
 import {
@@ -31,9 +31,9 @@ export function StockChart({ symbol }: { symbol: string }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      let [quote, chartData] = await Promise.all([
+      const [quote, chartData] = await Promise.all([
         getQuotes(symbol),
-        getChartData(symbol, timeInterval),
+        timeInterval === '1d' ? get1minChartData(symbol) : getChartData(symbol, timeInterval),
       ]);
 
       const { marketState } = quote;
@@ -42,25 +42,12 @@ export function StockChart({ symbol }: { symbol: string }) {
       const is1dInterval = timeInterval === '1d';
       if (!chartData) return null;
 
-      if (isRegularMarket && is1dInterval) {
-        chartData = padChartData(chartData);
-      }
-
-      chartData = chartData.map((entry: any) => {
-        return {
-          ...entry,
-          date: is1dInterval
-            ? new Date(entry.date).toLocaleTimeString()
-            : new Date(entry.date).toLocaleString(),
-        };
-      });
-
-      // const localeChartData = chartData.map((data:any) => {return {...data, date : is1dInterval? data.date.toLocaleTimeString() :  data.date.toLocaleString()}})
-
+      const localeChartData = ((isRegularMarket && is1dInterval)? padChartData(chartData) : chartData).map((data:any) => {return {...data, date : is1dInterval? new Date(data.date).toLocaleTimeString():  new Date(data.date).toLocaleString()}})
+      
       setMaxVolume(
         Math.max(...chartData.map((data: any) => Number(data.volume))),
       );
-      setChartData(chartData);
+      setChartData(localeChartData)
       setIncreasing((quote?.regularMarketChangePercent ?? 0) >= 0);
     };
 

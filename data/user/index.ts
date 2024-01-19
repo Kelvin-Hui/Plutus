@@ -80,11 +80,11 @@ export const getWatchListSymbols = cache(
         skip : cursor ? 1 : 0
       })
     ])
-    
+
     return {count, data};
   },
   ['get_watch_list'],
-  {tags : ['watch_list']}
+  {tags : ['watch_list', 'auth']}
 )
 
 export const checkIfWatchItemExists = cache(
@@ -154,7 +154,7 @@ export const getBalanceChartData = cache(
     });
   },
   ['get_balance_chart_data'],
-  {revalidate: 60}
+  {tags:['auth'],revalidate: 60}
 )
 
 export const getTransactions  = cache(
