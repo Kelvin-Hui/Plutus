@@ -2,8 +2,8 @@
 import { auth } from '@/auth';
 import { getQuotes } from '@/data/stock';
 import prisma from '@/lib/prisma';
-import { convertToISO, nextDay } from '@/lib/utils';
-import { ProfolioValue } from '@prisma/client';
+import { nextDay } from '@/lib/utils';
+import { PortfolioValue } from '@prisma/client';
 import { unstable_cache as cache } from 'next/cache';
 
 export async function getUserById(userId: string | undefined) {
@@ -33,7 +33,7 @@ export const getUserCreateTime = cache(
   async () => {
     const result = await getUserById(await getCurrentUserId());
     if(!result) throw Error("User cant be null!")
-    return new Date(result.createdAt)
+    return result.createdAt
   },
   ['current_user_create_time'],
   {tags:['auth']}
@@ -105,52 +105,57 @@ export const checkIfWatchItemExists = cache(
   {tags: ['watch_list']}
 )
 
-export async function getBalanceChartData(from: Date, to: Date) {
-  const userId = await getCurrentUserId();
-  const MONTH_IN_SECOND = 30 * 24 * 60 * 60;
 
-  if ((to.valueOf() - from.valueOf()) / 1000 > MONTH_IN_SECOND) {
-    const data = await prisma.$queryRaw<ProfolioValue[]>`
-    SELECT DISTINCT ON (date_trunc('day', "createdAt"))
-          "createdAt", "balance"
-    FROM "ProfolioValue" 
-    WHERE "userId" = ${userId}
-    `;
-    return data?.map((row) => {
+export const getBalanceChartData = cache(
+  async (from: Date, to: Date) => {
+    const userId = await getCurrentUserId();
+    const MONTH_IN_SECOND = 30 * 24 * 60 * 60;
+
+    if ((to.valueOf() - from.valueOf()) / 1000 > MONTH_IN_SECOND) {
+      const data = await prisma.$queryRaw<PortfolioValue[]>`
+      SELECT DISTINCT ON (date_trunc('day', "createdAt"))
+            "createdAt", "balance"
+      FROM "PortfolioValue" 
+      WHERE "userId" = ${userId}
+      `;
+      return data?.map((row) => {
+        return {
+          balance: Number(row.balance.toFixed(2)),
+          createdAt: row.createdAt,
+        };
+      });
+    }
+
+    const chartData = await prisma.portfolioValue.findMany({
+      where: {
+        userId: {
+          equals: userId,
+        },
+        createdAt: {
+          gte: from,
+          lte: nextDay(to),
+        },
+      },
+      select: {
+        balance: true,
+        createdAt: true,
+      },
+      orderBy: [
+        {
+          createdAt: 'asc',
+        },
+      ],
+    });
+    return chartData?.map((row) => {
       return {
         balance: Number(row.balance.toFixed(2)),
         createdAt: row.createdAt,
       };
     });
-  }
-
-  const chartData = await prisma.profolioValue.findMany({
-    where: {
-      userId: {
-        equals: userId,
-      },
-      createdAt: {
-        gte: convertToISO(from),
-        lte: convertToISO(nextDay(to)),
-      },
-    },
-    select: {
-      balance: true,
-      createdAt: true,
-    },
-    orderBy: [
-      {
-        createdAt: 'asc',
-      },
-    ],
-  });
-  return chartData?.map((row) => {
-    return {
-      balance: Number(row.balance.toFixed(2)),
-      createdAt: row.createdAt,
-    };
-  });
-}
+  },
+  ['get_balance_chart_data'],
+  {revalidate: 60}
+)
 
 export const getTransactions  = cache(
   async (symbol?: string | undefined) => {
@@ -183,10 +188,10 @@ export const getTransactions  = cache(
   {tags:['auth','transactions']}
 )
 
-export const getProfolioList = cache(
+export const getPortfolioList = cache(
   async(symbol?: string | undefined, id?: string) => {
     const userId = id ?? (await getCurrentUserId());
-    const profolio = await prisma.profolioItem.findMany({
+    const portfolio = await prisma.portfolioItem.findMany({
       where: {
         userId: {
           equals: !userId ? '0' : userId,
@@ -201,26 +206,26 @@ export const getProfolioList = cache(
         cost: true,
       },
     });
-    return profolio
+    return portfolio
   },
-  ['get_profolio_list'],
+  ['get_portfolio_list'],
   {tags : ['auth','transactions']}
 )
 
-export async function getProfolio(symbol?: string | undefined, id?: string) {
-  const profolio = await getProfolioList(symbol,id)
-  const symbolList = profolio?.map((item) => item.symbol);
-  if (profolio.length === 0) {
+export async function getPortfolio(symbol?: string | undefined, id?: string) {
+  const portfolio = await getPortfolioList(symbol,id)
+  const symbolList = portfolio?.map((item) => item.symbol);
+  if (portfolio.length === 0) {
     if (!!symbol) {
       symbolList.push(symbol);
     } else {
       return [];
     }
   }
-  if (profolio.length === 0 && !!symbol) symbolList.push(symbol);
+  if (portfolio.length === 0 && !!symbol) symbolList.push(symbol);
   const marketPrices = await getQuotes(symbolList);
 
-  const castedProfolio = profolio.map((row) => {
+  const castedPortfolio = portfolio.map((row) => {
     return { ...row, cost: Number(row.cost) };
   });
   return symbolList?.map((_, idx) => {
@@ -230,24 +235,24 @@ export async function getProfolio(symbol?: string | undefined, id?: string) {
       marketPreviousClose: Number(
         marketPrices[idx]?.regularMarketPreviousClose,
       ),
-      ...castedProfolio[idx],
+      ...castedPortfolio[idx],
     };
   });
 }
 
-export async function getProfolioValue(id?: string) {
-  const profolio = await getProfolio(undefined, id);
-  return profolio.reduce(
+export async function getPortfolioValue(id?: string) {
+  const portfolio = await getPortfolio(undefined, id);
+  return portfolio.reduce(
     (acc, curr) => acc + curr.marketPrice * curr.quantity,
     0,
   );
 }
 
-export async function computeTotalProfolioValue(userId: string) {
+export async function computeTotalPortfolioValue(userId: string) {
   const id = userId ?? (await getCurrentUserId());
-  const [cash, profolioValue] = await Promise.all([
+  const [cash, portfolioValue] = await Promise.all([
     getBuyingPower(userId),
-    getProfolioValue(userId),
+    getPortfolioValue(userId),
   ]);
-  return { userId: id, balance: Number((cash + profolioValue).toFixed(2)) };
+  return { userId: id, balance: Number((cash + portfolioValue).toFixed(2)) };
 }

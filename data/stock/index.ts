@@ -4,7 +4,7 @@ import { getChartQueryOptions, getStartingPeriod } from '@/lib/utils';
 import yfClient from '@/lib/yahooFinanceClient';
 import { TimeInterval } from '@/types';
 import { intlFormatDistance } from 'date-fns';
-import { unstable_cache as cache, unstable_noStore } from 'next/cache';
+import { unstable_cache as cache } from 'next/cache';
 
 
 const SUPPORTED_QUOTETYPE = ['EQUITY', 'ETF', 'INDEX'];
@@ -34,7 +34,7 @@ export const getQuotes = cache(
     return result;
   },
   ['get_quotes'],
-  {revalidate : 5}
+  {revalidate : 10}
 )
 
 export const getSummaryDetail = cache(
@@ -62,22 +62,22 @@ export const getQuoteNews = cache(
 )
 
 
-export const getRecommandationSymbols = cache(
+export const getRecommendationSymbols = cache(
   async (symbol : string) => {
-    const recommands = await yfClient.recommendationsBySymbol(symbol);
-    return recommands?.recommendedSymbols?.map((entry) => entry.symbol);
+    const recommends = await yfClient.recommendationsBySymbol(symbol);
+    return recommends?.recommendedSymbols?.map((entry) => entry.symbol);
   },
-  ['recommanded_symbols'],
+  ['recommended_symbols'],
   {revalidate : 86400}
 )
 
-export const getRecommandationQuotes = cache(
+export const getRecommendationQuotes = cache(
   async (symbol : string) => {
-    const recommandsSymbols = await getRecommandationSymbols(symbol)
-    const result = await yfClient.quote(recommandsSymbols);
+    const recommendsSymbols = await getRecommendationSymbols(symbol)
+    const result = await yfClient.quote(recommendsSymbols);
     return result;
   },
-  ["recommanded_quotes"],
+  ["recommended_quotes"],
   {
     revalidate: 60
   }
@@ -143,25 +143,28 @@ export async function get1minChartData(symbol: string) {
   return ohlcData;
 }
 
-export async function getChartData(symbol: string, timeInterval: TimeInterval) {
-  unstable_noStore();
-  if (timeInterval == '1d') {
-    return await get1minChartData(symbol);
-  }
-
-  const { period1, interval } = getChartQueryOptions(timeInterval);
-  const result = await yfClient.chart(
-    symbol,
-    {
-      period1: period1,
-      period2: new Date().toISOString().slice(0, 10),
-      interval: interval,
-      events: '',
-      includePrePost: false,
-    },
-    { validateResult: false },
-  );
-  return result?.quotes.map((quote: any) => {
-    return { ...quote, date: quote.date };
-  });
-}
+export const getChartData = cache(
+  async(symbol: string, timeInterval: TimeInterval) => {
+    if (timeInterval == '1d') {
+      return await get1minChartData(symbol);
+    }
+  
+    const { period1, interval } = getChartQueryOptions(timeInterval);
+    const result = await yfClient.chart(
+      symbol,
+      {
+        period1: period1,
+        period2: new Date().toISOString().slice(0, 10),
+        interval: interval,
+        events: '',
+        includePrePost: false,
+      },
+      { validateResult: false },
+    );
+    return result?.quotes.map((quote: any) => {
+      return { ...quote, date: quote.date };
+    });
+  },
+  ['get_chart_data'],
+  {revalidate: 10}
+)

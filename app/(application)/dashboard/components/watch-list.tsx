@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { useInView } from "react-intersection-observer";
 
+import { getChartData, getQuotes } from '@/data/stock';
 import { getWatchListSymbols } from '@/data/user';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
@@ -14,8 +15,9 @@ export function WatchList() {
   const [cursor, setCursor] = useState<any>(undefined);
   const [ref, inView] = useInView()
 
+
   const fetchSymbols = async () =>{
-    const queries  = await getWatchListSymbols(cursor, 8);
+    const queries  = await getWatchListSymbols(cursor, symbolList.length === 0? 8 : 4);
 
     if(isEndOfList) return
 
@@ -23,6 +25,10 @@ export function WatchList() {
       setIsEndOfList(true);
     } 
     const symbols = queries.data.map((entry) => entry.symbol);
+  
+    await getQuotes(symbols);
+    symbols.forEach(async (symbol) => await getChartData(symbol, '1d'));
+
     const lastQuery = queries.data.slice(-1)[0];
     setCursor({userId: lastQuery.userId, symbol : lastQuery.symbol});
     setSymbolList((prev) => [...prev, ...symbols].filter((v,i,self) => self.indexOf(v) === i))

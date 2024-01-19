@@ -37,7 +37,7 @@ async function main() {
       username: 'admin1',
       password: await bcrypt.hash('admin1', 10),
       cash: 25000.0,
-      // wathchList: {
+      // watchList: {
       //   createMany: {
       //     data: [
       //       { symbol: 'META', id:1},
@@ -91,7 +91,7 @@ async function main() {
           ],
         },
       },
-      profolio: {
+      portfolio: {
         createMany: {
           data: [
             { symbol: 'AAPL', quantity: 10, cost: 2 },

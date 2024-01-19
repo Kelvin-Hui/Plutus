@@ -17,13 +17,13 @@ model User{
   createdAt DateTime @default(now())
   cash Decimal
   transactions Transaction[]
-  wathchList WatchListItem[]
-  values ProfolioValue[]
-  profolio ProfolioItem[]
+  watchList WatchListItem[]
+  values PortfolioValue[]
+  portfolio PortfolioItem[]
 }
 
 model WatchListItem{
-  user User @relation(fields:[userId], references:[id])
+  user User @relation(fields:[userId], references:[id], onDelete: Cascade)
   userId String
   symbol String
   createdAt DateTime @default(now())
@@ -32,7 +32,7 @@ model WatchListItem{
 
 model Transaction{
   createdAt DateTime @default(now())
-  user User @relation(fields:[userId], references:[id])
+  user User @relation(fields:[userId], references:[id], onDelete: Cascade)
   userId String
   symbol String
   quantity Int
@@ -40,8 +40,8 @@ model Transaction{
   @@unique([createdAt, userId])
 }
 
-model ProfolioItem{
-  user User @relation(fields:[userId], references:[id])
+model PortfolioItem{
+  user User @relation(fields:[userId], references:[id], onDelete: Cascade)
   userId String
   symbol String
   updatedAt DateTime @updatedAt
@@ -50,8 +50,8 @@ model ProfolioItem{
   @@unique([userId, symbol])
 }
 
-model ProfolioValue{
-  user User @relation(fields:[userId], references:[id])
+model PortfolioValue{
+  user User @relation(fields:[userId], references:[id], onDelete: Cascade)
   userId String
   balance Decimal
   createdAt DateTime @default(now())

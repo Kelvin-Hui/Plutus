@@ -79,9 +79,9 @@ export function calculateROI(
 export function calculateDiversity(
   marketPrice: number,
   quantity: number,
-  totalProfolioValue: number,
+  totalPortfolioValue: number,
 ) {
-  return ((marketPrice * quantity) / totalProfolioValue) * 100;
+  return ((marketPrice * quantity) / totalPortfolioValue) * 100;
 }
 
 export function calculateTodayReturn(
@@ -104,11 +104,6 @@ export function calculateTodayReturn(
       todayReturn += (marketPrice - transaction.cost) * transaction.quantity;
     });
   return (todayReturn += marketChange * (quantity - shareBoughtToday));
-}
-
-export function convertToISO(date: Date) {
-  const str = date.toISOString().split('T')[0];
-  return new Date(str);
 }
 
 export function addMinute(prevDate: Date) {

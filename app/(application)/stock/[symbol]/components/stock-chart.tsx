@@ -45,12 +45,13 @@ export function StockChart({ symbol }: { symbol: string }) {
       if (isRegularMarket && is1dInterval) {
         chartData = padChartData(chartData);
       }
+
       chartData = chartData.map((entry: any) => {
         return {
           ...entry,
           date: is1dInterval
-            ? entry.date.toLocaleTimeString()
-            : entry.date.toLocaleString(),
+            ? new Date(entry.date).toLocaleTimeString()
+            : new Date(entry.date).toLocaleString(),
         };
       });
 

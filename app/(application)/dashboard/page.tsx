@@ -2,7 +2,7 @@ import { BalanceChart } from '@/app/(application)/dashboard/components/balance-c
 import { WatchList } from '@/app/(application)/dashboard/components/watch-list';
 import { cn } from '@/lib/utils';
 import { Metadata } from 'next/types';
-import { ProfolioInfo } from './components/profolio-info';
+import { PortfolioInfo } from './components/portfolio-info';
 
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -20,7 +20,7 @@ export default function Page() {
         <BalanceChart />
         <WatchList />
       </div>
-      <ProfolioInfo />
+      <PortfolioInfo />
     </div>
   );
 }
