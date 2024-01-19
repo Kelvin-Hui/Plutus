@@ -26,7 +26,7 @@ CREATE TABLE "Transaction" (
 );
 
 -- CreateTable
-CREATE TABLE "PortfolioItem" (
+CREATE TABLE "ProfolioItem" (
     "userId" TEXT NOT NULL,
     "symbol" TEXT NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE "PortfolioItem" (
 );
 
 -- CreateTable
-CREATE TABLE "PortfolioValue" (
+CREATE TABLE "ProfolioValue" (
     "userId" TEXT NOT NULL,
     "balance" DECIMAL(65,30) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -51,10 +51,10 @@ CREATE UNIQUE INDEX "WatchListItem_userId_symbol_key" ON "WatchListItem"("userId
 CREATE UNIQUE INDEX "Transaction_createdAt_userId_key" ON "Transaction"("createdAt", "userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "PortfolioItem_userId_symbol_key" ON "PortfolioItem"("userId", "symbol");
+CREATE UNIQUE INDEX "ProfolioItem_userId_symbol_key" ON "ProfolioItem"("userId", "symbol");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "PortfolioValue_userId_createdAt_key" ON "PortfolioValue"("userId", "createdAt");
+CREATE UNIQUE INDEX "ProfolioValue_userId_createdAt_key" ON "ProfolioValue"("userId", "createdAt");
 
 -- AddForeignKey
 ALTER TABLE "WatchListItem" ADD CONSTRAINT "WatchListItem_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -63,7 +63,7 @@ ALTER TABLE "WatchListItem" ADD CONSTRAINT "WatchListItem_userId_fkey" FOREIGN K
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PortfolioItem" ADD CONSTRAINT "PortfolioItem_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ProfolioItem" ADD CONSTRAINT "ProfolioItem_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PortfolioValue" ADD CONSTRAINT "PortfolioValue_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ProfolioValue" ADD CONSTRAINT "ProfolioValue_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
