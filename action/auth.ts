@@ -59,20 +59,6 @@ export async function createUser(username: string, password: string) {
         username: username,
         password: await bcrypt.hash(password, 10),
         cash: 25000.0,
-        watchList: {
-          createMany: {
-            data: [
-              { symbol: 'META' },
-              { symbol: 'AMZN' },
-              { symbol: 'AAPL' },
-              { symbol: 'NFLX' },
-              { symbol: 'GOOG' },
-              { symbol: 'SPY' },
-              { symbol: 'VOO' },
-              { symbol: 'QQQ' },
-            ],
-          },
-        },
         values: {
           create: {
             balance: 25000,

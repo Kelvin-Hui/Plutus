@@ -120,35 +120,35 @@ export const getTrendingQuotes = cache(
   {revalidate:60}
 )
 
-export async function get1minChartData(symbol: string) {
-  const request = await fetch(
-    `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}?period1=${
-      getStartingPeriod().valueOf() / 1000
-    }&interval=1m&period2=${9999999999}&includePrePost=false`,
-  );
-  const response = await request.json();
-  const result = response?.chart?.result[0];
-
-  const timestamp = result?.timestamp;
-  const quote = result?.indicators?.quote[0];
-
-  const ohlcData = timestamp?.map((time: number, idx: number) => ({
-    date: new Date(time * 1000),
-    open: quote.open[idx],
-    high: quote.high[idx],
-    low: quote.low[idx],
-    close: quote.close[idx],
-    volume: quote.volume[idx],
-  }));
-  return ohlcData;
-}
+export const get1minChartData = cache(
+  async (symbol : string)=>{
+    const request = await fetch(
+      `https://query2.finance.yahoo.com/v8/finance/chart/${symbol}?period1=${
+        getStartingPeriod().valueOf() / 1000
+      }&interval=1m&period2=${9999999999}&includePrePost=false`,
+    );
+    const response = await request.json();
+    const result = response?.chart?.result[0];
+  
+    const timestamp = result?.timestamp;
+    const quote = result?.indicators?.quote[0];
+  
+    const ohlcData = timestamp?.map((time: number, idx: number) => ({
+      date: new Date(time * 1000),
+      open: quote.open[idx],
+      high: quote.high[idx],
+      low: quote.low[idx],
+      close: quote.close[idx],
+      volume: quote.volume[idx],
+    }));
+    return ohlcData;
+  },
+  ['get_1min_chart_data'],
+  {revalidate:10}
+)
 
 export const getChartData = cache(
   async(symbol: string, timeInterval: TimeInterval) => {
-    if (timeInterval == '1d') {
-      return await get1minChartData(symbol);
-    }
-  
     const { period1, interval } = getChartQueryOptions(timeInterval);
     const result = await yfClient.chart(
       symbol,
