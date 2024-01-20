@@ -90,7 +90,7 @@ export const getWatchListSymbols = cache(
 export const checkIfWatchItemExists = cache(
   async (symbol : string) => {
     const userId = await getCurrentUserId();
-  if(!userId) throw Error("User Doesn't Exist!") 
+  if(!userId) return false
   const symbolList = await prisma.watchListItem.findUnique({
     where: {
       userId_symbol: {

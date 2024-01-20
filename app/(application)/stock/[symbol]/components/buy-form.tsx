@@ -3,26 +3,26 @@
 import { buyShares } from '@/action/order';
 import { Button } from '@/components/ui/button';
 import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
 } from '@/components/ui/card';
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { cn, currencyFormat } from '@/lib/utils';
 import { PortfolioData } from '@/types';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -46,6 +46,7 @@ export function BuyForm({
   const cash = Number(buyingPower) ?? 0;
   const maxShares = Math.floor(cash / marketPrice);
 
+  const {push} = useRouter();
   const BuySchema = z.object({
     shares: z.coerce.number().min(1).max(maxShares, {
       message: 'Dont Have Enough Buying Power!',
@@ -152,7 +153,7 @@ export function BuyForm({
                 )}
               </Button>
             ) : (
-              <Button className="w-full" onClick={() => redirect('/login')}>
+              <Button className="w-full" type="button" onClick={() => push('/login')}>
                 Sign In First
               </Button>
             )}

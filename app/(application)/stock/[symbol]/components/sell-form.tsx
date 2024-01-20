@@ -3,26 +3,26 @@
 import { sellShares } from '@/action/order';
 import { Button } from '@/components/ui/button';
 import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
 } from '@/components/ui/card';
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { cn, currencyFormat } from '@/lib/utils';
 import { PortfolioData } from '@/types';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -45,10 +45,11 @@ export function SellForm({
 
   const cash = Number(buyingPower) ?? 0;
   const maxShares = quantity;
+  const {push} = useRouter();
 
   const SellSchema = z.object({
     shares: z.coerce.number().min(1).max(maxShares, {
-      message: 'Dont Have Enough Shares',
+      message: "Dont Have Enough Shares",
     }),
     totalCredit: z.coerce.number(),
   });
@@ -152,7 +153,7 @@ export function SellForm({
                 )}
               </Button>
             ) : (
-              <Button className="w-full" onClick={() => redirect('/login')}>
+              <Button className="w-full" type="button" onClick={() => push('/login')}>
                 Sign In First
               </Button>
             )}
