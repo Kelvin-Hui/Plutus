@@ -5,8 +5,26 @@ import { cn, currencyFormat } from '@/lib/utils';
 import { PNLData, TransactionData } from '@/types';
 import { ArrowsUpDownIcon } from '@heroicons/react/24/outline';
 import { ColumnDef } from '@tanstack/react-table';
-import { BadgeDelta, ProgressCircle } from '@tremor/react';
 
+import BadgeDelta from '@tremor/react/dist/components/icon-elements/BadgeDelta/BadgeDelta';
+import ProgressCircle from '@tremor/react/dist/components/vis-elements/ProgressCircle/ProgressCircle';
+
+interface SortableHeaderProps {
+  header: string;
+  column: any;
+}
+function SortableHeader({ header, column }: SortableHeaderProps) {
+  return (
+    <Button
+      variant="ghost"
+      onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      className="text-[10px] sm:text-sm"
+    >
+      {header}
+      <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
+    </Button>
+  );
+}
 export const pnlColumns: ColumnDef<PNLData>[] = [
   {
     accessorKey: 'symbol',
@@ -43,14 +61,7 @@ export const pnlColumns: ColumnDef<PNLData>[] = [
   {
     accessorKey: 'todayReturn',
     header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Today&apos;s Return <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
-        </Button>
-      );
+      return <SortableHeader header="Today's Return" column={column} />;
     },
     cell: ({ row }) => {
       const todayReturn = row.getValue<number>('todayReturn');
@@ -69,14 +80,7 @@ export const pnlColumns: ColumnDef<PNLData>[] = [
   {
     accessorKey: 'pnl',
     header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          PNL <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
-        </Button>
-      );
+      return <SortableHeader header="PNL" column={column} />;
     },
     cell: ({ row }) => {
       const PNL = row.getValue<number>('pnl');
@@ -92,14 +96,7 @@ export const pnlColumns: ColumnDef<PNLData>[] = [
   {
     accessorKey: 'roi',
     header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          ROI <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
-        </Button>
-      );
+      return <SortableHeader header="ROI" column={column} />;
     },
     cell: ({ row }) => {
       const ROI = row.getValue<number>('roi');
@@ -145,14 +142,7 @@ export const transactionColumns: ColumnDef<TransactionData>[] = [
   {
     accessorKey: 'createdAt',
     header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Date <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
-        </Button>
-      );
+      return <SortableHeader header="Date" column={column} />;
     },
     cell: ({ row }) => {
       const date = row.getValue<Date>('createdAt');
@@ -185,15 +175,16 @@ export const transactionColumns: ColumnDef<TransactionData>[] = [
   },
   {
     accessorKey: 'totalCost',
-    header: () => {
-      return <p className="text-end">Total Cost</p>;
-    },
+    header: 'Total Cost',
+    // header: () => {
+    //   return <p className="text-end">Total Cost</p>;
+    // },
     cell: ({ row }) => {
       const totalCost =
         row.getValue<number>('quantity') * row.getValue<number>('cost');
       return (
         <p
-          className={cn('text-end text-green-600', {
+          className={cn(' text-green-600', {
             'text-red-600': totalCost > 0,
           })}
         >

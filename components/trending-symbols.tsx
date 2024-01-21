@@ -1,6 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getTrendingQuotes } from '@/data/stock';
-import { cn, numberFormat } from '@/lib/utils';
+import {
+  cn,
+  currencyFormat,
+  numberFormat,
+  percentageFormat,
+} from '@/lib/utils';
 import { Quote } from '@/types';
 import BadgeDelta from '@tremor/react/dist/components/icon-elements/BadgeDelta/BadgeDelta';
 import Link from 'next/link';
@@ -44,10 +49,10 @@ export function TrendingSymbolItem({ quote }: { quote: Quote }) {
           })}
         >
           <div>
-            <span>${regularMarketPrice?.toFixed(2)}</span>
+            <span>{currencyFormat(regularMarketPrice)}</span>
             <span className="pl-1 text-sm">
               {increasing && '+'}
-              {regularMarketChange?.toFixed(2)}
+              {currencyFormat(regularMarketChange)}
             </span>
           </div>
 
@@ -55,7 +60,7 @@ export function TrendingSymbolItem({ quote }: { quote: Quote }) {
             deltaType={increasing ? 'moderateIncrease' : 'moderateDecrease'}
             className="self-center"
           >
-            {regularMarketChangePercent?.toFixed(2)}%
+            {percentageFormat(regularMarketChangePercent)}
           </BadgeDelta>
         </div>
       </div>

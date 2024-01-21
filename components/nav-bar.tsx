@@ -10,7 +10,7 @@ export function NavBar({
   showUserRelated?: boolean;
 }) {
   return (
-    <header className="sticky top-0 z-50 w-full bg-background">
+    <header className="fixed left-0 top-0 z-50 w-full bg-background px-2 pb-2">
       <nav className="flex flex-row items-center justify-between pt-4 sm:container">
         <WebNav showNavLinks={showUserRelated} />
         <MobileNav />

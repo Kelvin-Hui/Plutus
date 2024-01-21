@@ -25,10 +25,10 @@ export async function KeyStats({ symbol }: { symbol: string }) {
   ];
 
   return (
-    <Card className="w-full">
+    <Card>
       <CardHeader>
         <CardTitle>About - {symbol}</CardTitle>
-        <CardDescription>
+        <CardDescription className="hidden sm:block">
           <ReadMoreWrapper text={company?.longBusinessSummary} />
         </CardDescription>
       </CardHeader>
@@ -36,7 +36,7 @@ export async function KeyStats({ symbol }: { symbol: string }) {
         <div className="grid grid-cols-4 gap-4 text-center">
           {labels.map((obj, idx) => {
             return (
-              <div key={idx} className="flex flex-col">
+              <div key={idx} className="flex flex-col justify-end">
                 <h2 className="text-muted-foreground underline">{obj.key}</h2>
                 <span>{numberFormat(stats?.[obj.value]) ?? 'Unavailable'}</span>
               </div>

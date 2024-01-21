@@ -52,6 +52,11 @@ export function numberFormat(num: number | undefined) {
   return num;
 }
 
+export function percentageFormat(num: number | undefined) {
+  if (num === undefined || isNaN(num)) return '0.00%';
+  return num.toFixed(2) + '%';
+}
+
 export function currencyFormat(num: number | undefined) {
   if (num === undefined || isNaN(num)) return '$0';
   let formatter = Intl.NumberFormat('en-us', {
@@ -97,7 +102,8 @@ export function calculateTodayReturn(
     .filter(
       (transaction) =>
         (transaction.createdAt >= getStartingPeriod() ||
-        transaction.cost >= prevClose) && transaction.quantity > 0
+          transaction.cost >= prevClose) &&
+        transaction.quantity > 0,
     )
     .forEach((transaction) => {
       shareBoughtToday += transaction.quantity;
@@ -211,4 +217,9 @@ export function padChartData(data: any) {
     });
   }
   return [...data, ...padData];
+}
+
+export function isMobileView() {
+  //Need Better Logic
+  return false;
 }

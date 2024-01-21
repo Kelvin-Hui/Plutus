@@ -22,26 +22,27 @@ export function NewsItem({
     <a
       href={link}
       target="_blank"
-      className="container mb-4 flex flex-row justify-between rounded-md border-2 border-solid p-4 hover:bg-muted/50"
+      className="mb-4 flex rounded-md border-2 border-solid p-4 hover:bg-muted/50"
     >
-      <header>
-        <h2 className="text-xl font-medium">{title}</h2>
-        <div className="flex">
-          <span className="mr-4 text-muted-foreground">
+      <header className="w-full">
+        <h2 className="text-xs font-medium sm:text-lg lg:text-xl">{title}</h2>
+        <div className="flex flex-col items-start gap-1 sm:flex-row sm:items-center">
+          <span className="mr-4 text-xs text-muted-foreground sm:text-base lg:text-lg">
             {publishTime}
           </span>
           <Badge>{publisher}</Badge>
         </div>
       </header>
+
       {!imageURL ? (
-        <PhotoIcon width={140} height={140} className="h-auto w-auto" />
+        <PhotoIcon width={64} height={64} />
       ) : (
         <Image
           alt="thumbnail"
           src={imageURL}
-          width={72}
-          height={72}
-          className="h-auto w-auto"
+          width={64}
+          height={64}
+          className="h-16 w-16 sm:h-24 sm:w-24"
         />
       )}
     </a>
@@ -50,9 +51,8 @@ export function NewsItem({
 
 export async function NewsTable({ symbol }: { symbol: string }) {
   const news = await getQuoteNews(symbol);
-
   return (
-    <Card className="h-full w-full overflow-auto">
+    <Card className="max-h-[750px] overflow-auto">
       <CardHeader className={cn('sticky top-0')}>
         <CardTitle>Recent News</CardTitle>
       </CardHeader>

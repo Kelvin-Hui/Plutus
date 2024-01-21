@@ -18,20 +18,20 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params }: { params: { symbol: string } }) {
-  const symbol = decodeURI(params.symbol);
+  const symbol = decodeURI(params.symbol).toUpperCase();
   const session = await auth();
   const userId = session?.user?.id;
 
   return (
-    <div className="item-center container mt-10 flex h-full flex-col gap-10">
+    <div className="mt-16 flex flex-col gap-y-5 sm:container">
       <QuoteHeader symbol={symbol} userId={userId} />
-      <div className="space-y-2 lg:flex lg:w-full lg:flex-1 lg:justify-between lg:space-x-2 lg:space-y-0">
+      <div className="md:grid md:grid-cols-3 md:gap-x-2">
         <StockChart symbol={symbol} />
         <OrderPanel symbol={symbol} userId={userId} />
       </div>
       <KeyStats symbol={symbol} />
       <RecommendationSymbols symbol={symbol} />
-      <div className="h-3/5 space-y-4 pb-4 lg:flex lg:flex-initial lg:gap-4 lg:space-y-0">
+      <div className="mb-5 flex flex-col gap-5 md:grid md:grid-cols-2">
         <NewsTable symbol={symbol} />
         <TransactionHistory symbol={symbol} />
       </div>

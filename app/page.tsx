@@ -149,7 +149,7 @@ export const revalidate = 60;
 
 export default function Home() {
   return (
-    <div className="flex flex-col sm:container">
+    <div className="mt-16 flex flex-col sm:container">
       <NavBar showUserRelated={false} />
       <SymbolCarousel />
       <section className="lg:grid lg:grid-cols-2 lg:gap-x-4">

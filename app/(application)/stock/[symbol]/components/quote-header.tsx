@@ -1,6 +1,6 @@
 import { getQuotes } from '@/data/stock';
 import { checkIfWatchItemExists } from '@/data/user';
-import { cn } from '@/lib/utils';
+import { cn, currencyFormat, percentageFormat } from '@/lib/utils';
 import BadgeDelta from '@tremor/react/dist/components/icon-elements/BadgeDelta/BadgeDelta';
 import { notFound } from 'next/navigation';
 import { WatchListButton } from './watch-list-button';
@@ -16,8 +16,6 @@ export async function QuoteHeader({
     getQuotes(symbol),
     checkIfWatchItemExists(symbol),
   ]);
-  // const quote = await getQuotes(symbol);
-  // const alreadyWatching = await checkIfWatchItemExists(symbol)
 
   if (quote === undefined) {
     notFound();
@@ -28,52 +26,52 @@ export async function QuoteHeader({
     regularMarketPrice: price,
     regularMarketChangePercent: percentChange,
     regularMarketChange: priceChange,
+    quoteType: quoteType,
   } = quote;
 
   const increasing = (percentChange ?? 0) >= 0;
 
   return (
-    <div className="flex w-full items-center justify-between">
-      <div className="flex flex-col space-y-2">
-        <h2 className="text-5xl">
+    <>
+      <div className="pl-4">
+        <h2 className="text-3xl lg:text-5xl">
           {companyName} -{' '}
           <span className="text-muted-foreground">{symbol}</span>
         </h2>
-        <span className="text-muted-foreground">
-          {exchangeName}-{quote.quoteType}
-        </span>
-      </div>
-
-      <div className="flex flex-col items-end space-y-2">
-        <div className="flex flex-row items-end gap-2">
-          <h1
-            className={cn('text-5xl text-green-600', {
-              'text-red-600': !increasing,
-            })}
-          >
-            ${price}
-          </h1>
-          <span
-            className={cn('text-2xl text-green-600', {
-              'text-red-600': !increasing,
-            })}
-          >
-            {increasing && '+'}
-            {priceChange.toFixed(2)}
-          </span>
-          <BadgeDelta
-            deltaType={increasing ? 'moderateIncrease' : 'moderateDecrease'}
-            size={'xl'}
-          >
-            {percentChange?.toFixed(2)}%
-          </BadgeDelta>
+        <div className="flex items-center justify-between">
+          <h2 className="text-base text-muted-foreground">
+            {exchangeName} - {quoteType}
+          </h2>
+          <WatchListButton
+            symbol={symbol}
+            userId={userId}
+            alreadyWatching={alreadyWatching}
+          />
         </div>
-        <WatchListButton
-          symbol={symbol}
-          userId={userId}
-          alreadyWatching={alreadyWatching}
-        />
+
+        <div
+          className={cn(
+            'flex flex-col items-end text-green-600 sm:flex-row sm:justify-end',
+            { 'text-red-600': !increasing },
+          )}
+        >
+          <h1 className="text-5xl font-semibold leading-tight tracking-tight lg:text-7xl">
+            {currencyFormat(price)}
+          </h1>
+          <div className="flex items-center">
+            <span className="text-xl lg:text-3xl">
+              {increasing && '+'}
+              {currencyFormat(priceChange)}
+            </span>
+            <BadgeDelta
+              deltaType={increasing ? 'moderateIncrease' : 'moderateDecrease'}
+              size={'lg'}
+            >
+              {percentageFormat(percentChange)}
+            </BadgeDelta>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

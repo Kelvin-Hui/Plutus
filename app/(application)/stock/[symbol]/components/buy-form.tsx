@@ -46,7 +46,7 @@ export function BuyForm({
   const cash = Number(buyingPower) ?? 0;
   const maxShares = Math.floor(cash / marketPrice);
 
-  const {push} = useRouter();
+  const { push } = useRouter();
   const BuySchema = z.object({
     shares: z.coerce.number().min(1).max(maxShares, {
       message: 'Dont Have Enough Buying Power!',
@@ -87,7 +87,7 @@ export function BuyForm({
         <CardTitle>{symbol}</CardTitle>
       </CardHeader>
       <CardContent>
-        <span className="mb-2 flex flex-col text-sm text-muted-foreground">
+        <span className="mb-2 flex flex-col text-sm text-muted-foreground sm:text-base">
           <p>
             Position {quantity}@{currencyFormat(cost)}
           </p>
@@ -153,7 +153,11 @@ export function BuyForm({
                 )}
               </Button>
             ) : (
-              <Button className="w-full" type="button" onClick={() => push('/login')}>
+              <Button
+                className="w-full"
+                type="button"
+                onClick={() => push('/login')}
+              >
                 Sign In First
               </Button>
             )}

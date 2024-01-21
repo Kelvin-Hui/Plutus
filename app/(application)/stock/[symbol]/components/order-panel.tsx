@@ -15,8 +15,8 @@ export async function OrderPanel({
     getPortfolio(symbol),
   ]);
   return (
-    <Tabs defaultValue="buy" className="w-full lg:w-1/2">
-      <TabsList className="grid w-full grid-cols-2">
+    <Tabs defaultValue="buy" className="mt-4 w-full md:mt-0">
+      <TabsList className="grid grid-cols-2">
         <TabsTrigger value="buy">Buy</TabsTrigger>
         <TabsTrigger value="sell">Sell</TabsTrigger>
       </TabsList>
