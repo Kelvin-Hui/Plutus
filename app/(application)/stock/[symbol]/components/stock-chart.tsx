@@ -3,6 +3,7 @@ import { get1minChartData, getChartData, getQuotes } from '@/data/stock';
 import {
   cn,
   currencyFormat,
+  determineYAxisWidth,
   isMobileView,
   numberFormat,
   padChartData,
@@ -11,29 +12,6 @@ import { TimeInterval } from '@/types';
 
 import { AreaChart, BarChart, Tab, TabGroup, TabList } from '@tremor/react';
 import { useEffect, useState } from 'react';
-
-function determineYAxisWidth(value: number | undefined) {
-  if (value === undefined) return 56;
-  const numOfDigits = value.toString().split('.')[0].length;
-  switch (numOfDigits) {
-    case 1:
-      return 40;
-    case 2:
-      return 48;
-    case 3:
-      return 56;
-    case 4:
-      return 64;
-    case 5:
-      return 72;
-    case 6:
-      return 80;
-    case 7:
-      return 88;
-    default:
-      throw Error('Value Too High😵');
-  }
-}
 
 export function StockChart({ symbol }: { symbol: string }) {
   const TimeInterval: TimeInterval[] = [

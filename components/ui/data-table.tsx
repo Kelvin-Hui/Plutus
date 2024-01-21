@@ -70,7 +70,7 @@ export function DataTable<TData, TValue>({
             onChange={(event) =>
               table.getColumn('symbol')?.setFilterValue(event.target.value)
             }
-            className="max-w-sm"
+            className="max-w-sm text-xs sm:text-base"
           />
           <DataTableViewOptions table={table} colHeaderMap={colHeaderMap} />
         </div>

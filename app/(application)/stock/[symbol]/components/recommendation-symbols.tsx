@@ -39,13 +39,13 @@ export async function RecommendationSymbols({ symbol }: { symbol: string }) {
                     <CardHeader>
                       <CardTitle>{symbol}</CardTitle>
                       <CardDescription className="block w-full overflow-hidden text-ellipsis whitespace-nowrap">
-                        {displayName}
+                        {shortName}
                       </CardDescription>
                     </CardHeader>
 
                     <CardContent
                       className={cn(
-                        'flex items-center justify-between gap-x-1 text-green-600',
+                        'flex items-end justify-between gap-x-1 text-sm text-green-600',
                         { 'text-red-600': !increasing },
                       )}
                     >
