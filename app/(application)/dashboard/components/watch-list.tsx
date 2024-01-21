@@ -27,6 +27,7 @@ export function WatchList() {
       setIsEndOfList(true);
     }
     const symbols = queries.data.map((entry) => entry.symbol);
+    if (symbols.length === 0) return;
 
     const duplicated = symbols.filter((symbol) =>
       watchListData.map((each) => each.symbol).includes(symbol),

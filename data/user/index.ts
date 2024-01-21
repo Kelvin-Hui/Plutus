@@ -4,7 +4,6 @@ import { getQuotes } from '@/data/stock';
 import prisma from '@/lib/prisma';
 import { nextDay } from '@/lib/utils';
 import { PortfolioValue } from '@prisma/client';
-import { unstable_cache as cache } from 'next/cache';
 
 export async function getUserById(userId: string | undefined) {
   return await prisma.user.findUnique({
@@ -20,28 +19,20 @@ export async function getUserByUsername(username: string) {
     },
   });
 }
-export const getCurrentUserId = cache(
-  async () => {
-    const session = await auth();
-    return session?.user.id;
-  },
-  ['current_user'],
-  {tags:['auth']}
-)
 
-export const getUserCreateTime = cache(
-  async () => {
-    const result = await getUserById(await getCurrentUserId());
-    if(!result) throw Error("User cant be null!")
-    return result.createdAt
-  },
-  ['current_user_create_time'],
-  {tags:['auth']}
-)
+export async function getCurrentUserId() {
+  const session = await auth();
+  return session?.user.id;
+}
 
-export const getBuyingPower = cache(
-  async (id? : string) => {
-    const userId = id ?? (await getCurrentUserId());
+export const getUserCreateTime = async () => {
+  const result = await getUserById(await getCurrentUserId());
+  if (!result) throw Error('User cant be null!');
+  return result.createdAt;
+};
+
+export const getBuyingPower = async (id?: string) => {
+  const userId = id ?? (await getCurrentUserId());
   if (!userId) return 0;
   const obj = await prisma.user.findUnique({
     where: {
@@ -51,169 +42,151 @@ export const getBuyingPower = cache(
       cash: true,
     },
   });
-    return Number(obj?.cash);
-  },
-  ['get_buying_power'],
-  {tags:['transactions','auth']}
-)
+  return Number(obj?.cash);
+};
 
-export const getWatchListSymbols = cache(
-  async (cursor?:{userId: string, symbol : string}|undefined, limit?:number) => {
-    const userId = await getCurrentUserId();
-    const whereFilter = {
-      userId : {
-        equals : userId,
-      }
-    }
+export const getWatchListSymbols = async (
+  cursor?: { userId: string; symbol: string } | undefined,
+  limit?: number,
+) => {
+  const userId = await getCurrentUserId();
+  const whereFilter = {
+    userId: {
+      equals: userId,
+    },
+  };
 
-    const [count, data] = await Promise.all([
-      await prisma.watchListItem.count({
-        where : whereFilter
-      }),
-      await prisma.watchListItem.findMany({
-        where : whereFilter,
-        cursor: cursor? {userId_symbol:cursor} : undefined,
-        orderBy:{
-          createdAt: 'asc'
-        },
-        take : limit ?? 0,
-        skip : cursor ? 1 : 0
-      })
-    ])
+  const [count, data] = await Promise.all([
+    await prisma.watchListItem.count({
+      where: whereFilter,
+    }),
+    await prisma.watchListItem.findMany({
+      where: whereFilter,
+      cursor: cursor ? { userId_symbol: cursor } : undefined,
+      orderBy: {
+        createdAt: 'asc',
+      },
+      take: limit ?? 0,
+      skip: cursor ? 1 : 0,
+    }),
+  ]);
 
-    return {count, data};
-  },
-  ['get_watch_list'],
-  {tags : ['watch_list', 'auth']}
-)
+  return { count, data };
+};
 
-export const checkIfWatchItemExists = cache(
-  async (symbol : string) => {
-    const userId = await getCurrentUserId();
-  if(!userId) return false
+export const checkIfWatchItemExists = async (symbol: string) => {
+  const userId = await getCurrentUserId();
+  if (!userId) return false;
   const symbolList = await prisma.watchListItem.findUnique({
     where: {
       userId_symbol: {
         userId: userId,
-        symbol: symbol
+        symbol: symbol,
       },
     },
   });
-  return !!symbolList
-  },
-  ['check_watch_list'],
-  {tags: ['watch_list']}
-)
+  return !!symbolList;
+};
 
+export const getBalanceChartData = async (from: Date, to: Date) => {
+  const userId = await getCurrentUserId();
+  const MONTH_IN_SECOND = 30 * 24 * 60 * 60;
 
-export const getBalanceChartData = cache(
-  async (from: Date, to: Date) => {
-    const userId = await getCurrentUserId();
-    const MONTH_IN_SECOND = 30 * 24 * 60 * 60;
-
-    if ((to.valueOf() - from.valueOf()) / 1000 > MONTH_IN_SECOND) {
-      const data = await prisma.$queryRaw<PortfolioValue[]>`
+  if ((to.valueOf() - from.valueOf()) / 1000 > MONTH_IN_SECOND) {
+    const data = await prisma.$queryRaw<PortfolioValue[]>`
       SELECT DISTINCT ON (date_trunc('day', "createdAt"))
             "createdAt", "balance"
       FROM "PortfolioValue" 
       WHERE "userId" = ${userId}
       `;
-      return data?.map((row) => {
-        return {
-          balance: Number(row.balance.toFixed(2)),
-          createdAt: row.createdAt,
-        };
-      });
-    }
-
-    const chartData = await prisma.portfolioValue.findMany({
-      where: {
-        userId: {
-          equals: userId,
-        },
-        createdAt: {
-          gte: from,
-          lte: nextDay(to),
-        },
-      },
-      select: {
-        balance: true,
-        createdAt: true,
-      },
-      orderBy: [
-        {
-          createdAt: 'asc',
-        },
-      ],
-    });
-    return chartData?.map((row) => {
+    return data?.map((row) => {
       return {
         balance: Number(row.balance.toFixed(2)),
         createdAt: row.createdAt,
       };
     });
-  },
-  ['get_balance_chart_data'],
-  {tags:['auth'],revalidate: 60}
-)
+  }
 
-export const getTransactions  = cache(
-  async (symbol?: string | undefined) => {
-    const userId = await getCurrentUserId();
-    if (!userId) return [];
-    const transactions = await prisma.transaction.findMany({
-      where: {
-        userId: {
-          equals: userId,
-        },
-        symbol: {
-          equals: symbol,
-        },
+  const chartData = await prisma.portfolioValue.findMany({
+    where: {
+      userId: {
+        equals: userId,
       },
-      select: {
-        symbol: true,
-        quantity: true,
-        cost: true,
-        createdAt: true,
+      createdAt: {
+        gte: from,
+        lte: nextDay(to),
       },
-      orderBy: {
-        createdAt: 'desc',
+    },
+    select: {
+      balance: true,
+      createdAt: true,
+    },
+    orderBy: [
+      {
+        createdAt: 'asc',
       },
-    });
-    return transactions?.map((row) => {
-      return { ...row, cost: Number(row.cost) };
-    });
-  },
-  ['get_transactions'],
-  {tags:['auth','transactions']}
-)
+    ],
+  });
+  return chartData?.map((row) => {
+    return {
+      balance: Number(row.balance.toFixed(2)),
+      createdAt: row.createdAt,
+    };
+  });
+};
 
-export const getPortfolioList = cache(
-  async(symbol?: string | undefined, id?: string) => {
-    const userId = id ?? (await getCurrentUserId());
-    const portfolio = await prisma.portfolioItem.findMany({
-      where: {
-        userId: {
-          equals: !userId ? '0' : userId,
-        },
-        symbol: {
-          equals: symbol,
-        },
+export const getTransactions = async (symbol?: string | undefined) => {
+  const userId = await getCurrentUserId();
+  if (!userId) return [];
+  const transactions = await prisma.transaction.findMany({
+    where: {
+      userId: {
+        equals: userId,
       },
-      select: {
-        symbol: true,
-        quantity: true,
-        cost: true,
+      symbol: {
+        equals: symbol,
       },
-    });
-    return portfolio
-  },
-  ['get_portfolio_list'],
-  {tags : ['auth','transactions']}
-)
+    },
+    select: {
+      symbol: true,
+      quantity: true,
+      cost: true,
+      createdAt: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+  return transactions?.map((row) => {
+    return { ...row, cost: Number(row.cost) };
+  });
+};
+
+export const getPortfolioList = async (
+  symbol?: string | undefined,
+  id?: string,
+) => {
+  const userId = id ?? (await getCurrentUserId());
+  const portfolio = await prisma.portfolioItem.findMany({
+    where: {
+      userId: {
+        equals: !userId ? '0' : userId,
+      },
+      symbol: {
+        equals: symbol,
+      },
+    },
+    select: {
+      symbol: true,
+      quantity: true,
+      cost: true,
+    },
+  });
+  return portfolio;
+};
 
 export async function getPortfolio(symbol?: string | undefined, id?: string) {
-  const portfolio = await getPortfolioList(symbol,id)
+  const portfolio = await getPortfolioList(symbol, id);
   const symbolList = portfolio?.map((item) => item.symbol);
   if (portfolio.length === 0) {
     if (!!symbol) {
