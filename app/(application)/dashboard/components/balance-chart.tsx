@@ -2,20 +2,31 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-    getBalanceChartData,
-    getBuyingPower,
-    getPortfolioValue,
-    getUserCreateTime,
+  getBalanceChartData,
+  getBuyingPower,
+  getPortfolioValue,
+  getUserCreateTime,
 } from '@/data/user';
-import { cn, currencyFormat } from '@/lib/utils';
-import { BalanceHeaderProps } from '@/types';
 import {
-    AreaChart,
-    BadgeDelta,
-    DateRangePicker,
-    DateRangePickerValue,
+  cn,
+  currencyFormat,
+  determineYAxisWidth,
+  percentageFormat,
+} from '@/lib/utils';
+import {
+  AreaChart,
+  BadgeDelta,
+  DateRangePicker,
+  DateRangePickerValue,
 } from '@tremor/react';
 import { useEffect, useState } from 'react';
+
+interface BalanceHeaderProps {
+  totalBalance: number;
+  PNL: number;
+  PNLpercentage: number;
+  isIncreasing: boolean;
+}
 
 export function BalanceHeader({
   balanceInfo,
@@ -24,27 +35,19 @@ export function BalanceHeader({
 }) {
   const { totalBalance, PNL, PNLpercentage, isIncreasing } = balanceInfo;
   return (
-    <div className="flex justify-around">
-      <div className="flex flex-col items-center text-xl">
-        <label className="mb-2 font-semibold underline">Portfolio Value</label>
-        <span>{currencyFormat(totalBalance)}</span>
-      </div>
-      <div className="flex flex-col items-center text-xl">
-        <label className="mb-2 font-semibold underline">PNL</label>
-        <span
-          className={cn('text-green-600', { 'text-red-600': !isIncreasing })}
-        >
-          {currencyFormat(PNL)}
-        </span>
-      </div>
-      <div className="flex flex-col items-center text-xl">
-        <label className="mb-2 font-semibold underline">ROI</label>
+    <div
+      className={cn('flex flex-col items-center space-y-2 text-green-600', {
+        'text-red-600': !isIncreasing,
+      })}
+    >
+      <h1 className="text-4xl sm:text-7xl">{currencyFormat(totalBalance)}</h1>
+      <div className="flex w-full justify-evenly">
+        <span className="text-xl sm:text-3xl">{currencyFormat(PNL)}</span>
         <BadgeDelta
           deltaType={isIncreasing ? 'moderateIncrease' : 'moderateDecrease'}
           size={'xl'}
         >
-          {isIncreasing && '+'}
-          {PNLpercentage.toFixed(2)}%
+          {percentageFormat(PNLpercentage)}
         </BadgeDelta>
       </div>
     </div>
@@ -68,7 +71,7 @@ export function BalanceChart() {
     PNLpercentage: 0,
     isIncreasing: true,
   });
-  const [chartData, setChartData] = useState<Object[]>([]);
+  const [chartData, setChartData] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,13 +86,12 @@ export function BalanceChart() {
 
       const isToday = range.from?.getDate() === range.to?.getDate();
 
-      if(isToday){
+      if (isToday) {
         chartData.push({
           createdAt: new Date(),
           balance: Number((cash + portfolioValue).toFixed(2)),
         });
       }
-      
 
       const totalBalance = isToday
         ? Number((cash + portfolioValue).toFixed(2))
@@ -122,13 +124,13 @@ export function BalanceChart() {
   }, [range]);
 
   return (
-    <Card className="w-full">
+    <Card className="lg:col-span-2">
       <CardHeader>
-        <CardTitle>Balance History</CardTitle>
+        <CardTitle>Balance Chart</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-0 sm:p-6">
         <BalanceHeader balanceInfo={balanceInfo} />
-        <div className="mt-2 flex items-center justify-center">
+        <div className="my-5 flex flex-col items-center px-1 sm:flex-row sm:justify-center">
           <DateRangePicker
             enableYearNavigation={true}
             enableClear={false}
@@ -137,13 +139,15 @@ export function BalanceChart() {
             onValueChange={(range) =>
               setRange({ from: range?.from, to: range?.to })
             }
+            className="p-0"
           />
           <Button
+            className="w-full sm:w-fit"
             variant="outline"
             onClick={() => {
               const fetchCreated = async () => {
                 const minRange = await getUserCreateTime();
-                
+
                 setRange({ from: new Date(minRange), to: new Date() });
               };
               fetchCreated().catch(console.error);
@@ -164,7 +168,7 @@ export function BalanceChart() {
           showAnimation
           animationDuration={2000}
           valueFormatter={currencyFormat}
-          yAxisWidth={75}
+          yAxisWidth={determineYAxisWidth(chartData.slice(-1)[0]?.balance)}
           className="min-h-[20rem]"
           noDataText="Loading Data ... 🔄"
         />

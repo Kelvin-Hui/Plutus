@@ -70,14 +70,14 @@ export function DataTable<TData, TValue>({
             onChange={(event) =>
               table.getColumn('symbol')?.setFilterValue(event.target.value)
             }
-            className="max-w-sm"
+            className="max-w-sm text-xs sm:text-base"
           />
           <DataTableViewOptions table={table} colHeaderMap={colHeaderMap} />
         </div>
       )}
 
       <div className="rounded-md border">
-        <Table>
+        <Table className="text-[10px] sm:text-sm">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>

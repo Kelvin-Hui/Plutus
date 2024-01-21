@@ -1,8 +1,9 @@
 'use client';
 
+import { isMobileView } from '@/lib/utils';
 import React from 'react';
 
-const MAX_CHAR = 1000;
+const MAX_CHAR = isMobileView() ? 300 : 1000;
 
 export function ReadMoreWrapper({ text }: { text: string | undefined }) {
   const [readMore, setReadMore] = React.useState<boolean>(true);

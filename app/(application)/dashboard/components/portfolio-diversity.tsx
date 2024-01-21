@@ -55,22 +55,24 @@ const LegendItem = ({ selectValue }: { selectValue: SelectValueProps }) => {
               )}
             ></span>
             {isCash ? (
-              <p>{symbol}</p>
+              <span>{symbol}</span>
             ) : (
               <a href={`/stock/${symbol}`}>{symbol}</a>
             )}
           </label>
         </CardTitle>
         {marketPrice && (
-          <pre className="flex flex-col">
+          <p className="flex flex-col text-sm sm:text-lg">
             <span>
-              Positon {currencyFormat(cost)} @{quantity}
+              Position <b>{currencyFormat(cost)}</b> @ <b>{quantity}</b>
             </span>
-            <span>Market Price {currencyFormat(marketPrice)}</span>
-          </pre>
+            <span>
+              Market Price <b>{currencyFormat(marketPrice)}</b>
+            </span>
+          </p>
         )}
       </CardHeader>
-      <CardContent className="text-2xl font-light">
+      <CardContent className="text-center text-xl font-semibold leading-tight tracking-tight sm:text-2xl">
         {currencyFormat(marketValue)}
       </CardContent>
     </Card>
@@ -90,12 +92,12 @@ export function PortfolioDiversity({
   });
 
   return (
-    <div className="flex items-center justify-around">
+    <div className="flex flex-col items-center justify-around space-y-4 md:flex-row">
       <DonutChart
         data={[...data, { symbol: '$CASH', marketValue: buyingPower }]}
         category="marketValue"
         index="symbol"
-        className="h-[24rem] w-[24rem]"
+        className="h-64 w-64 sm:h-72 sm:w-72 lg:h-96 lg:w-96"
         colors={colors}
         onValueChange={(v) => {
           setValue(v);

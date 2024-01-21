@@ -73,13 +73,6 @@ export type TransactionData = {
   userId?: string;
 };
 
-export type BalanceHeaderProps = {
-  totalBalance: number;
-  PNL: number;
-  PNLpercentage: number;
-  isIncreasing: boolean;
-};
-
 export type RangeValues = {
   from?: Date;
   to?: Date;

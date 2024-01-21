@@ -4,10 +4,10 @@ import { DataTable } from '@/components/ui/data-table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getBuyingPower, getPortfolio, getTransactions } from '@/data/user';
 import {
-    calculateDiversity,
-    calculatePNL,
-    calculateROI,
-    calculateTodayReturn,
+  calculateDiversity,
+  calculatePNL,
+  calculateROI,
+  calculateTodayReturn,
 } from '@/lib/utils';
 import { PortfolioOverviewData, TransactionData } from '@/types';
 import { PortfolioDiversity } from './portfolio-diversity';
@@ -76,19 +76,28 @@ export async function PortfolioInfo() {
   ]);
 
   return (
-    <Tabs defaultValue={'overview'} className="h-full w-full">
-      <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger value="chart">Portfolio Diversity</TabsTrigger>
-        <TabsTrigger value="overview">Portfolio Overview</TabsTrigger>
-        <TabsTrigger value="history">Recent Transactions</TabsTrigger>
+    <Tabs defaultValue={'overview'} className="">
+      <TabsList className="grid grid-cols-3">
+        <TabsTrigger value="chart">
+          <h6 className="text-xs sm:text-base">Diversity</h6>
+        </TabsTrigger>
+        <TabsTrigger value="overview">
+          <h6 className="text-xs sm:text-base">Overview</h6>
+        </TabsTrigger>
+        <TabsTrigger value="history">
+          <h6 className="text-xs sm:text-base">Transaction</h6>
+        </TabsTrigger>
       </TabsList>
-      <Card className="h-full">
+      <Card className="">
         <TabsContent value="chart">
           <CardHeader>
             <CardTitle>Portfolio Diversity</CardTitle>
           </CardHeader>
           <CardContent>
-            <PortfolioDiversity portfolio={portfolio} buyingPower={buyingPower} />
+            <PortfolioDiversity
+              portfolio={portfolio}
+              buyingPower={buyingPower}
+            />
           </CardContent>
         </TabsContent>
         <TabsContent value="overview">

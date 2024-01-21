@@ -52,6 +52,11 @@ export function numberFormat(num: number | undefined) {
   return num;
 }
 
+export function percentageFormat(num: number | undefined) {
+  if (num === undefined || isNaN(num)) return '0.00%';
+  return (num >= 0 ? '+' : '') + num.toFixed(2) + '%';
+}
+
 export function currencyFormat(num: number | undefined) {
   if (num === undefined || isNaN(num)) return '$0';
   let formatter = Intl.NumberFormat('en-us', {
@@ -97,7 +102,8 @@ export function calculateTodayReturn(
     .filter(
       (transaction) =>
         (transaction.createdAt >= getStartingPeriod() ||
-        transaction.cost >= prevClose) && transaction.quantity > 0
+          transaction.cost >= prevClose) &&
+        transaction.quantity > 0,
     )
     .forEach((transaction) => {
       shareBoughtToday += transaction.quantity;
@@ -211,4 +217,36 @@ export function padChartData(data: any) {
     });
   }
   return [...data, ...padData];
+}
+
+export function isMobileView() {
+  //Need Better Logic
+  return false;
+}
+
+export function determineYAxisWidth(value: number | undefined) {
+  if (value === undefined) return 56;
+  const numOfDigits = value.toString().split('.')[0].length;
+  switch (numOfDigits) {
+    case 1:
+      return 40;
+    case 2:
+      return 48;
+    case 3:
+      return 56;
+    case 4:
+      return 64;
+    case 5:
+      return 72;
+    case 6:
+      return 80;
+    case 7:
+      return 88;
+    case 8:
+      return 96;
+    case 9:
+      return 104;
+    default:
+      throw Error('Value Too High😵');
+  }
 }

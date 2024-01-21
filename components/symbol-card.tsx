@@ -4,8 +4,8 @@ import {
   CardDescription,
   CardHeader,
 } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { BadgeDelta } from '@tremor/react';
+import { cn, currencyFormat, percentageFormat } from '@/lib/utils';
+import BadgeDelta from '@tremor/react/dist/components/icon-elements/BadgeDelta/BadgeDelta';
 import Link from 'next/link';
 
 interface SymbolCardProps {
@@ -38,7 +38,7 @@ export function SymbolCard({
               deltaType={increasing ? 'moderateIncrease' : 'moderateDecrease'}
               size={'sm'}
             >
-              {regularMarketChangePercent?.toFixed(2)} %{' '}
+              {percentageFormat(regularMarketChangePercent)}
             </BadgeDelta>
           </div>
           <CardDescription
@@ -55,10 +55,10 @@ export function SymbolCard({
             'text-red-500': !increasing,
           })}
         >
-          <span>${regularMarketPrice}</span>
+          <span>{currencyFormat(regularMarketPrice)}</span>
           <span>
             {increasing && '+'}
-            {regularMarketChange?.toFixed(2)}
+            {currencyFormat(regularMarketChange)}
           </span>
         </CardContent>
       </Card>
