@@ -1,7 +1,7 @@
 import { getQuotes } from '@/data/stock';
 import { checkIfWatchItemExists } from '@/data/user';
 import { cn } from '@/lib/utils';
-import { BadgeDelta } from '@tremor/react';
+import BadgeDelta from '@tremor/react/dist/components/icon-elements/BadgeDelta/BadgeDelta';
 import { notFound } from 'next/navigation';
 import { WatchListButton } from './watch-list-button';
 
@@ -12,7 +12,10 @@ export async function QuoteHeader({
   symbol: string;
   userId: string | undefined;
 }) {
-  const [quote, alreadyWatching] = await Promise.all([getQuotes(symbol), checkIfWatchItemExists(symbol)]) 
+  const [quote, alreadyWatching] = await Promise.all([
+    getQuotes(symbol),
+    checkIfWatchItemExists(symbol),
+  ]);
   // const quote = await getQuotes(symbol);
   // const alreadyWatching = await checkIfWatchItemExists(symbol)
 
@@ -65,7 +68,11 @@ export async function QuoteHeader({
             {percentChange?.toFixed(2)}%
           </BadgeDelta>
         </div>
-        <WatchListButton symbol={symbol} userId={userId} alreadyWatching={alreadyWatching}/>
+        <WatchListButton
+          symbol={symbol}
+          userId={userId}
+          alreadyWatching={alreadyWatching}
+        />
       </div>
     </div>
   );

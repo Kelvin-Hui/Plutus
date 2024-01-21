@@ -19,7 +19,7 @@ export const SignOutButton = () => {
       className="display:none"
       action={async () => {
         'use server';
-        revalidateTag('auth')
+        revalidateTag('auth');
         await signOut();
       }}
     >
@@ -43,7 +43,7 @@ export async function UserAvatar({
   if (!isLoggedIn || !showUserRelated) {
     return (
       <Link href="/login">
-        <Button variant="outline">Login / Signup</Button>
+        <Button variant="outline">Login</Button>
       </Link>
     );
   }

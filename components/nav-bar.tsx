@@ -1,8 +1,8 @@
-import { ArrowTrendingUpIcon } from '@heroicons/react/24/outline';
-import Link from 'next/link';
+import { MobileNav } from './mobile-nav-drawer';
 import { ModeToggle } from './mode-toggle';
 import { SearchBar } from './search-bar';
 import { UserAvatar } from './user-avatar';
+import { WebNav } from './web-nav';
 
 export function NavBar({
   showUserRelated = true,
@@ -10,27 +10,14 @@ export function NavBar({
   showUserRelated?: boolean;
 }) {
   return (
-    <header className="sticky top-0 z-50 w-full bg-background pb-2">
-      <nav className="container flex flex-row items-center justify-between pt-4">
-        <ul className="flex items-center space-x-4">
-          <Link key="home" href="/">
-            <div className="items-center text-2xl font-extrabold tracking-normal hover:text-foreground/75 sm:flex">
-              <ArrowTrendingUpIcon className="h-8 w-8 text-green-300" />
-              <span className="hidden sm:flex">Plutus</span>
-            </div>
-          </Link>
-          {showUserRelated && (
-            <Link
-              href="/dashboard"
-              className="text-md text-muted-foreground hover:text-primary"
-            >
-              Dashboard
-            </Link>
-          )}
-        </ul>
-        <div className="flex flex-1 items-center justify-end space-x-2">
-          <SearchBar placeholder="Search Symbols" />
-          <nav className="flex items-center gap-2">
+    <header className="sticky top-0 z-50 w-full bg-background">
+      <nav className="flex flex-row items-center justify-between pt-4 sm:container">
+        <WebNav showNavLinks={showUserRelated} />
+        <MobileNav />
+
+        <div className="flex items-center justify-end gap-1">
+          <SearchBar placeholder="Search Symbols..." />
+          <nav className="flex gap-1">
             <ModeToggle />
             <UserAvatar showUserRelated={showUserRelated} />
           </nav>

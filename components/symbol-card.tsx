@@ -5,7 +5,7 @@ import {
   CardHeader,
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { BadgeDelta } from '@tremor/react';
+import BadgeDelta from '@tremor/react/dist/components/icon-elements/BadgeDelta/BadgeDelta';
 import Link from 'next/link';
 
 interface SymbolCardProps {
