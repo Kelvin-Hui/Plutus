@@ -28,12 +28,12 @@ export async function KeyStats({ symbol }: { symbol: string }) {
     <Card>
       <CardHeader>
         <CardTitle>About - {symbol}</CardTitle>
-        <CardDescription className="hidden sm:block">
+        <CardDescription>
           <ReadMoreWrapper text={company?.longBusinessSummary} />
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-4 gap-4 text-center">
+        <div className="grid grid-cols-4 gap-4 text-center text-xs sm:text-base">
           {labels.map((obj, idx) => {
             return (
               <div key={idx} className="flex flex-col justify-end">

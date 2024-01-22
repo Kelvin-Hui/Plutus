@@ -27,19 +27,26 @@ const colors = [
 
 type SelectValueProps = {
   symbol?: string;
-  marketValue?: number;
+  marketValue: number;
   color?: string;
-  quantity?: number;
+  quantity: number;
   marketPrice?: number;
   cost?: number;
 } | null;
 
-const LegendItem = ({ selectValue }: { selectValue: SelectValueProps }) => {
+const LegendItem = ({
+  selectValue,
+  totalValue,
+}: {
+  selectValue: SelectValueProps;
+  totalValue: number;
+}) => {
   if (!selectValue) return null;
   const { symbol, marketValue, color, quantity, marketPrice, cost } =
     selectValue;
 
   const isCash = symbol === '$CASH';
+  const percentage = ((marketValue / totalValue) * 100).toFixed(2);
 
   return (
     <Card>
@@ -59,6 +66,7 @@ const LegendItem = ({ selectValue }: { selectValue: SelectValueProps }) => {
             ) : (
               <a href={`/stock/${symbol}`}>{symbol}</a>
             )}
+            <span className="font-normal">- {percentage}%</span>
           </label>
         </CardTitle>
         {marketPrice && (
@@ -91,10 +99,16 @@ export function PortfolioDiversity({
     return { ...row, marketValue: row.quantity * row.marketPrice };
   });
 
+  const totalValue =
+    data.reduce((acc, quote) => (acc += quote.marketValue), 0) + buyingPower;
+
   return (
     <div className="flex flex-col items-center justify-around space-y-4 md:flex-row">
       <DonutChart
-        data={[...data, { symbol: '$CASH', marketValue: buyingPower }]}
+        data={[
+          ...data,
+          { symbol: '$CASH', marketValue: buyingPower, quantity: 1 },
+        ]}
         category="marketValue"
         index="symbol"
         className="h-64 w-64 sm:h-72 sm:w-72 lg:h-96 lg:w-96"
@@ -105,7 +119,7 @@ export function PortfolioDiversity({
         valueFormatter={currencyFormat}
       />
 
-      <LegendItem selectValue={value} />
+      <LegendItem selectValue={value} totalValue={totalValue} />
     </div>
   );
 }

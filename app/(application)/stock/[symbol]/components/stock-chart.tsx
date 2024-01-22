@@ -1,10 +1,10 @@
 'use client';
 import { get1minChartData, getChartData, getQuotes } from '@/data/stock';
+import { useIsMobileView } from '@/hook/use-is-mobile-view';
 import {
   cn,
   currencyFormat,
   determineYAxisWidth,
-  isMobileView,
   numberFormat,
   padChartData,
 } from '@/lib/utils';
@@ -29,6 +29,9 @@ export function StockChart({ symbol }: { symbol: string }) {
   const [timeInterval, setTimeInterval] = useState<TimeInterval>('1d');
   const [increasing, setIncreasing] = useState<boolean>(false);
   const [chartData, setChartData] = useState<any[]>([]);
+
+  const isMobileView = useIsMobileView();
+  console.log(isMobileView);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -161,7 +164,7 @@ export function StockChart({ symbol }: { symbol: string }) {
           noDataText="Loading Data ... 🔄"
           valueFormatter={valueFormatter}
           customTooltip={customToolTip}
-          showAnimation={!isMobileView()}
+          showAnimation={!isMobileView}
           animationDuration={2000}
           yAxisWidth={determineYAxisWidth(
             chartData.slice(timeInterval === '1d' ? 0 : -1)[0]?.close,
@@ -178,7 +181,7 @@ export function StockChart({ symbol }: { symbol: string }) {
           yAxisWidth={determineYAxisWidth(
             chartData.slice(timeInterval === '1d' ? 0 : -1)[0]?.close,
           )}
-          showAnimation={!isMobileView()}
+          showAnimation={!isMobileView}
           animationDuration={2000}
           valueFormatter={() => ''}
           rotateLabelX={{ angle: 0, verticalShift: 1000000 }}

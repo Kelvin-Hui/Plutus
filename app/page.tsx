@@ -101,7 +101,7 @@ function FeatureCard({ icon, title, description }: FeatureCardProps) {
             {title}
           </div>
         </CardTitle>
-        <CardDescription className="text-xs sm:text-sm">
+        <CardDescription className="text-center text-xs sm:text-sm">
           {description}
         </CardDescription>
       </CardHeader>

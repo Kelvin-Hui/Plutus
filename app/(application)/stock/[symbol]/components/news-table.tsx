@@ -35,7 +35,7 @@ export function NewsItem({
       </header>
 
       {!imageURL ? (
-        <PhotoIcon width={64} height={64} />
+        <PhotoIcon width={96} height={96} />
       ) : (
         <Image
           alt="thumbnail"

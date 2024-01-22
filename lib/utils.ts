@@ -219,11 +219,6 @@ export function padChartData(data: any) {
   return [...data, ...padData];
 }
 
-export function isMobileView() {
-  //Need Better Logic
-  return false;
-}
-
 export function determineYAxisWidth(value: number | undefined) {
   if (value === undefined) return 56;
   const numOfDigits = value.toString().split('.')[0].length;
