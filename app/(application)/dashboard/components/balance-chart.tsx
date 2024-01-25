@@ -19,7 +19,7 @@ import {
   DateRangePicker,
   DateRangePickerValue,
 } from '@tremor/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 
 interface BalanceHeaderProps {
   totalBalance: number;
@@ -72,6 +72,7 @@ export function BalanceChart() {
     isIncreasing: true,
   });
   const [chartData, setChartData] = useState<any[]>([]);
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -120,7 +121,9 @@ export function BalanceChart() {
       );
     };
 
-    fetchData().catch(console.error);
+    startTransition(() => fetchData().catch(console.error));
+
+    // fetchData().catch(console.error);
   }, [range]);
 
   return (
@@ -140,10 +143,12 @@ export function BalanceChart() {
               setRange({ from: range?.from, to: range?.to })
             }
             className="p-0"
+            disabled={isPending}
           />
           <Button
             className="w-full sm:w-fit"
             variant="outline"
+            disabled={isPending}
             onClick={() => {
               const fetchCreated = async () => {
                 const minRange = await getUserCreateTime();
