@@ -12,10 +12,13 @@ import { WatchListItem } from './watch-list-item';
 export function WatchList({ userId }: { userId: string }) {
   const [watchListData, setWatchListData] = useState<any[]>([]);
   const [isEndOfList, setIsEndOfList] = useState<boolean>(false);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
   const [cursor, setCursor] = useState<any>(undefined);
   const [ref, inView] = useInView({ threshold: 1, initialInView: true });
 
   const fetchSymbols = async () => {
+    setIsFetching(true);
+
     const queries = await getWatchListSymbols(
       userId,
       cursor,
@@ -54,7 +57,13 @@ export function WatchList({ userId }: { userId: string }) {
   };
 
   useEffect(() => {
-    if (inView && !isEndOfList) fetchSymbols().catch(console.error);
+    if (isFetching) return;
+
+    if (inView && !isEndOfList) {
+      fetchSymbols()
+        .catch(console.error)
+        .finally(() => setIsFetching(false));
+    }
   }, [inView]);
 
   return (

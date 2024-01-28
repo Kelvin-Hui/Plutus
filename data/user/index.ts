@@ -63,27 +63,26 @@ export const getWatchListSymbols = cache(
     return { count, data };
   },
   ['get_watch_list'],
-  { tags: ['watch_list'] },
-);
-
-export const checkIfWatchListItemExists = cache(
-  async (userId: string | undefined, symbol: string) => {
-    if (!userId) return false;
-    const symbolList = await prisma.watchListItem.findUnique({
-      where: {
-        userId_symbol: {
-          userId: userId,
-          symbol: symbol,
-        },
-      },
-    });
-    return !!symbolList;
-  },
-  ['check_watch_list_item_exist'],
   {
     tags: ['watch_list'],
   },
 );
+
+export async function checkIfWatchListItemExists(
+  userId: string | undefined,
+  symbol: string,
+) {
+  if (!userId) return false;
+  const symbolList = await prisma.watchListItem.findUnique({
+    where: {
+      userId_symbol: {
+        userId: userId,
+        symbol: symbol,
+      },
+    },
+  });
+  return !!symbolList;
+}
 
 export const getBalanceChartData = cache(
   async (userId: string, from: Date, to: Date) => {
