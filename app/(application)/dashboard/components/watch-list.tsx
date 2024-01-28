@@ -9,7 +9,7 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import { WatchListItem } from './watch-list-item';
 
-export function WatchList() {
+export function WatchList({ userId }: { userId: string }) {
   const [watchListData, setWatchListData] = useState<any[]>([]);
   const [isEndOfList, setIsEndOfList] = useState<boolean>(false);
   const [cursor, setCursor] = useState<any>(undefined);
@@ -17,6 +17,7 @@ export function WatchList() {
 
   const fetchSymbols = async () => {
     const queries = await getWatchListSymbols(
+      userId,
       cursor,
       watchListData.length === 0 ? 8 : 4,
     );

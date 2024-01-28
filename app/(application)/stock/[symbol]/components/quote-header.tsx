@@ -1,5 +1,5 @@
 import { getQuotes } from '@/data/stock';
-import { checkIfWatchItemExists } from '@/data/user';
+import { checkIfWatchListItemExists } from '@/data/user';
 import { cn, currencyFormat, percentageFormat } from '@/lib/utils';
 import BadgeDelta from '@tremor/react/dist/components/icon-elements/BadgeDelta/BadgeDelta';
 import { notFound } from 'next/navigation';
@@ -14,7 +14,7 @@ export async function QuoteHeader({
 }) {
   const [quote, alreadyWatching] = await Promise.all([
     getQuotes(symbol),
-    checkIfWatchItemExists(symbol),
+    checkIfWatchListItemExists(userId, symbol),
   ]);
 
   if (quote === undefined) {

@@ -31,7 +31,6 @@ export function StockChart({ symbol }: { symbol: string }) {
   const [chartData, setChartData] = useState<any[]>([]);
 
   const isMobileView = useIsMobileView();
-  console.log(isMobileView);
 
   useEffect(() => {
     const fetchData = async () => {

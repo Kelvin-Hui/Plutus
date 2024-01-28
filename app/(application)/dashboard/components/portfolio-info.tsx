@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { pnlColumns, transactionColumns } from '@/components/ui/columns';
 import { DataTable } from '@/components/ui/data-table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { getBuyingPower, getPortfolio, getTransactions } from '@/data/user';
+import { getPortfolio, getTransactions, getUserById } from '@/data/user';
 import {
   calculateDiversity,
   calculatePNL,
@@ -68,12 +68,14 @@ export function TransactionsHistory({ data }: { data: TransactionData[] }) {
   );
 }
 
-export async function PortfolioInfo() {
-  const [portfolio, transactions, buyingPower] = await Promise.all([
-    getPortfolio(),
-    getTransactions(),
-    getBuyingPower(),
+export async function PortfolioInfo({ userId }: { userId: string }) {
+  const [portfolio, transactions, user] = await Promise.all([
+    getPortfolio(userId),
+    getTransactions(userId),
+    getUserById(userId),
   ]);
+
+  const buyingPower = Number(user?.cash);
 
   return (
     <Tabs defaultValue={'overview'} className="">

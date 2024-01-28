@@ -45,11 +45,11 @@ export function SellForm({
 
   const cash = Number(buyingPower) ?? 0;
   const maxShares = quantity;
-  const {push} = useRouter();
+  const { push } = useRouter();
 
   const SellSchema = z.object({
     shares: z.coerce.number().min(1).max(maxShares, {
-      message: "Dont Have Enough Shares",
+      message: 'Dont Have Enough Shares',
     }),
     totalCredit: z.coerce.number(),
   });
@@ -87,7 +87,7 @@ export function SellForm({
         <CardTitle>{symbol}</CardTitle>
       </CardHeader>
       <CardContent>
-        <span className="mb-2 flex flex-col text-sm text-muted-foreground">
+        <span className="mb-2 flex flex-col text-sm text-muted-foreground sm:text-base">
           <p>
             Position {quantity}@{currencyFormat(cost)}
           </p>
@@ -153,7 +153,11 @@ export function SellForm({
                 )}
               </Button>
             ) : (
-              <Button className="w-full" type="button" onClick={() => push('/login')}>
+              <Button
+                className="w-full"
+                type="button"
+                onClick={() => push('/login')}
+              >
                 Sign In First
               </Button>
             )}

@@ -3,9 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   getBalanceChartData,
-  getBuyingPower,
   getPortfolioValue,
-  getUserCreateTime,
+  getUserById,
 } from '@/data/user';
 import {
   cn,
@@ -60,7 +59,7 @@ function dateMidnight() {
   return date;
 }
 
-export function BalanceChart() {
+export function BalanceChart({ userId }: { userId: string }) {
   const [range, setRange] = useState<DateRangePickerValue>({
     from: dateMidnight(),
     to: dateMidnight(),
@@ -76,14 +75,16 @@ export function BalanceChart() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const [chartData, cash, portfolioValue] = await Promise.all([
+      const [chartData, user, portfolioValue] = await Promise.all([
         getBalanceChartData(
+          userId,
           range.from ?? dateMidnight(),
           range.to ?? dateMidnight(),
         ),
-        getBuyingPower(),
-        getPortfolioValue(),
+        getUserById(userId),
+        getPortfolioValue(userId),
       ]);
+      const cash = Number(user?.cash);
 
       const isToday = range.from?.getDate() === range.to?.getDate();
 
@@ -151,9 +152,11 @@ export function BalanceChart() {
             disabled={isPending}
             onClick={() => {
               const fetchCreated = async () => {
-                const minRange = await getUserCreateTime();
+                const user = await getUserById(userId);
+                if (!user) return;
+                const createTime = user.createdAt;
 
-                setRange({ from: new Date(minRange), to: new Date() });
+                setRange({ from: new Date(createTime), to: new Date() });
               };
               fetchCreated().catch(console.error);
             }}
