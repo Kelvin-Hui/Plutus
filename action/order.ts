@@ -16,15 +16,15 @@ export async function buyShares(shares: number, symbol: string) {
     return { error: 'Market Closed! 🥱' };
   }
 
-  const portfolioData = await getPortfolio(symbol);
+  const userId = (await getCurrentUserId()) ?? undefined;
+
+  const portfolioData = await getPortfolio(userId, symbol);
   const prevCost = portfolioData[0].cost ?? 0;
   const prevShares = portfolioData[0].quantity ?? 0;
   const currentMarketPrice = portfolioData[0].marketPrice;
 
   const totalCost = currentMarketPrice * shares;
   const prevTotalCost = prevCost * prevShares;
-
-  const userId = (await getCurrentUserId()) ?? '';
 
   if (!userId || !currentMarketPrice)
     return { error: 'Something went wrong❌. Please try again.' };
@@ -71,7 +71,7 @@ export async function buyShares(shares: number, symbol: string) {
       }),
     ]);
 
-  revalidateTag('transactions')
+  revalidateTag('transactions');
   return {
     success: `[Bought] $${currentMarketPrice} @ ${shares} shares of ${symbol}! 🎉 (${new Date().toLocaleString()})`,
   };
@@ -86,7 +86,8 @@ export async function sellShares(shares: number, symbol: string) {
     return { error: 'Market Closed! 🥱' };
   }
 
-  const portfolioData = await getPortfolio(symbol);
+  const userId = (await getCurrentUserId()) ?? undefined;
+  const portfolioData = await getPortfolio(userId, symbol);
   const prevCost = portfolioData[0].cost ?? 0;
   const prevShares = portfolioData[0].quantity ?? 0;
   const currentMarketPrice = portfolioData[0].marketPrice;
@@ -96,8 +97,6 @@ export async function sellShares(shares: number, symbol: string) {
   }
 
   const totalCredit = currentMarketPrice * shares;
-
-  const userId = (await getCurrentUserId()) ?? '';
 
   const soldAll = shares == prevShares;
 
@@ -149,7 +148,7 @@ export async function sellShares(shares: number, symbol: string) {
       }),
     ]);
 
-  revalidateTag('transactions')
+  revalidateTag('transactions');
   return {
     success: `[Sold] $${currentMarketPrice} @ ${shares} shares of ${symbol}! 🎉 (${new Date().toLocaleString()})`,
   };

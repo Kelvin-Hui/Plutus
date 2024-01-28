@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { getBuyingPower, getPortfolio } from '@/data/user';
+import { getPortfolio, getUserById } from '@/data/user';
 import { BuyForm } from './buy-form';
 import { SellForm } from './sell-form';
 
@@ -10,10 +10,13 @@ export async function OrderPanel({
   symbol: string;
   userId: string | undefined;
 }) {
-  const [buyingPower, portfolioData] = await Promise.all([
-    getBuyingPower(),
-    getPortfolio(symbol),
+  const [user, portfolioData] = await Promise.all([
+    userId ? getUserById(userId) : null,
+    getPortfolio(userId, symbol),
   ]);
+
+  const buyingPower = Number(user?.cash) ?? undefined;
+
   return (
     <Tabs defaultValue="buy" className="mt-4 w-full md:mt-0">
       <TabsList className="grid grid-cols-2">

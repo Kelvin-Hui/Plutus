@@ -2,11 +2,14 @@ import { Interval, TimeInterval, TransactionData } from '@/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-export function cn(...inputs: ClassValue[]) {
+export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
-export function useDebouncedCallback(callback: Function, wait: number) {
+export function useDebouncedCallback(
+  callback: Function,
+  wait: number,
+): Function {
   let id: any = 0;
   return (...args: any) => {
     clearTimeout(id);
@@ -25,7 +28,7 @@ function isDayLightSaving() {
   return new Date().getTimezoneOffset() < stdTimezoneOffset();
 }
 
-export function getMarketOpenTime(date = new Date()) {
+export function getMarketOpenTime(date: Date = new Date()): Date {
   let open = !date ? new Date() : new Date(date);
   open.setUTCHours(isDayLightSaving() ? 13 : 14);
   open.setUTCMinutes(30);
@@ -34,7 +37,7 @@ export function getMarketOpenTime(date = new Date()) {
   return open;
 }
 
-export function getMarketCloseTime(date = new Date()) {
+export function getMarketCloseTime(date: Date = new Date()): Date {
   let close = !date ? new Date() : new Date(date);
   close.setUTCHours(isDayLightSaving() ? 20 : 21);
   close.setUTCMinutes(0);
@@ -43,21 +46,21 @@ export function getMarketCloseTime(date = new Date()) {
   return close;
 }
 
-export function numberFormat(num: number | undefined) {
+export function numberFormat(num: number | undefined): string | undefined {
   if (num === undefined) return num;
   if (num >= 100000) {
     let formatter = Intl.NumberFormat('en', { notation: 'compact' });
     return formatter.format(num);
   }
-  return num;
+  return num.toString();
 }
 
-export function percentageFormat(num: number | undefined) {
+export function percentageFormat(num: number | undefined): string {
   if (num === undefined || isNaN(num)) return '0.00%';
   return (num >= 0 ? '+' : '') + num.toFixed(2) + '%';
 }
 
-export function currencyFormat(num: number | undefined) {
+export function currencyFormat(num: number | undefined): string {
   if (num === undefined || isNaN(num)) return '$0';
   let formatter = Intl.NumberFormat('en-us', {
     style: 'currency',
@@ -70,14 +73,14 @@ export function calculatePNL(
   marketPrice: number,
   cost: number,
   quantity: number,
-) {
+): number {
   return (marketPrice - cost) * quantity;
 }
 export function calculateROI(
   marketPrice: number,
   cost: number,
   quantity: number,
-) {
+): number {
   return (calculatePNL(marketPrice, cost, quantity) / (cost * quantity)) * 100;
 }
 
@@ -85,7 +88,7 @@ export function calculateDiversity(
   marketPrice: number,
   quantity: number,
   totalPortfolioValue: number,
-) {
+): number {
   return ((marketPrice * quantity) / totalPortfolioValue) * 100;
 }
 
@@ -95,7 +98,7 @@ export function calculateTodayReturn(
   quantity: number,
   prevClose: number,
   history: TransactionData[],
-) {
+): number {
   let todayReturn = 0;
   let shareBoughtToday = 0;
   history
@@ -112,18 +115,18 @@ export function calculateTodayReturn(
   return (todayReturn += marketChange * (quantity - shareBoughtToday));
 }
 
-export function addMinute(prevDate: Date) {
+export function addMinute(prevDate: Date): Date {
   let date = new Date(prevDate.valueOf());
   date.setMinutes(date.getMinutes() + 1);
   return date;
 }
-export function nextDay(prevDate: Date | undefined) {
+export function nextDay(prevDate: Date | undefined): Date {
   let date = prevDate ? new Date(prevDate) : new Date();
   date.setDate(date.getDate() + 1);
   return date;
 }
 
-export function getStartingPeriod() {
+export function getStartingPeriod(): Date {
   const currTime = new Date();
   const marketOpen = getMarketOpenTime();
 
@@ -142,11 +145,11 @@ export function getStartingPeriod() {
   return new Date(marketOpen);
 }
 
-export function getEndingPeriod() {
+export function getEndingPeriod(): Date {
   return getMarketCloseTime(getStartingPeriod());
 }
 
-export function isMarketHours() {
+export function isMarketHours(): boolean {
   const date = new Date();
   if (date.getUTCDay() == 6 || date.getUTCDay() == 0) return false;
   const start = getStartingPeriod();
@@ -203,7 +206,7 @@ export function getChartQueryOptions(timeInterval: TimeInterval): {
   return { period1, interval };
 }
 
-export function padChartData(data: any) {
+export function padChartData(data: any): any {
   const startPeriod = getStartingPeriod();
   const endPeriod = getEndingPeriod();
   let currDate = new Date(data.slice(-1)[0].date ?? startPeriod);
@@ -219,7 +222,7 @@ export function padChartData(data: any) {
   return [...data, ...padData];
 }
 
-export function determineYAxisWidth(value: number | undefined) {
+export function determineYAxisWidth(value: number | undefined): number {
   if (value === undefined) return 56;
   const numOfDigits = value.toString().split('.')[0].length;
   switch (numOfDigits) {

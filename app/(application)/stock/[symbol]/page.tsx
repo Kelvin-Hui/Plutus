@@ -1,5 +1,5 @@
 import { QuoteHeader } from '@/app/(application)/stock/[symbol]/components/quote-header';
-import { auth } from '@/auth';
+import { getCurrentUserId } from '@/data/user';
 import { KeyStats } from './components/key-stats';
 import { NewsTable } from './components/news-table';
 import { OrderPanel } from './components/order-panel';
@@ -19,8 +19,7 @@ export async function generateMetadata({
 
 export default async function Page({ params }: { params: { symbol: string } }) {
   const symbol = decodeURI(params.symbol).toUpperCase();
-  const session = await auth();
-  const userId = session?.user?.id;
+  const userId = await getCurrentUserId();
 
   return (
     <div className="mt-16 flex flex-col gap-y-5 sm:container">
@@ -33,7 +32,7 @@ export default async function Page({ params }: { params: { symbol: string } }) {
       <RecommendationSymbols symbol={symbol} />
       <div className="mb-5 flex flex-col gap-5 md:grid md:grid-cols-2">
         <NewsTable symbol={symbol} />
-        <TransactionHistory symbol={symbol} />
+        <TransactionHistory symbol={symbol} userId={userId} />
       </div>
     </div>
   );
