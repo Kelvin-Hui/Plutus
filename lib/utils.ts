@@ -223,7 +223,7 @@ export function padChartData(data: any): any {
 }
 
 export function determineYAxisWidth(value: number | undefined): number {
-  if (value === undefined) return 56;
+  if (!value) return 56;
   const numOfDigits = value.toString().split('.')[0].length;
   switch (numOfDigits) {
     case 1:
