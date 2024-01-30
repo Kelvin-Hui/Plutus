@@ -109,7 +109,7 @@ export function BalanceChart({ userId }: { userId: string }) {
         chartData.map((entry) => {
           return {
             ...entry,
-            createdAt: entry.createdAt.toLocaleString('en-US', {
+            createdAt: new Date(entry.createdAt).toLocaleString('en-US', {
               year: 'numeric',
               month: '2-digit',
               day: '2-digit',
