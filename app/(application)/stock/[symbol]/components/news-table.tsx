@@ -38,6 +38,7 @@ export function NewsItem({
         <PhotoIcon width={96} height={96} />
       ) : (
         <Image
+          unoptimized
           alt="thumbnail"
           src={imageURL}
           width={64}
